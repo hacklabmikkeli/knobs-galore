@@ -1,0 +1,6 @@
+KnobsGalore/
+*.o
+*~
+*.vcd
+*.cf
+*.gtkw
