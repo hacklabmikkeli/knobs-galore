@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:smil="urn:oasis:names:tc:opendocument:xmlns:smil-compatible:1.0" xmlns:anim="urn:oasis:names:tc:opendocument:xmlns:animation:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:css3t="http://www.w3.org/TR/css3-text/" office:version="1.2" office:mimetype="application/vnd.oasis.opendocument.graphics">
- <office:meta><meta:initial-creator>Ilmo Euro</meta:initial-creator><meta:creation-date>2014-07-24T13:24:09.485312267</meta:creation-date><dc:date>2015-03-09T12:32:04.392064370</dc:date><meta:editing-duration>PT5H29M9S</meta:editing-duration><meta:editing-cycles>11</meta:editing-cycles><meta:generator>LibreOffice/4.3.6.2$Linux_X86_64 LibreOffice_project/430m0$Build-2</meta:generator><meta:document-statistic meta:object-count="143"/></office:meta>
+ <office:meta><meta:initial-creator>Ilmo Euro</meta:initial-creator><meta:creation-date>2014-07-24T13:24:09.485312267</meta:creation-date><dc:date>2015-03-09T20:08:19.530092801</dc:date><meta:editing-duration>PT5H44M38S</meta:editing-duration><meta:editing-cycles>13</meta:editing-cycles><meta:generator>LibreOffice/4.3.6.2$Linux_X86_64 LibreOffice_project/430m0$Build-2</meta:generator><meta:document-statistic meta:object-count="186"/></office:meta>
  <office:settings>
   <config:config-item-set config:name="ooo:view-settings">
-   <config:config-item config:name="VisibleAreaTop" config:type="int">6702</config:config-item>
-   <config:config-item config:name="VisibleAreaLeft" config:type="int">-127</config:config-item>
-   <config:config-item config:name="VisibleAreaWidth" config:type="int">19598</config:config-item>
-   <config:config-item config:name="VisibleAreaHeight" config:type="int">12627</config:config-item>
+   <config:config-item config:name="VisibleAreaTop" config:type="int">-6407</config:config-item>
+   <config:config-item config:name="VisibleAreaLeft" config:type="int">-699</config:config-item>
+   <config:config-item config:name="VisibleAreaWidth" config:type="int">29985</config:config-item>
+   <config:config-item config:name="VisibleAreaHeight" config:type="int">23429</config:config-item>
    <config:config-item-map-indexed config:name="Views">
     <config:config-item-map-entry>
      <config:config-item config:name="ViewId" config:type="string">view1</config:config-item>
@@ -29,7 +29,7 @@
      <config:config-item config:name="NoColors" config:type="boolean">true</config:config-item>
      <config:config-item config:name="RulerIsVisible" config:type="boolean">true</config:config-item>
      <config:config-item config:name="PageKind" config:type="short">0</config:config-item>
-     <config:config-item config:name="SelectedPage" config:type="short">0</config:config-item>
+     <config:config-item config:name="SelectedPage" config:type="short">1</config:config-item>
      <config:config-item config:name="IsLayerMode" config:type="boolean">true</config:config-item>
      <config:config-item config:name="IsDoubleClickTextEdit" config:type="boolean">true</config:config-item>
      <config:config-item config:name="IsClickChangeRotation" config:type="boolean">true</config:config-item>
@@ -37,10 +37,10 @@
      <config:config-item config:name="EditModeStandard" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeNotes" config:type="int">0</config:config-item>
      <config:config-item config:name="EditModeHandout" config:type="int">1</config:config-item>
-     <config:config-item config:name="VisibleAreaTop" config:type="int">6702</config:config-item>
-     <config:config-item config:name="VisibleAreaLeft" config:type="int">-127</config:config-item>
-     <config:config-item config:name="VisibleAreaWidth" config:type="int">19599</config:config-item>
-     <config:config-item config:name="VisibleAreaHeight" config:type="int">12628</config:config-item>
+     <config:config-item config:name="VisibleAreaTop" config:type="int">-6407</config:config-item>
+     <config:config-item config:name="VisibleAreaLeft" config:type="int">-699</config:config-item>
+     <config:config-item config:name="VisibleAreaWidth" config:type="int">20903</config:config-item>
+     <config:config-item config:name="VisibleAreaHeight" config:type="int">9696</config:config-item>
      <config:config-item config:name="GridCoarseWidth" config:type="int">1000</config:config-item>
      <config:config-item config:name="GridCoarseHeight" config:type="int">1000</config:config-item>
      <config:config-item config:name="GridFineWidth" config:type="int">100</config:config-item>
@@ -92,7 +92,7 @@
    <config:config-item config:name="PrintQuality" config:type="int">0</config:config-item>
    <config:config-item config:name="PrinterIndependentLayout" config:type="string">low-resolution</config:config-item>
    <config:config-item config:name="PrinterName" config:type="string">Generic Printer</config:config-item>
-   <config:config-item config:name="PrinterSetup" config:type="base64Binary">gAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMApgAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKUGFnZVNpemU6QTQAABIAQ09NUEFUX0RVUExFWF9NT0RFCgBEVVBMRVhfT0ZG</config:config-item>
+   <config:config-item config:name="PrinterSetup" config:type="base64Binary">jAH+/0dlbmVyaWMgUHJpbnRlcgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU0dFTlBSVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAMAsgAAAAAAAAAEAAhSAAAEdAAASm9iRGF0YSAxCnByaW50ZXI9R2VuZXJpYyBQcmludGVyCm9yaWVudGF0aW9uPVBvcnRyYWl0CmNvcGllcz0xCm1hcmdpbmRhanVzdG1lbnQ9MCwwLDAsMApjb2xvcmRlcHRoPTI0CnBzbGV2ZWw9MApwZGZkZXZpY2U9MApjb2xvcmRldmljZT0wClBQRENvbnRleERhdGEKRHVwbGV4Ok5vbmUAUGFnZVNpemU6QTQAABIAQ09NUEFUX0RVUExFWF9NT0RFCgBEVVBMRVhfT0ZG</config:config-item>
    <config:config-item config:name="SaveVersionOnClose" config:type="boolean">true</config:config-item>
    <config:config-item config:name="ScaleDenominator" config:type="int">1</config:config-item>
    <config:config-item config:name="ScaleNumerator" config:type="int">1</config:config-item>
@@ -276,6 +276,57 @@
   </style:style>
   <style:style style:name="gr10" style:family="graphic" style:parent-style-name="standard">
    <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="top" draw:auto-grow-height="false" fo:padding-top="0.25cm"/>
+  </style:style>
+  <style:style style:name="gr11" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="3.75cm" fo:min-width="0.5cm"/>
+  </style:style>
+  <style:style style:name="gr12" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="3.75cm" fo:min-width="0.5cm"/>
+  </style:style>
+  <style:style style:name="gr13" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.55cm" fo:min-width="0cm"/>
+  </style:style>
+  <style:style style:name="gr14" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties svg:stroke-color="#ffffff" draw:fill="solid" draw:fill-color="#000000" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.283cm" fo:min-width="0cm"/>
+  </style:style>
+  <style:style style:name="gr15" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#4c4c4c" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.55cm" fo:min-width="0.3cm"/>
+  </style:style>
+  <style:style style:name="gr16" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:fill="solid" draw:fill-color="#808000" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="0cm"/>
+  </style:style>
+  <style:style style:name="gr17" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.25cm" fo:min-width="0.375cm"/>
+  </style:style>
+  <style:style style:name="gr18" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="1.75cm" fo:min-width="1.5cm"/>
+  </style:style>
+  <style:style style:name="gr19" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.25cm" fo:min-width="0cm"/>
+  </style:style>
+  <style:style style:name="gr20" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.35cm" fo:min-width="0.813cm"/>
+  </style:style>
+  <style:style style:name="gr21" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="3.178cm" fo:min-width="3.5cm"/>
+  </style:style>
+  <style:style style:name="gr22" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:stroke="none" svg:stroke-color="#000000" draw:fill="none" draw:fill-color="#ffffff" fo:min-height="0.35cm"/>
+  </style:style>
+  <style:style style:name="gr23" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.241cm" fo:min-width="3.387cm"/>
+  </style:style>
+  <style:style style:name="gr24" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.75cm" fo:min-width="0.5cm"/>
+  </style:style>
+  <style:style style:name="gr25" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.75cm" fo:min-width="0.5cm"/>
+  </style:style>
+  <style:style style:name="gr26" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0.1cm" fo:min-width="0cm"/>
+  </style:style>
+  <style:style style:name="gr27" style:family="graphic" style:parent-style-name="standard">
+   <style:graphic-properties draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:min-height="0cm" fo:min-width="0cm"/>
   </style:style>
   <style:style style:name="P1" style:family="paragraph">
    <style:paragraph-properties fo:text-align="center"/>
@@ -1557,6 +1608,406 @@
     <draw:custom-shape draw:style-name="gr2" draw:text-style-name="P2" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="7.1cm" svg:y="25.4cm">
      <text:p text:style-name="P1"><text:span text:style-name="T2">PROG</text:span><text:span text:style-name="T2"><text:line-break/></text:span><text:span text:style-name="T2">MEM</text:span></text:p>
      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+   </draw:page>
+   <draw:page draw:name="page2" draw:style-name="dp2" draw:master-page-name="Oletus">
+    <draw:custom-shape draw:style-name="gr11" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="4cm" svg:x="3cm" svg:y="5.001cm">
+     <text:p/>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr12" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="4cm" svg:x="5cm" svg:y="5.001cm">
+     <text:p text:style-name="P1">IB</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr3" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="4cm" svg:y="5.001cm">
+     <text:p text:style-name="P1">PROBE</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="?f7 ?f0 21600 ?f2" draw:type="left-arrow" draw:modifiers="5400 5400" draw:enhanced-path="M 21600 ?f0 L ?f1 ?f0 ?f1 0 0 10800 ?f1 21600 ?f1 ?f2 21600 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:g>
+     <draw:custom-shape draw:style-name="gr13" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.8cm" svg:x="3.1cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr13" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.8cm" svg:x="3.3cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr13" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.8cm" svg:x="3.5cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr13" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.8cm" svg:x="3.7cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr14" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.533cm" svg:x="3.199cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr14" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.533cm" svg:x="3.399cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr14" draw:text-style-name="P1" draw:layer="layout" svg:width="0.2cm" svg:height="0.533cm" svg:x="3.599cm" svg:y="5.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+    </draw:g>
+    <draw:g>
+     <draw:custom-shape draw:style-name="gr15" draw:text-style-name="P1" draw:layer="layout" svg:width="0.8cm" svg:height="0.8cm" svg:x="3.1cm" svg:y="8.101cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:g>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.189cm" svg:y="8.215cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.367cm" svg:y="8.215cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.544cm" svg:y="8.215cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.722cm" svg:y="8.215cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.189cm" svg:y="8.558cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.367cm" svg:y="8.558cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.544cm" svg:y="8.558cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+      <draw:custom-shape draw:style-name="gr16" draw:text-style-name="P1" draw:layer="layout" svg:width="0.089cm" svg:height="0.229cm" svg:x="3.722cm" svg:y="8.558cm">
+       <text:p/>
+       <draw:enhanced-geometry svg:viewBox="0 0 88 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="44 ?f6 44 0 0 10800 44 21600 88 10800" draw:text-areas="0 ?f6 88 ?f3" draw:type="can" draw:modifiers="5400" draw:enhanced-path="M 44 0 C 20 0 0 ?f2 0 ?f0 L 0 ?f3 C 0 ?f4 20 21600 44 21600 68 21600 88 ?f4 88 ?f3 L 88 ?f0 C 88 ?f2 68 0 44 0 Z N M 44 0 C 20 0 0 ?f2 0 ?f0 0 ?f5 20 ?f6 44 ?f6 68 ?f6 88 ?f5 88 ?f0 88 ?f2 68 0 44 0 Z N">
+        <draw:equation draw:name="f0" draw:formula="$0 *2/4"/>
+        <draw:equation draw:name="f1" draw:formula="?f0 *6/11"/>
+        <draw:equation draw:name="f2" draw:formula="?f0 -?f1 "/>
+        <draw:equation draw:name="f3" draw:formula="21600-?f0 "/>
+        <draw:equation draw:name="f4" draw:formula="?f3 +?f1 "/>
+        <draw:equation draw:name="f5" draw:formula="?f0 +?f1 "/>
+        <draw:equation draw:name="f6" draw:formula="$0 *2/2"/>
+        <draw:equation draw:name="f7" draw:formula="44"/>
+        <draw:handle draw:handle-position="?f7 $0" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+       </draw:enhanced-geometry>
+      </draw:custom-shape>
+     </draw:g>
+    </draw:g>
+    <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="4cm" svg:y="8.001cm">
+     <text:p text:style-name="P1">DATA</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="16200 5400" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:frame draw:style-name="gr7" draw:layer="layout" svg:width="2cm" svg:height="1.25cm" svg:x="3cm" svg:y="2.001cm">
+     <draw:text-box>
+      <text:p>Plan #4</text:p>
+     </draw:text-box>
+    </draw:frame>
+    <draw:custom-shape draw:style-name="gr18" draw:text-style-name="P1" draw:layer="layout" svg:width="2cm" svg:height="2cm" svg:x="7cm" svg:y="7.001cm">
+     <text:p text:style-name="P1">VOICE<text:line-break/>ALLOCATION<text:line-break/>CPU</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="6cm" svg:y="7.401cm">
+     <text:p text:style-name="P1">KEYS</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="16200 5400" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="9cm" svg:y="7.001cm">
+     <text:p text:style-name="P1">FREQ</text:p>
+     <text:p text:style-name="P1">GATE</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="16200 5400" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr19" draw:text-style-name="P2" draw:layer="layout" svg:width="0.5cm" svg:height="0.5cm" svg:x="7.1cm" svg:y="8.401cm">
+     <text:p text:style-name="P1"><text:span text:style-name="T2">PROG</text:span><text:span text:style-name="T2"><text:line-break/></text:span><text:span text:style-name="T2">MEM</text:span></text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr18" draw:text-style-name="P1" draw:layer="layout" svg:width="2cm" svg:height="2cm" svg:x="10cm" svg:y="6cm">
+     <text:p text:style-name="P1">VOICE<text:line-break/>GENERATOR</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr20" draw:text-style-name="P1" draw:layer="layout" svg:width="1.5cm" svg:height="1.2cm" svg:x="12cm" svg:y="6.4cm">
+     <text:p text:style-name="P1">STATE<text:line-break/>VECTOR</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="16200 5400" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr18" draw:text-style-name="P1" draw:layer="layout" svg:width="2cm" svg:height="2cm" svg:x="13.5cm" svg:y="6cm">
+     <text:p text:style-name="P1">16x8<text:line-break/>SHIFT<text:line-break/>REGISTER</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr21" draw:text-style-name="P1" draw:layer="layout" svg:width="4cm" svg:height="3.427cm" draw:transform="rotate (-3.14159265358979) translate (14.7cm 9.7cm)">
+     <text:p/>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 0 21600 21600" draw:type="circular-arrow" draw:modifiers="-179.836216628193 -26.91905285472 7432.13745678609" draw:enhanced-path="B ?f3 ?f3 ?f20 ?f20 ?f19 ?f18 ?f17 ?f16 W 0 0 21600 21600 ?f9 ?f8 ?f11 ?f10 L ?f24 ?f23 ?f36 ?f35 ?f29 ?f28 Z N">
+      <draw:equation draw:name="f0" draw:formula="$0 "/>
+      <draw:equation draw:name="f1" draw:formula="$1 "/>
+      <draw:equation draw:name="f2" draw:formula="$2 "/>
+      <draw:equation draw:name="f3" draw:formula="10800+$2 "/>
+      <draw:equation draw:name="f4" draw:formula="10800*sin($0 *(pi/180))"/>
+      <draw:equation draw:name="f5" draw:formula="10800*cos($0 *(pi/180))"/>
+      <draw:equation draw:name="f6" draw:formula="10800*sin($1 *(pi/180))"/>
+      <draw:equation draw:name="f7" draw:formula="10800*cos($1 *(pi/180))"/>
+      <draw:equation draw:name="f8" draw:formula="?f4 +10800"/>
+      <draw:equation draw:name="f9" draw:formula="?f5 +10800"/>
+      <draw:equation draw:name="f10" draw:formula="?f6 +10800"/>
+      <draw:equation draw:name="f11" draw:formula="?f7 +10800"/>
+      <draw:equation draw:name="f12" draw:formula="?f3 *sin($0 *(pi/180))"/>
+      <draw:equation draw:name="f13" draw:formula="?f3 *cos($0 *(pi/180))"/>
+      <draw:equation draw:name="f14" draw:formula="?f3 *sin($1 *(pi/180))"/>
+      <draw:equation draw:name="f15" draw:formula="?f3 *cos($1 *(pi/180))"/>
+      <draw:equation draw:name="f16" draw:formula="?f12 +10800"/>
+      <draw:equation draw:name="f17" draw:formula="?f13 +10800"/>
+      <draw:equation draw:name="f18" draw:formula="?f14 +10800"/>
+      <draw:equation draw:name="f19" draw:formula="?f15 +10800"/>
+      <draw:equation draw:name="f20" draw:formula="21600-?f3 "/>
+      <draw:equation draw:name="f21" draw:formula="13500*sin($1 *(pi/180))"/>
+      <draw:equation draw:name="f22" draw:formula="13500*cos($1 *(pi/180))"/>
+      <draw:equation draw:name="f23" draw:formula="?f21 +10800"/>
+      <draw:equation draw:name="f24" draw:formula="?f22 +10800"/>
+      <draw:equation draw:name="f25" draw:formula="$2 -2700"/>
+      <draw:equation draw:name="f26" draw:formula="?f25 *sin($1 *(pi/180))"/>
+      <draw:equation draw:name="f27" draw:formula="?f25 *cos($1 *(pi/180))"/>
+      <draw:equation draw:name="f28" draw:formula="?f26 +10800"/>
+      <draw:equation draw:name="f29" draw:formula="?f27 +10800"/>
+      <draw:equation draw:name="f30" draw:formula="($1+45)*pi/180"/>
+      <draw:equation draw:name="f31" draw:formula="sqrt(((?f29-?f24)*(?f29-?f24))+((?f28-?f23)*(?f28-?f23)))"/>
+      <draw:equation draw:name="f32" draw:formula="sqrt(2)/2*?f31"/>
+      <draw:equation draw:name="f33" draw:formula="?f32*sin(?f30)"/>
+      <draw:equation draw:name="f34" draw:formula="?f32*cos(?f30)"/>
+      <draw:equation draw:name="f35" draw:formula="?f28+?f33"/>
+      <draw:equation draw:name="f36" draw:formula="?f29+?f34"/>
+      <draw:handle draw:handle-position="10800 $0" draw:handle-polar="10800 10800" draw:handle-radius-range-minimum="10800" draw:handle-radius-range-maximum="10800"/>
+      <draw:handle draw:handle-position="$2 $1" draw:handle-polar="10800 10800" draw:handle-radius-range-minimum="0" draw:handle-radius-range-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:frame draw:style-name="gr22" draw:layer="layout" svg:width="2.9cm" svg:height="0.6cm" svg:x="11.6cm" svg:y="9.1cm">
+     <draw:text-box>
+      <text:p>STATE VECTOR</text:p>
+     </draw:text-box>
+    </draw:frame>
+    <draw:custom-shape draw:style-name="gr23" draw:text-style-name="P1" draw:layer="layout" svg:width="4cm" svg:height="1cm" svg:x="6cm" svg:y="6cm">
+     <text:p text:style-name="P1">PARAMETERS</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="20354.1655985645 5502.4975024975" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr24" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="10.6cm" svg:y="4cm">
+     <text:p text:style-name="P1">MIXER</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="11.6cm" svg:y="4cm">
+     <text:p text:style-name="P1"><text:span text:style-name="T1">ΔΣ</text:span></text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="16200 5400" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+    <draw:custom-shape draw:style-name="gr25" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" svg:x="12.6cm" svg:y="4cm">
+     <text:p/>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+    </draw:custom-shape>
+    <draw:g>
+     <draw:custom-shape draw:style-name="gr26" draw:text-style-name="P1" draw:layer="layout" svg:width="0.175cm" svg:height="0.35cm" svg:x="12.706cm" svg:y="4.325cm">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:type="rectangle" draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr27" draw:text-style-name="P1" draw:layer="layout" svg:width="0.7cm" svg:height="0.35cm" draw:transform="rotate (-1.5707963267949) translate (13.231cm 4.15cm)">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:mirror-horizontal="false" draw:mirror-vertical="false" draw:glue-points="?f6 10800 10800 21600 ?f5 10800 10800 0" draw:text-areas="?f3 ?f3 ?f4 ?f4" draw:type="trapezoid" draw:modifiers="5400" draw:enhanced-path="M 0 0 L 21600 0 ?f0 21600 ?f1 21600 Z N">
+       <draw:equation draw:name="f0" draw:formula="21600-$0 "/>
+       <draw:equation draw:name="f1" draw:formula="$0 "/>
+       <draw:equation draw:name="f2" draw:formula="$0 *10/18"/>
+       <draw:equation draw:name="f3" draw:formula="?f2 +1750"/>
+       <draw:equation draw:name="f4" draw:formula="21600-?f3 "/>
+       <draw:equation draw:name="f5" draw:formula="$0 /2"/>
+       <draw:equation draw:name="f6" draw:formula="21600-?f5 "/>
+       <draw:handle draw:handle-position="$0 bottom" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="10800"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr27" draw:text-style-name="P1" draw:layer="layout" svg:width="0.175cm" svg:height="0.175cm" draw:transform="rotate (-1.5707963267949) translate (13.406cm 4.412cm)">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="block-arc" draw:modifiers="180 5400" draw:enhanced-path="B 0 0 21600 21600 ?f4 ?f3 ?f2 ?f3 W ?f5 ?f5 ?f6 ?f6 ?f2 ?f3 ?f4 ?f3 Z N">
+       <draw:equation draw:name="f0" draw:formula="10800*cos($0 *(pi/180))"/>
+       <draw:equation draw:name="f1" draw:formula="10800*sin($0 *(pi/180))"/>
+       <draw:equation draw:name="f2" draw:formula="?f0 +10800"/>
+       <draw:equation draw:name="f3" draw:formula="?f1 +10800"/>
+       <draw:equation draw:name="f4" draw:formula="21600-?f2 "/>
+       <draw:equation draw:name="f5" draw:formula="10800-$1 "/>
+       <draw:equation draw:name="f6" draw:formula="10800+$1 "/>
+       <draw:equation draw:name="f7" draw:formula="?f5 *cos($0 *(pi/180))"/>
+       <draw:equation draw:name="f8" draw:formula="?f5 *sin($0 *(pi/180))"/>
+       <draw:handle draw:handle-position="$1 $0" draw:handle-polar="10800 10800" draw:handle-radius-range-minimum="0" draw:handle-radius-range-maximum="10800"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape>
+     <draw:custom-shape draw:style-name="gr26" draw:text-style-name="P1" draw:layer="layout" svg:width="0.35cm" svg:height="0.35cm" draw:transform="rotate (-1.5707963267949) translate (13.494cm 4.325cm)">
+      <text:p/>
+      <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:type="block-arc" draw:modifiers="-176.481388534663 8337.91218454247" draw:enhanced-path="B 0 0 21600 21600 ?f4 ?f3 ?f2 ?f3 W ?f5 ?f5 ?f6 ?f6 ?f2 ?f3 ?f4 ?f3 Z N">
+       <draw:equation draw:name="f0" draw:formula="10800*cos($0 *(pi/180))"/>
+       <draw:equation draw:name="f1" draw:formula="10800*sin($0 *(pi/180))"/>
+       <draw:equation draw:name="f2" draw:formula="?f0 +10800"/>
+       <draw:equation draw:name="f3" draw:formula="?f1 +10800"/>
+       <draw:equation draw:name="f4" draw:formula="21600-?f2 "/>
+       <draw:equation draw:name="f5" draw:formula="10800-$1 "/>
+       <draw:equation draw:name="f6" draw:formula="10800+$1 "/>
+       <draw:equation draw:name="f7" draw:formula="?f5 *cos($0 *(pi/180))"/>
+       <draw:equation draw:name="f8" draw:formula="?f5 *sin($0 *(pi/180))"/>
+       <draw:handle draw:handle-position="$1 $0" draw:handle-polar="10800 10800" draw:handle-radius-range-minimum="0" draw:handle-radius-range-maximum="10800"/>
+      </draw:enhanced-geometry>
+     </draw:custom-shape>
+    </draw:g>
+    <draw:custom-shape draw:style-name="gr17" draw:text-style-name="P1" draw:layer="layout" svg:width="1cm" svg:height="1cm" draw:transform="rotate (1.5707963267949) translate (10.6cm 6cm)">
+     <text:p text:style-name="P1">AUDIO</text:p>
+     <draw:enhanced-geometry svg:viewBox="0 0 21600 21600" draw:text-areas="0 ?f0 ?f5 ?f2" draw:type="right-arrow" draw:modifiers="16200 5400" draw:enhanced-path="M 0 ?f0 L ?f1 ?f0 ?f1 0 21600 10800 ?f1 21600 ?f1 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f0" draw:formula="$1 "/>
+      <draw:equation draw:name="f1" draw:formula="$0 "/>
+      <draw:equation draw:name="f2" draw:formula="21600-$1 "/>
+      <draw:equation draw:name="f3" draw:formula="21600-?f1 "/>
+      <draw:equation draw:name="f4" draw:formula="?f3 *?f0 /10800"/>
+      <draw:equation draw:name="f5" draw:formula="?f1 +?f4 "/>
+      <draw:equation draw:name="f6" draw:formula="?f1 *?f0 /10800"/>
+      <draw:equation draw:name="f7" draw:formula="?f1 -?f6 "/>
+      <draw:handle draw:handle-position="$0 $1" draw:handle-range-x-minimum="0" draw:handle-range-x-maximum="21600" draw:handle-range-y-minimum="0" draw:handle-range-y-maximum="10800"/>
+     </draw:enhanced-geometry>
     </draw:custom-shape>
    </draw:page>
   </office:drawing>
