@@ -6,9 +6,12 @@ The current target hardware for the synthesizer is [Papilio One](http://papilio.
 Audio output is via a 3,5mm headphone jack (available as a module for Papilio) and
 input is through a Simba My Music World toy keyboard.
 
-### Test instructions
+### Test instructions (Linux/Unix/OSX)
 You need to have ghdl (GCC VHDL frontend) and GtkWave installed. After that,
 run `./build.sh` in the project folder and inspect the `.vcd` file.
+
+### Test instructions (Windows)
+Would somebody with a Windows machine create a test script?
 
 ### Synthesis instructions
 Create a Xilinx ISE (or Vivado) project and add all the .vhdl files and the .ucf file
