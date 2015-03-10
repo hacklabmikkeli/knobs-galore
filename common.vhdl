@@ -6,17 +6,11 @@ use ieee.math_real.all;
 use std.textio.all;
 
 package common is
-    constant freq_bits : natural := 16;
-    constant freq_max : natural := 2**freq_bits;
-    subtype freq_signal is unsigned(freq_bits - 1 downto 0);
-
-    constant ctl_bits : natural := 8;
+    constant ctl_bits : natural := 12;
     constant ctl_max : natural := 2**ctl_bits;
     subtype ctl_signal is unsigned(ctl_bits - 1 downto 0);
 
-    constant ampl_bits : natural := 12;
-    constant ampl_max : natural := 2**ampl_bits;
-    subtype ampl_signal is unsigned(ampl_bits - 1 downto 0);
+    constant voices : natural := 8;
 
     type pd_lut_t is array(0 to 63, 0 to 63) of ctl_signal;
 

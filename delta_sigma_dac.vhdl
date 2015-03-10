@@ -6,14 +6,14 @@ use work.common.all;
 
 entity delta_sigma_dac is
     port    (CLK:           in  std_logic
-            ;Zin:           in  ampl_signal
+            ;Zin:           in  ctl_signal
             ;Vout:          out std_logic
             )
     ;
 end entity;
 
 architecture delta_sigma_dac_impl of delta_sigma_dac is
-    subtype sigma_t is signed(ampl_signal'high + 1 downto 0);
+    subtype sigma_t is signed(ctl_signal'high + 1 downto 0);
 
     signal sigma : sigma_t := (others => '0');
 

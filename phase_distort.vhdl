@@ -9,7 +9,8 @@ use std.textio.all;
 use work.common.all;
 
 entity phase_distort is
-    port    (CUTOFF:        in  ctl_signal
+    port    (CLK:           in  std_logic
+            ;CUTOFF:        in  ctl_signal
             ;THETA_IN:      in  ctl_signal
             ;THETA_OUT:     out ctl_signal
             )
@@ -52,8 +53,17 @@ architecture phase_distort_saw of phase_distort is
     end function;
 
     constant lut : pd_lut_t := make_lut;
+    
+    signal theta_out_buf: ctl_signal := (others => '0');
 begin
-    THETA_OUT <= pd_lookup(CUTOFF, THETA_IN, lut);
+    process (CLK)
+    begin
+        if rising_edge(CLK) then
+            theta_out_buf <= pd_lookup(CUTOFF, THETA_IN, lut);
+        end if;
+    end process;
+
+    THETA_OUT <= theta_out_buf;
 end architecture;
 
 architecture phase_distort_sq of phase_distort is
@@ -98,6 +108,14 @@ architecture phase_distort_sq of phase_distort is
 
     constant lut : pd_lut_t := make_lut;
 
+    signal theta_out_buf: ctl_signal := (others => '0');
 begin
-    THETA_OUT <= pd_lookup(CUTOFF, THETA_IN, lut);
+    process (CLK)
+    begin
+        if rising_edge(CLK) then
+            theta_out_buf <= pd_lookup(CUTOFF, THETA_IN, lut);
+        end if;
+    end process;
+
+    THETA_OUT <= theta_out_buf;
 end architecture;

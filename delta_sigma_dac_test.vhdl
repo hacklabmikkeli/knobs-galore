@@ -9,13 +9,13 @@ end entity;
 
 architecture delta_sigma_dac_test_impl of delta_sigma_dac_test is
     signal  THETA:  ctl_signal := to_unsigned(0, ctl_bits);
-    signal  Z:      ampl_signal;
+    signal  Z:      ctl_signal;
     signal  CLK:    std_logic := '0';
     signal  Vout:   std_logic;
     constant count: natural := 30;
 begin
     waveshaper_sin : entity work.waveshaper(waveshaper_sin)
-                     port map (THETA, Z);
+                     port map (CLK, THETA, Z);
 
     delta_sigma_dac : entity work.delta_sigma_dac(delta_sigma_dac_impl)
                      port map (CLK, Z, Vout); 
