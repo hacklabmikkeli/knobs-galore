@@ -18,14 +18,6 @@ package common is
     constant ampl_max : natural := 2**ampl_bits;
     subtype ampl_signal is unsigned(ampl_bits - 1 downto 0);
 
-    -- constant num_inputs : natural := 2;
-    -- constant num_inputs_bits : natural := 1;
-    -- constant input_bits : natural := 8;
-    -- subtype input_signal is unsigned(input_bits - 1 downto 0);
-    -- type all_inputs is array(num_inputs - 1 downto 0) of input_signal;
-
-    -- constant input_probe_length : input_signal := to_unsigned(64, input_bits);
-
     type pd_lut_t is array(0 to 63, 0 to 63) of ctl_signal;
 
     function pd_lookup(cutoff : ctl_signal
