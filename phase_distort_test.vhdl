@@ -24,10 +24,10 @@ begin
         port map (CLK, CUTOFF, THETA_IN, SQR_THETA);
 
     process begin
-        for j in 0 to (ctl_max - 1) / 16 loop
-            CUTOFF <= to_unsigned(j * 16, CUTOFF'length);
-            for i in 0 to (ctl_max - 1) / 16 loop
-                THETA_IN <= to_unsigned(i * 16, THETA_IN'length);
+        for j in 0 to ctl_max - 1 loop
+            CUTOFF <= to_unsigned(j, CUTOFF'length);
+            for i in 0 to ctl_max - 1 loop
+                THETA_IN <= to_unsigned(i, THETA_IN'length);
                 wait for 1 ns;
                 CLK <= not CLK;
                 wait for 1 ns;

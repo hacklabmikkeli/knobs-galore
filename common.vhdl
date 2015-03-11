@@ -6,9 +6,19 @@ use ieee.math_real.all;
 use std.textio.all;
 
 package common is
-    constant ctl_bits : natural := 12;
+    constant ctl_bits : natural := 8;
     constant ctl_max : natural := 2**ctl_bits;
     subtype ctl_signal is unsigned(ctl_bits - 1 downto 0);
+
+    constant time_bits : natural := 16;
+    constant time_max : natural := 2**time_bits;
+    subtype time_signal is unsigned(time_bits - 1 downto 0);
+
+    constant audio_bits : natural := 13;
+    constant audio_max : natural := 2**audio_bits;
+    subtype audio_signal is unsigned(audio_bits - 1 downto 0);
+
+    type adsr_stage_t is (attack, decay, sustain, rel);
 
     constant voices : natural := 8;
 
@@ -19,6 +29,12 @@ package common is
                       ;lut : pd_lut_t
                       )
     return ctl_signal;
+
+    function to_ctl(input: time_signal)
+    return ctl_signal;
+
+    function to_audio(input: ctl_signal)
+    return audio_signal;
 end common;
 
 package body common is
@@ -69,5 +85,17 @@ package body common is
         p34 := ((shrink_factor - x) * p3 + x * p4) / shrink_factor;
         p1234 := ((shrink_factor - y) * p12 + y * p34) / shrink_factor;
         return to_unsigned(p1234, ctl_bits);
+    end function;
+
+    function to_ctl(input: time_signal)
+    return ctl_signal is
+    begin
+        return input(input'high downto input'high - ctl_bits);
+    end function;
+
+    function to_audio(input: ctl_signal)
+    return audio_signal is
+    begin
+        return input & "00000";
     end function;
 end common;
