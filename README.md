@@ -8,14 +8,15 @@ input is through a Simba My Music World toy keyboard.
 
 ### Test instructions (Linux/Unix/OSX)
 You need to have ghdl (GCC VHDL frontend) and GtkWave installed. After that,
-run `./build.sh` in the project folder and inspect the `.vcd` file.
+run `make test` in the project folder and inspect the `.vcd` file.
 
 ### Test instructions (Windows)
 Would somebody with a Windows machine create a test script?
 
 ### Synthesis instructions
-Create a Xilinx ISE (or Vivado) project and add all the .vhdl files and the .ucf file
-to the project, and synthesize like any other Xilinx project.
+Create a Xilinx ISE (or Vivado) project and add non-test .vhdl files and the .ucf file
+to the project, and synthesize like any other Xilinx project. Note that there's
+no main entity at the moment, so the project can't be synthesized.
 
 ### More info
 Info on phase distortion:
