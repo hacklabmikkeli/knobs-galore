@@ -4,7 +4,8 @@ use ieee.numeric_std.all;
 use work.common.all;
 
 entity env_gen is
-    port    (CLK:           in  std_logic
+    port    (EN:            in  std_logic
+            ;CLK:           in  std_logic
             ;GATE:          in  std_logic
             ;A_RATE:        in  ctl_signal
             ;D_RATE:        in  ctl_signal
@@ -34,7 +35,7 @@ architecture env_gen_impl of env_gen is
 begin
     process(CLK)
     begin
-        if rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK) then
 
             if PREV_GATE_IN = '0' and GATE = '1' then
                 stage_out_buf <= adsr_attack;

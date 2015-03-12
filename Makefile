@@ -1,15 +1,18 @@
-GHDL_FLAGS=-g
+ANALYZE_FLAGS=-g
+ELABORATE_FLAGS=-g
+RUN_FLAGS=
 
-test: \
-	phase_gen_test.vcd \
-	env_gen_test.vcd \
-	waveshaper_test.vcd \
-	phase_distort_test.vcd \
-	delta_sigma_dac_test.vcd \
-	waveform_test.vcd
+VHDL=$(shell find *.vhdl)
+TEST_VHDL=$(shell find *_test.vhdl)
+OBJ=$(VHDL:.vhdl=.o)
+TEST_VCD=$(TEST_VHDL:.vhdl=.vcd)
+
+all: $(OBJ)
+
+test: $(TEST_VCD)
 
 clean:
-	rm *.o *.vcd
+	rm -f *.o *.vcd *.cf
 
 %.o: %.vhdl
 	ghdl -a $(GHDL_FLAGS) $<
@@ -41,4 +44,8 @@ delta_sigma_dac_test.o: common.o waveshaper.o delta_sigma_dac.o
 
 waveform_test.o: common.o waveshaper.o phase_distort.o
 
-.PHONY: test clean
+circular_buffer.o: common.o
+
+circular_buffer_test.o: common.o circular_buffer.o
+
+.PHONY: all test clean

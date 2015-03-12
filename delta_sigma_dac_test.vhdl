@@ -8,18 +8,18 @@ entity delta_sigma_dac_test is
 end entity;
 
 architecture delta_sigma_dac_test_impl of delta_sigma_dac_test is
-    signal  THETA:  ctl_signal := to_unsigned(0, ctl_bits);
+    signal  THETA:  ctl_signal := (others => '0');
     signal  Zctl:   ctl_signal := (others => '0');
     signal  Z:      audio_signal := (others => '0');
-    signal  CLK:    std_logic := '0';
+    signal  CLK:    std_logic := '1';
     signal  Vout:   std_logic;
     constant count: natural := 30;
 begin
     waveshaper_sin : entity work.waveshaper(waveshaper_sin)
-                     port map (CLK, THETA, Zctl);
+                     port map ('1', CLK, THETA, Zctl);
 
     delta_sigma_dac : entity work.delta_sigma_dac(delta_sigma_dac_impl)
-                     port map (CLK, Z, Vout); 
+                     port map ('1', CLK, Z, Vout); 
 
     process begin
         for k in 0 to ctl_max - 1 loop
@@ -33,5 +33,5 @@ begin
         wait;
     end process;
 
-    Z <= to_audio(Zctl);
+    Z <= to_audio_msb(Zctl);
 end architecture;

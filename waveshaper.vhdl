@@ -5,7 +5,8 @@ use ieee.math_real.all;
 use work.common.all;
 
 entity waveshaper is
-    port    (CLK:           in  std_logic
+    port    (EN:            in  std_logic
+            ;CLK:           in  std_logic
             ;THETA:         in  ctl_signal
             ;Z:             out ctl_signal
             )
@@ -62,7 +63,9 @@ architecture waveshaper_sin of waveshaper is
 begin
     process (CLK)
     begin
-        z_buf <= lookup(THETA, sin_lut);
+        if EN = '1' and rising_edge(CLK) then
+            z_buf <= lookup(THETA, sin_lut);
+        end if;
     end process;
 
     Z <= z_buf;

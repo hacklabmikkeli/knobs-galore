@@ -26,7 +26,30 @@ package common is
     constant adsr_rel:      adsr_stage      := "11";
     constant foobar: std_logic := '1';
 
-    constant voices : natural := 8;
+    type state_vector is
+    record
+        sv_phase1: time_signal;
+        sv_phase2: time_signal; sv_wave_sel: std_logic; sv_ampl: time_signal;
+        sv_ampl_stage: adsr_stage;
+        sv_cutoff: time_signal;
+        sv_cutoff_stage: adsr_stage;
+    end record;
+
+    type synthesis_params is
+    record
+        sp_amplitude_attack: ctl_signal;
+        sp_amplitude_decay: ctl_signal;
+        sp_amplitude_sustain: ctl_signal;
+        sp_amplitude_rel: ctl_signal;
+        sp_cutoff_base: ctl_signal;
+        sp_cutoff_env: ctl_signal;
+        sp_cutoff_attack: ctl_signal;
+        sp_cutoff_decay: ctl_signal;
+        sp_cutoff_sustain: ctl_signal;
+        sp_cutoff_rel: ctl_signal;
+    end record;
+    
+    constant num_voices : natural := 32;
 
     type pd_lut_t is array(0 to 63, 0 to 63) of ctl_signal;
 
@@ -39,8 +62,14 @@ package common is
     function to_ctl(input: time_signal)
     return ctl_signal;
 
-    function to_audio(input: ctl_signal)
+    function to_audio_msb(input: ctl_signal)
     return audio_signal;
+
+    function to_audio_lsb(input: ctl_signal)
+    return audio_signal;
+
+    function empty_state_vector
+    return state_vector;
 end common;
 
 package body common is
@@ -96,12 +125,36 @@ package body common is
     function to_ctl(input: time_signal)
     return ctl_signal is
     begin
-        return input(input'high downto input'high - ctl_bits);
+        return input(input'high downto input'high - ctl_bits + 1);
     end function;
 
-    function to_audio(input: ctl_signal)
+    function to_audio_msb(input: ctl_signal)
     return audio_signal is
+        variable retval: audio_signal := (others => '0');
     begin
-        return input & "00000";
+        retval(retval'high downto retval'high - ctl_bits + 1) := input;
+        return retval;
+    end function;
+
+    function to_audio_lsb(input: ctl_signal)
+    return audio_signal is
+        variable retval: audio_signal := (others => '0');
+    begin
+        retval(ctl_bits - 1 downto 0) := input;
+        return retval;
+    end function;
+
+    function empty_state_vector
+    return state_vector is
+        variable retval: state_vector;
+    begin
+        retval.sv_phase1 := (others => '0');
+        retval.sv_phase2 := (others => '0');
+        retval.sv_wave_sel := '0';
+        retval.sv_ampl := (others => '0');
+        retval.sv_ampl_stage := (others => '0');
+        retval.sv_cutoff := (others => '0');
+        retval.sv_cutoff_stage := (others => '0');
+        return retval;
     end function;
 end common;

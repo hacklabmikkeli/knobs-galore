@@ -8,12 +8,12 @@ entity waveshaper_test is
 end entity;
 
 architecture waveshaper_test_impl of waveshaper_test is
-    signal  CLK:    std_logic := '0';
+    signal  CLK:    std_logic := '1';
     signal  THETA:  ctl_signal := (others => '0');
     signal  Z:      ctl_signal;
 begin
     waveshaper_sin : entity work.waveshaper(waveshaper_sin)
-                     port map (CLK, THETA, Z);
+                     port map ('1', CLK, THETA, Z);
 
     process begin
         for k in 0 to ctl_max - 1 loop

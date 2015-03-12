@@ -8,10 +8,9 @@ entity waveform_test is
 end entity;
 
 architecture waveform_test_impl of waveform_test is
-    signal      CLK:            std_logic  := '0';
+    signal      CLK:            std_logic  := '1';
     signal      CUTOFF:         ctl_signal := (others => '0');
     signal      THETA_IN:       ctl_signal := (others => '0');
-    -- TODO: Some of these seem unitialized ?
     signal      SAW_THETA:      ctl_signal := (others => '0');
     signal      SQR_THETA:      ctl_signal := (others => '0');
     signal      SAW_Z:          ctl_signal;
@@ -20,19 +19,19 @@ architecture waveform_test_impl of waveform_test is
 begin
     phase_distort_saw : 
         entity work.phase_distort(phase_distort_saw)
-        port map (CLK, CUTOFF, THETA_IN, SAW_THETA);
+        port map ('1', CLK, CUTOFF, THETA_IN, SAW_THETA);
 
     phase_distort_sq : 
         entity work.phase_distort(phase_distort_sq)
-        port map (CLK, CUTOFF, THETA_IN, SQR_THETA);
+        port map ('1', CLK, CUTOFF, THETA_IN, SQR_THETA);
 
     waveform_saw :
         entity work.waveshaper(waveshaper_sin)
-        port map (CLK, SAW_THETA, SAW_Z);
+        port map ('1', CLK, SAW_THETA, SAW_Z);
 
     waveform_sq :
         entity work.waveshaper(waveshaper_sin)
-        port map (CLK, SQR_THETA, SQR_Z);
+        port map ('1', CLK, SQR_THETA, SQR_Z);
 
     process begin
         for j in 0 to ctl_max - 1 loop

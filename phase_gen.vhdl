@@ -4,7 +4,8 @@ use ieee.numeric_std.all;
 use work.common.all;
 
 entity phase_gen is
-    port    (CLK:           in  std_logic
+    port    (EN:            in  std_logic
+            ;CLK:           in  std_logic
             ;FREQ1:         in  time_signal
             ;FREQ2:         in  time_signal
             ;PHASE1_IN:     in  time_signal
@@ -26,7 +27,7 @@ begin
     process(CLK)
         variable overflow_check: unsigned(time_bits downto 0);
     begin
-        if rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK) then
             overflow_check := ('0' & PHASE1_IN) + ('0' & FREQ1);
 
             if overflow_check(overflow_check'high) = '1' then

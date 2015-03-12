@@ -8,7 +8,7 @@ entity env_gen_test is
 end entity;
 
 architecture env_gen_test_impl of env_gen_test is
-    signal  CLK:            std_logic := '0';
+    signal  CLK:            std_logic := '1';
     signal  GATE:           std_logic := '0';
     signal  A_RATE:         ctl_signal := x"FF";
     signal  D_RATE:         ctl_signal := x"02";
@@ -24,7 +24,8 @@ begin
     env_gen : entity 
                 work.env_gen(env_gen_impl)
               port map 
-                (CLK
+                ('1'
+                ,CLK
                 ,GATE
                 ,A_RATE
                 ,D_RATE
