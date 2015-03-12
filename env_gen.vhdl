@@ -12,8 +12,8 @@ entity env_gen is
             ;R_RATE:        in  ctl_signal
             ;ENV_IN:        in  time_signal
             ;ENV_OUT:       out time_signal
-            ;STAGE_IN:      in  adsr_stage_t
-            ;STAGE_OUT:     out adsr_stage_t
+            ;STAGE_IN:      in  adsr_stage
+            ;STAGE_OUT:     out adsr_stage
             ;PREV_GATE_IN:  in  std_logic
             ;PREV_GATE_OUT: out std_logic
             )
@@ -28,7 +28,7 @@ architecture env_gen_impl of env_gen is
     constant zero_f_min_c : unsigned(bit_diff downto 0) := (others => '0');
 
     signal env_out_buf: time_signal := (others => '0');
-    signal stage_out_buf: adsr_stage_t := rel;
+    signal stage_out_buf: adsr_stage := adsr_rel;
     signal prev_gate_out_buf: std_logic := '0';
 
 begin
@@ -37,36 +37,38 @@ begin
         if rising_edge(CLK) then
 
             if PREV_GATE_IN = '0' and GATE = '1' then
-                stage_out_buf <= attack;
+                stage_out_buf <= adsr_attack;
                 prev_gate_out_buf <= '1';
             elsif PREV_GATE_IN = '1' and GATE = '0' then
-                stage_out_buf <= rel;
+                stage_out_buf <= adsr_rel;
                 prev_gate_out_buf <= '0';
             end if;
 
             case STAGE_IN is
-                when attack =>
+                when adsr_attack =>
                     if ENV_IN > time_max_val - A_RATE then
                         env_out_buf <= time_max_val;
-                        stage_out_buf <= decay;
+                        stage_out_buf <= adsr_decay;
                     else
                         env_out_buf <= ENV_IN + A_RATE;
                     end if;
-                when decay =>
+                when adsr_decay =>
                     if ENV_IN < (S_LVL & zero_f_min_c) + D_RATE then
                         env_out_buf <= S_LVL & zero_f_min_c;
-                        stage_out_buf <= sustain;
+                        stage_out_buf <= adsr_sustain;
                     else
                         env_out_buf <= ENV_IN - D_RATE;
                     end if;
-                when sustain =>
+                when adsr_sustain =>
                     null;
-                when rel =>
+                when adsr_rel =>
                     if ENV_IN < R_RATE then
                         env_out_buf <= zero_f;
                     else
                         env_out_buf <= ENV_IN - R_RATE;
                     end if;
+                when others => -- non-binary values
+                    null;
             end case;
         end if;
     end process;

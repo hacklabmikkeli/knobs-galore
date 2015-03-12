@@ -18,7 +18,13 @@ package common is
     constant audio_max : natural := 2**audio_bits;
     subtype audio_signal is unsigned(audio_bits - 1 downto 0);
 
-    type adsr_stage_t is (attack, decay, sustain, rel);
+    subtype adsr_stage is unsigned(1 downto 0);
+
+    constant adsr_attack:   adsr_stage      := "00";
+    constant adsr_decay:    adsr_stage      := "01";
+    constant adsr_sustain:  adsr_stage      := "10";
+    constant adsr_rel:      adsr_stage      := "11";
+    constant foobar: std_logic := '1';
 
     constant voices : natural := 8;
 

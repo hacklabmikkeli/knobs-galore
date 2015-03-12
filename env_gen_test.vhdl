@@ -15,7 +15,7 @@ architecture env_gen_test_impl of env_gen_test is
     signal  S_LVL:          ctl_signal := x"80";
     signal  R_RATE:         ctl_signal := x"10";
     signal  ENV:            time_signal := (others => '0');
-    signal  STAGE:          adsr_stage_t := rel;
+    signal  STAGE:          adsr_stage := adsr_rel;
     signal  PREV_GATE:      std_logic := '0';
     signal  BUSY:           std_logic;
     constant length:        integer := 100000;
