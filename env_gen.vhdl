@@ -36,7 +36,6 @@ begin
     process(CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
-
             if PREV_GATE_IN = '0' and GATE = '1' then
                 stage_out_buf <= adsr_attack;
                 prev_gate_out_buf <= '1';

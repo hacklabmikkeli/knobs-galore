@@ -48,4 +48,8 @@ circular_buffer.o: common.o
 
 circular_buffer_test.o: common.o circular_buffer.o
 
+synthesizer.o: common.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o
+
+synthesizer_test.o: common.o synthesizer.o
+
 .PHONY: all test clean

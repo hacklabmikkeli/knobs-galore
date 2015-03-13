@@ -29,7 +29,9 @@ package common is
     type state_vector is
     record
         sv_phase1: time_signal;
-        sv_phase2: time_signal; sv_wave_sel: std_logic; sv_ampl: time_signal;
+        sv_phase2: time_signal;
+        sv_wave_sel: std_logic;
+        sv_ampl: time_signal;
         sv_ampl_stage: adsr_stage;
         sv_cutoff: time_signal;
         sv_cutoff_stage: adsr_stage;
@@ -51,6 +53,16 @@ package common is
     
     constant num_voices : natural := 32;
 
+    constant empty_state_vector : state_vector :=
+        ((others => '0')
+        ,(others => '0')
+        ,'0'
+        ,(others => '0')
+        ,adsr_rel
+        ,(others => '0')
+        ,adsr_rel
+        );
+
     type pd_lut_t is array(0 to 63, 0 to 63) of ctl_signal;
 
     function pd_lookup(cutoff : ctl_signal
@@ -67,9 +79,6 @@ package common is
 
     function to_audio_lsb(input: ctl_signal)
     return audio_signal;
-
-    function empty_state_vector
-    return state_vector;
 end common;
 
 package body common is
@@ -141,20 +150,6 @@ package body common is
         variable retval: audio_signal := (others => '0');
     begin
         retval(ctl_bits - 1 downto 0) := input;
-        return retval;
-    end function;
-
-    function empty_state_vector
-    return state_vector is
-        variable retval: state_vector;
-    begin
-        retval.sv_phase1 := (others => '0');
-        retval.sv_phase2 := (others => '0');
-        retval.sv_wave_sel := '0';
-        retval.sv_ampl := (others => '0');
-        retval.sv_ampl_stage := (others => '0');
-        retval.sv_cutoff := (others => '0');
-        retval.sv_cutoff_stage := (others => '0');
         return retval;
     end function;
 end common;
