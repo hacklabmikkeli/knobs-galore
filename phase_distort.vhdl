@@ -28,7 +28,7 @@ architecture phase_distort_saw of phase_distort is
         variable k : integer;
 
     begin
-        k := cutoff / 2;
+        k := (ctl_max - cutoff) / 2;
         y0 := (ctl_max / 2) - k;
         if x < k then
             y := (x * y0) / k;
@@ -77,7 +77,7 @@ architecture phase_distort_sq of phase_distort is
         variable y : integer;
 
     begin
-        k := cutoff / 4;
+        k := (ctl_max - cutoff) / 4;
         y0 := ctl_max / 4;
         if x < k then
             y := (x * y0) / k;
