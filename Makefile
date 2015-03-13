@@ -12,7 +12,7 @@ all: $(OBJ)
 test: $(TEST_VCD)
 
 clean:
-	rm -f *.o *.vcd *.cf
+	rm -f *.o *.vcd *.cf *.out
 
 %.o: %.vhdl
 	ghdl -a $(GHDL_FLAGS) $<
@@ -48,8 +48,12 @@ circular_buffer.o: common.o
 
 circular_buffer_test.o: common.o circular_buffer.o
 
-synthesizer.o: common.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o
+synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o
 
 synthesizer_test.o: common.o synthesizer.o
+
+synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o
+
+synthesizer_sim_test.o: common.o synthesizer_sim.o
 
 .PHONY: all test clean

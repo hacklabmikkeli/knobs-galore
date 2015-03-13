@@ -45,7 +45,6 @@ begin
         end loop;
 
         for k in 0 to length loop
-
             DATA_IN <= DATA_OUT;
 
             EN <= '1';
