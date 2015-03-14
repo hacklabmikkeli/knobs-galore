@@ -15,8 +15,7 @@ Would somebody with a Windows machine create a test script?
 
 ### Synthesis instructions
 Create a Xilinx ISE (or Vivado) project and add non-test .vhdl files and the .ucf file
-to the project, and synthesize like any other Xilinx project. Note that there's
-no main entity at the moment, so the project can't be synthesized.
+to the project, and synthesize like any other Xilinx project.
 
 ### More info
 Info on phase distortion:
