@@ -47,32 +47,23 @@ architecture synthesizer_impl of synthesizer is
         end case;
     end function;
 
-    function gated(sgn : std_logic
-                  ;keys : std_logic_vector(7 downto 0)
-                  )
-    return std_logic is
-    begin
-        return sgn and (keys(7) or
-             keys(6) or
-             keys(5) or
-             keys(4) or
-             keys(3) or
-             keys(2) or
-             keys(1) or
-             keys(0));
-    end function;
-
-    signal CLK1 : std_logic := '0';
-    signal CLK2 : std_logic := '0';
-    signal ENV: time_signal := (others => '0');
-    signal STAGE: adsr_stage := adsr_rel;
-    signal GATE: std_logic := '0';
-    signal PREV_GATE: std_logic := '0';
-    signal counter : unsigned(8 downto 0) := (others => '0');
-    signal theta : time_signal := (others => '0');
-    signal theta_pd : ctl_signal := (others => '0');
-    signal z : ctl_signal := (others => '0');
-	signal v_out : std_logic;
+    signal clk1: std_logic := '0';
+    signal clk2: std_logic := '0';
+    signal counter: unsigned(8 downto 0) := (others => '0');
+    signal freq: time_signal := (others => '0');
+    signal gate: std_logic := '0';
+    signal gain: ctl_signal := (others => '0');
+    signal env_cutoff: time_signal := (others => '0');
+    signal env_gain: time_signal := (others => '0');
+    signal stage_cutoff: adsr_stage := adsr_rel;
+    signal stage_gain: adsr_stage := adsr_rel;
+    signal prev_gate_cutoff: std_logic := '0';
+    signal prev_gate_gain: std_logic := '0';
+    signal theta: time_signal := (others => '0');
+    signal theta_pd: ctl_signal := (others => '0');
+    signal z: ctl_signal := (others => '0');
+    signal z_ampl: ctl_signal := (others => '0');
+    signal v_out: std_logic;
 begin
 
     process (CLK)
@@ -83,74 +74,121 @@ begin
                 else
                     counter <= counter + 1;
             end if;
+            if gate = '1' then
+                freq <= keys_to_freq(KEYS);
+            end if;
         end if;
     end process;
 
-    CLK1 <= CLK;
-    CLK2 <= '1' when counter = "000000000" else '0';
-    GATE <= '1' when keys /= "00000000" else '0';
+    clk1 <= CLK;
+    clk2 <= '1' when counter = "000000000" else '0';
+    gate <= '1' when KEYS /= "00000000" else '0';
 
-    phase_gen : entity
-                    work.phase_gen (phase_gen_impl)
-                port map
-                    ('1'
-                    ,CLK2
-                    ,keys_to_freq(KEYS)
-                    ,keys_to_freq(KEYS)
-                    ,theta
-                    ,(others => '0')
-                    ,'0'
-                    ,theta
-                    ,open
-                    ,open
-                    );
+    phase_gen:
+        entity
+            work.phase_gen (phase_gen_impl)
+        port map
+            ('1'
+            ,clk2
+            ,freq
+            ,freq
+            ,theta
+            ,(others => '0')
+            ,'0'
+            ,theta
+            ,open
+            ,open
+            );
 
-    env_gen : entity
-                work.env_gen (env_gen_impl)
-              port map
-                ('1'
-                ,CLK2
-                ,GATE
-                ,x"80"
-                ,x"80"
-                ,x"80"
-                ,x"80"
-                ,ENV
-                ,ENV
-                ,STAGE
-                ,STAGE
-                ,PREV_GATE
-                ,PREV_GATE
-                );
+    env_gen_cutoff:
+        entity
+            work.env_gen (env_gen_impl)
+        port map
+            ('1'
+            ,clk2
+            ,gate
+            ,x"80"
+            ,x"0A"
+            ,x"00"
+            ,x"04"
+            ,env_cutoff
+            ,env_cutoff
+            ,stage_cutoff
+            ,stage_cutoff
+            ,prev_gate_cutoff
+            ,prev_gate_cutoff
+            );
 
-    phase_distort : entity 
-                        work.phase_distort (phase_distort_saw)
-                    port map
-                        ('1'
-                        ,CLK2
-                        ,ENV(15 downto 8)
-                        ,theta(15 downto 8)
-                        ,theta_pd
-                        );
+    env_gen_ampl:
+        entity
+            work.env_gen (env_gen_impl)
+        port map
+            ('1'
+            ,clk2
+            ,gate
+            ,x"80"
+            ,x"08"
+            ,x"00"
+            ,x"02"
+            ,env_gain
+            ,env_gain
+            ,stage_gain
+            ,stage_gain
+            ,prev_gate_gain
+            ,prev_gate_gain
+            );
 
-    waveshaper : entity
-                    work.waveshaper(waveshaper_sin)
-                 port map
-                    ('1'
-                    ,CLK2
-                    ,theta_pd
-                    ,z
-                    );
+    phase_distort:
+        entity 
+            work.phase_distort (phase_distort_saw)
+        port map
+            ('1'
+            ,clk2
+            ,env_cutoff(15 downto 8)
+            ,theta(15 downto 8)
+            ,theta_pd
+            );
+
+    waveshaper:
+        entity
+            work.waveshaper(waveshaper_sin)
+        port map
+            ('1'
+            ,clk2
+            ,theta_pd
+            ,z
+            );
+
+    delay:
+        entity
+            work.delay (delay_impl)
+        port map
+            ('1'
+            ,clk2
+            ,env_gain(15 downto 8)
+            ,gain
+            );
+
+    amplifier:
+        entity
+            work.amplifier (amplifier_impl)
+        port map
+            ('1'
+            ,clk2
+            ,gain
+            ,z
+            ,z_ampl
+            );
 
 	dac : entity 
                 work.delta_sigma_dac(delta_sigma_dac_impl)
 	      port map
                 ('1'
-                ,CLK1
-                ,to_audio_msb(z)
+                ,clk1
+                ,to_audio_msb(z_ampl)
                 ,v_out
                 );
 
-    LINE_LEFT_NEG <= not gated(v_out, KEYS);
-    LINE_LEFT_POS <= gated(v_out, KEYS);
+    LINE_LEFT_NEG <= not v_out;
+    LINE_LEFT_POS <= v_out;
 end architecture;

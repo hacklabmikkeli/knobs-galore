@@ -32,6 +32,10 @@ phase_distort.o: common.o
 
 delta_sigma_dac.o: common.o
 
+amplifier.o: common.o
+
+delay.o: common.o
+
 phase_gen_test.o: common.o phase_gen.o
 
 env_gen_test.o: common.o env_gen.o
@@ -39,6 +43,8 @@ env_gen_test.o: common.o env_gen.o
 waveshaper_test.o: common.o waveshaper.o
 
 phase_distort_test.o: common.o phase_distort.o
+
+amplifier_test.o: common.o amplifier.o
 
 delta_sigma_dac_test.o: common.o waveshaper.o delta_sigma_dac.o
 
@@ -52,7 +58,7 @@ synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o 
 
 synthesizer_test.o: common.o synthesizer.o
 
-synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o
+synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o amplifier.o delay.o
 
 synthesizer_sim_test.o: common.o synthesizer_sim.o
 

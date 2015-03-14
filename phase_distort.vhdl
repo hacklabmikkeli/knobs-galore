@@ -16,12 +16,10 @@
 --    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --
 library ieee;
-library std;
 library work;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
-use std.textio.all;
 
 use work.common.all;
 

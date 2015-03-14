@@ -80,7 +80,8 @@ package common is
         ,adsr_rel
         );
 
-    type pd_lut_t is array(0 to 63, 0 to 63) of ctl_signal;
+    -- TODO: make the array larger after optimizing
+    type pd_lut_t is array(0 to 31, 0 to 31) of ctl_signal;
 
     function pd_lookup(cutoff : ctl_signal
                       ;theta_in : ctl_signal

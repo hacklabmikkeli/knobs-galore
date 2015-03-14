@@ -46,84 +46,127 @@ architecture synthesizer_sim_impl of synthesizer_sim is
         end case;
     end function;
 
-    function gated(sgn : std_logic
-                  ;keys : std_logic_vector(7 downto 0)
-                  )
-    return std_logic is
-    begin
-        return sgn and (keys(7) or
-             keys(6) or
-             keys(5) or
-             keys(4) or
-             keys(3) or
-             keys(2) or
-             keys(1) or
-             keys(0));
-    end function;
-
-    signal ENV: time_signal := (others => '0');
-    signal STAGE: adsr_stage := adsr_rel;
-    signal GATE: std_logic := '0';
-    signal PREV_GATE: std_logic := '0';
+    signal freq: time_signal := (others => '0');
+    signal gate: std_logic := '0';
+    signal gain: ctl_signal := (others => '0');
+    signal env_cutoff: time_signal := (others => '0');
+    signal env_gain: time_signal := (others => '0');
+    signal stage_cutoff: adsr_stage := adsr_rel;
+    signal stage_gain: adsr_stage := adsr_rel;
+    signal prev_gate_cutoff: std_logic := '0';
+    signal prev_gate_gain: std_logic := '0';
     signal theta : time_signal := (others => '0');
     signal theta_pd : ctl_signal := (others => '0');
     signal z : ctl_signal := (others => '0');
-	signal v_out : std_logic;
+    signal z_ampl : ctl_signal := (others => '0');
 begin
 
-    GATE <= '1' when keys /= "00000000" else '0';
+    gate <= '1' when KEYS /= "00000000" else '0';
 
-    phase_gen : entity
-                    work.phase_gen (phase_gen_impl)
-                port map
-                    ('1'
-                    ,CLK
-                    ,keys_to_freq(KEYS)
-                    ,keys_to_freq(KEYS)
-                    ,theta
-                    ,(others => '0')
-                    ,'0'
-                    ,theta
-                    ,open
-                    ,open
-                    );
+    process (CLK)
+    begin
+        if rising_edge(CLK) then
+            if gate = '1' then
+                freq <= keys_to_freq(KEYS);
+            end if;
+        end if;
+    end process;
 
-    env_gen : entity
-                work.env_gen (env_gen_impl)
-              port map
-                ('1'
-                ,CLK
-                ,GATE
-                ,x"08"
-                ,x"01"
-                ,x"00"
-                ,x"FF"
-                ,ENV
-                ,ENV
-                ,STAGE
-                ,STAGE
-                ,PREV_GATE
-                ,PREV_GATE
-                );
+    phase_gen:
+        entity
+            work.phase_gen (phase_gen_impl)
+        port map
+            ('1'
+            ,CLK
+            ,freq
+            ,freq
+            ,theta
+            ,(others => '0')
+            ,'0'
+            ,theta
+            ,open
+            ,open
+            );
 
-    phase_distort : entity 
-                        work.phase_distort (phase_distort_saw)
-                    port map
-                        ('1'
-                        ,CLK
-                        ,ENV(15 downto 8)
-                        ,theta(15 downto 8)
-                        ,theta_pd
-                        );
+    env_gen_cutoff:
+        entity
+            work.env_gen (env_gen_impl)
+        port map
+            ('1'
+            ,CLK
+            ,gate
+            ,x"08"
+            ,x"01"
+            ,x"00"
+            ,x"04"
+            ,env_cutoff
+            ,env_cutoff
+            ,stage_cutoff
+            ,stage_cutoff
+            ,prev_gate_cutoff
+            ,prev_gate_cutoff
+            );
 
-    waveshaper : entity
-                    work.waveshaper(waveshaper_sin)
-                 port map
-                    ('1'
-                    ,CLK
-                    ,theta_pd
-                    ,z
-                    );
+    env_gen_ampl:
+        entity
+            work.env_gen (env_gen_impl)
+        port map
+            ('1'
+            ,CLK
+            ,gate
+            ,x"40"
+            ,x"02"
+            ,x"80"
+            ,x"02"
+            ,env_gain
+            ,env_gain
+            ,stage_gain
+            ,stage_gain
+            ,prev_gate_gain
+            ,prev_gate_gain
+            );
 
-    AUDIO <= z;
+    phase_distort:
+        entity 
+            work.phase_distort (phase_distort_saw)
+        port map
+            ('1'
+            ,CLK
+            ,env_cutoff(15 downto 8)
+            ,theta(15 downto 8)
+            ,theta_pd
+            );
+
+    waveshaper:
+        entity
+            work.waveshaper(waveshaper_sin)
+        port map
+            ('1'
+            ,CLK
+            ,theta_pd
+            ,z
+            );
+
+    delay:
+        entity
+            work.delay (delay_impl)
+        port map
+            ('1'
+            ,CLK
+            ,env_gain(15 downto 8)
+            ,gain
+            );
+
+    amplifier:
+        entity
+            work.amplifier (amplifier_impl)
+        port map
+            ('1'
+            ,CLK
+            ,gain
+            ,z
+            ,z_ampl
+            );
+
+    AUDIO <= z_ampl;
 end architecture;
