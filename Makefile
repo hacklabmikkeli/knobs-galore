@@ -12,7 +12,11 @@ all: $(OBJ)
 test: $(TEST_VCD)
 
 clean:
+	make -C doc clean
 	rm -f *.o *.vcd *.cf *.out
+
+doc:
+	make -C doc all
 
 %.o: %.vhdl
 	ghdl -a $(GHDL_FLAGS) $<
