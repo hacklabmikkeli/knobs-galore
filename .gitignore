@@ -4,3 +4,5 @@ KnobsGalore/
 *.vcd
 *.cf
 *.gtkw
+*.out
+*.raw
