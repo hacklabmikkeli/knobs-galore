@@ -4,7 +4,7 @@ PNG=$(TXT:.txt=.png)
 all: $(PNG)
 
 clean:
-	rm *.png
+	rm -f *.png
 
 %.png: %.txt
 	ditaa -o $<
