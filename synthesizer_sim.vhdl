@@ -55,6 +55,7 @@ architecture synthesizer_sim_impl of synthesizer_sim is
     signal stage_gain: adsr_stage := adsr_rel;
     signal prev_gate_cutoff: std_logic := '0';
     signal prev_gate_gain: std_logic := '0';
+    signal wave_sel: std_logic := '0';
     signal theta : time_signal := (others => '0');
     signal theta_pd : ctl_signal := (others => '0');
     signal z : ctl_signal := (others => '0');
@@ -82,10 +83,10 @@ begin
             ,freq
             ,theta
             ,(others => '0')
-            ,'0'
+            ,wave_sel
             ,theta
             ,open
-            ,open
+            ,wave_sel
             );
 
     env_gen_cutoff:
@@ -128,10 +129,12 @@ begin
 
     phase_distort:
         entity 
-            work.phase_distort (phase_distort_saw)
+            work.phase_distort (phase_distort_impl)
         port map
             ('1'
             ,CLK
+            ,waveform_mix
+            ,wave_sel
             ,env_cutoff(15 downto 8)
             ,theta(15 downto 8)
             ,theta_pd

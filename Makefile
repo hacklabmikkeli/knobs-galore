@@ -1,6 +1,6 @@
 ANALYZE_FLAGS=-g
-ELABORATE_FLAGS=-g
-RUN_FLAGS=
+ELABORATE_FLAGS=
+RUN_FLAGS=--assert-level=warning 
 
 VHDL=$(shell find *.vhdl)
 TEST_VHDL=$(shell find *_test.vhdl)
@@ -19,11 +19,11 @@ doc:
 	make -C doc all
 
 %.o: %.vhdl
-	ghdl -a $(GHDL_FLAGS) $<
+	ghdl -a $(ANALYZE_FLAGS) $<
 
 %.vcd: %.o
-	ghdl -e $(subst .o,,$^)
-	ghdl -r $(subst .o,,$^) --vcd="$(subst .o,.vcd,$^)"
+	ghdl $(ELABORATE_FLAGS) -e $(subst .o,,$^)
+	ghdl -r $(subst .o,,$^) --vcd="$(subst .o,.vcd,$^)" $(RUN_FLAGS) 
 	rm $(subst .o,,$^)
 
 phase_gen.o: common.o
@@ -32,11 +32,13 @@ env_gen.o: common.o
 
 waveshaper.o: common.o
 
-phase_distort.o: common.o
+lookup.o: common.o
+
+phase_distort.o: common.o lookup.o
 
 delta_sigma_dac.o: common.o
 
-amplifier.o: common.o
+amplifier.o: common.o lookup.o
 
 delay.o: common.o
 
@@ -66,4 +68,4 @@ synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_ge
 
 synthesizer_sim_test.o: common.o synthesizer_sim.o
 
-.PHONY: all test clean
+.PHONY: all test clean doc

@@ -26,6 +26,8 @@ use work.common.all;
 entity phase_distort is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
+            ;WAVEFORM:      in  waveform
+            ;WAVE_SEL:      in  std_logic
             ;CUTOFF:        in  ctl_signal
             ;THETA_IN:      in  ctl_signal
             ;THETA_OUT:     out ctl_signal
@@ -33,10 +35,11 @@ entity phase_distort is
     ;
 end entity;
 
-architecture phase_distort_saw of phase_distort is
-    function transfer(cutoff : integer
-                     ;x : integer
-                     )
+architecture phase_distort_impl of phase_distort is
+    function transfer_saw
+        (cutoff: integer
+        ;x: integer
+        )
     return integer is
         variable y0 : integer;
         variable y : integer;
@@ -54,38 +57,10 @@ architecture phase_distort_saw of phase_distort is
         return y mod ctl_max;
     end function;
 
-    function make_lut return pd_lut_t is
-        constant shrink_factor : integer := (ctl_max / pd_lut_t'length(1));
-        variable result : pd_lut_t;
-
-    begin
-        for j in pd_lut_t'low(1) to pd_lut_t'high(1) loop
-            for i in pd_lut_t'low(2) to pd_lut_t'high(2) loop
-                result(j,i) := to_unsigned(transfer(j*shrink_factor,
-                                                    i*shrink_factor),ctl_bits);
-            end loop;
-        end loop;
-        return result;
-    end function;
-
-    constant lut : pd_lut_t := make_lut;
-    
-    signal theta_out_buf: ctl_signal := (others => '0');
-begin
-    process (CLK)
-    begin
-        if EN = '1' and rising_edge(CLK) then
-            theta_out_buf <= pd_lookup(CUTOFF, THETA_IN, lut);
-        end if;
-    end process;
-
-    THETA_OUT <= theta_out_buf;
-end architecture;
-
-architecture phase_distort_sq of phase_distort is
-    function transfer(cutoff : integer
-                     ;x : integer
-                     )
+    function transfer_sq
+        (cutoff: integer
+        ;x: integer
+        )
     return integer is
         variable k : integer;
         variable y0 : integer;
@@ -108,28 +83,96 @@ architecture phase_distort_sq of phase_distort is
         return y mod ctl_max;
     end function;
 
-    function make_lut return pd_lut_t is
-        constant shrink_factor : integer := (ctl_max / pd_lut_t'length(1));
-        variable result : pd_lut_t;
-
+    function make_lut_saw return ctl_lut_t is
+        variable result : ctl_lut_t;
     begin
-        for j in pd_lut_t'low(1) to pd_lut_t'high(1) loop
-            for i in pd_lut_t'low(2) to pd_lut_t'high(2) loop
-                result(j,i) := to_unsigned(transfer(j*shrink_factor,
-                                                    i*shrink_factor),ctl_bits);
+        for j in ctl_lut_t'low(1) to ctl_lut_t'high(1) loop
+            for i in ctl_lut_t'low(2) to ctl_lut_t'high(2) loop
+                result(j,i) := to_unsigned(transfer_saw(i*16, j),ctl_bits);
             end loop;
         end loop;
         return result;
     end function;
 
-    constant lut : pd_lut_t := make_lut;
+    function make_lut_sq return ctl_lut_t is
+        variable result : ctl_lut_t;
+    begin
+        for j in ctl_lut_t'low(1) to ctl_lut_t'high(1) loop
+            for i in ctl_lut_t'low(2) to ctl_lut_t'high(2) loop
+                result(j,i) := to_unsigned(transfer_sq(i*16, j),ctl_bits);
+            end loop;
+        end loop;
+        return result;
+    end function;
 
+    constant lut_saw: ctl_lut_t := make_lut_saw;
+    constant lut_sq: ctl_lut_t := make_lut_sq;
+    constant zero: ctl_signal := (others => '0');
+    signal wave_sel_in_buf: std_logic := '0';
+    signal real_cutoff: ctl_signal;
+    signal theta_saw: ctl_signal := (others => '0');
+    signal theta_sq: ctl_signal := (others => '0');
     signal theta_out_buf: ctl_signal := (others => '0');
 begin
+
+    real_cutoff <= 
+        CUTOFF 
+            when WAVEFORM /= waveform_res or wave_sel = '0' 
+            else zero;
+
+    lookup_saw:
+        entity
+            work.lookup(lookup_impl)
+        generic map
+            (lut_saw)
+        port map
+            (EN
+            ,CLK
+            ,THETA_IN
+            ,real_cutoff
+            ,theta_saw
+            );
+
+    lookup_sq:
+        entity
+            work.lookup(lookup_impl)
+        generic map
+            (lut_sq)
+        port map
+            (EN
+            ,CLK
+            ,THETA_IN
+            ,real_cutoff
+            ,theta_sq
+            );
+
     process (CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
-            theta_out_buf <= pd_lookup(CUTOFF, THETA_IN, lut);
+            wave_sel_in_buf <= WAVE_SEL;
+        end if;
+    end process;
+
+
+    process (CLK)
+    begin
+        if EN = '1' and rising_edge(CLK) then
+            case WAVEFORM is
+                when waveform_saw =>
+                    theta_out_buf <= theta_saw;
+                when waveform_sq =>
+                    theta_out_buf <= theta_sq;
+                when waveform_mix =>
+                    if wave_sel_in_buf = '1' then
+                        theta_out_buf <= theta_sq;
+                    else
+                        theta_out_buf <= theta_saw;
+                    end if;
+                when waveform_res =>
+                    theta_out_buf <= theta_saw;
+                when others =>
+                    theta_out_buf <= (others => 'X');
+            end case;
         end if;
     end process;
 

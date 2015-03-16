@@ -35,18 +35,18 @@ architecture waveform_test_impl of waveform_test is
 
 begin
     phase_distort_saw : 
-        entity work.phase_distort(phase_distort_saw)
-        port map ('1', CLK, CUTOFF, THETA_IN, SAW_THETA);
+        entity work.phase_distort(phase_distort_impl)
+        port map ('1', CLK, waveform_saw, '0', CUTOFF, THETA_IN, SAW_THETA);
 
     phase_distort_sq : 
-        entity work.phase_distort(phase_distort_sq)
-        port map ('1', CLK, CUTOFF, THETA_IN, SQR_THETA);
+        entity work.phase_distort(phase_distort_impl)
+        port map ('1', CLK, waveform_sq, '0', CUTOFF, THETA_IN, SQR_THETA);
 
-    waveform_saw :
+    waveshaper_saw :
         entity work.waveshaper(waveshaper_sin)
         port map ('1', CLK, SAW_THETA, SAW_Z);
 
-    waveform_sq :
+    waveshaper_sq :
         entity work.waveshaper(waveshaper_sin)
         port map ('1', CLK, SQR_THETA, SQR_Z);
 

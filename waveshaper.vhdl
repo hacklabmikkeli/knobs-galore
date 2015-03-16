@@ -76,12 +76,15 @@ architecture waveshaper_sin of waveshaper is
         end case;
     end function;
 
+    signal rom: lut_t := sin_lut;
+    attribute ram_style: string;
+    attribute ram_style of rom: signal is "block";
     signal z_buf: ctl_signal := (others => '0');
 begin
     process (CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
-            z_buf <= lookup(THETA, sin_lut);
+            z_buf <= lookup(THETA, rom);
         end if;
     end process;
 

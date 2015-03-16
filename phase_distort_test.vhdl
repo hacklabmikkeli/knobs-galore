@@ -26,19 +26,19 @@ end entity;
 
 architecture phase_distort_test_impl of phase_distort_test is
     signal      CLK:            std_logic := '1';
-    signal      CUTOFF:         ctl_signal := to_unsigned(0, ctl_bits);
-    signal      THETA_IN:       ctl_signal := to_unsigned(0, ctl_bits);
+    signal      CUTOFF:         ctl_signal := (others => '0');
+    signal      THETA_IN:       ctl_signal := (others => '0');
     signal      SAW_THETA:      ctl_signal;
     signal      SQR_THETA:      ctl_signal;
 
 begin
     phase_distort_saw : 
-        entity work.phase_distort(phase_distort_saw)
-        port map ('1', CLK, CUTOFF, THETA_IN, SAW_THETA);
+        entity work.phase_distort(phase_distort_impl)
+        port map ('1', CLK, waveform_saw, '0', CUTOFF, THETA_IN, SAW_THETA);
 
     phase_distort_sq : 
-        entity work.phase_distort(phase_distort_sq)
-        port map ('1', CLK, CUTOFF, THETA_IN, SQR_THETA);
+        entity work.phase_distort(phase_distort_impl)
+        port map ('1', CLK, waveform_sq, '0', CUTOFF, THETA_IN, SQR_THETA);
 
     process begin
         for j in 0 to ctl_max - 1 loop

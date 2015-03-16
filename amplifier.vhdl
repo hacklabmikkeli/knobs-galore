@@ -43,30 +43,30 @@ architecture amplifier_impl of amplifier is
         return ((x - bias) * gain) / ctl_max + bias;
     end function;
 
-    function make_lut return pd_lut_t is
-        constant shrink_factor : integer := (ctl_max / pd_lut_t'length(1));
-        variable result : pd_lut_t;
 
+    function make_lut return ctl_lut_t is
+        variable result : ctl_lut_t;
     begin
-        for j in pd_lut_t'low(1) to pd_lut_t'high(1) loop
-            for i in pd_lut_t'low(2) to pd_lut_t'high(2) loop
-                result(j,i) := to_unsigned(transfer(j*shrink_factor,
-                                                    i*shrink_factor),ctl_bits);
+        for j in ctl_lut_t'low(1) to ctl_lut_t'high(1) loop
+            for i in ctl_lut_t'low(2) to ctl_lut_t'high(2) loop
+                result(j,i) := to_unsigned(transfer(i * 16, j),ctl_bits);
             end loop;
         end loop;
         return result;
     end function;
 
-    constant lut : pd_lut_t := make_lut;
-    
-    signal audio_out_buf: ctl_signal := (others => '0');
+    constant lut : ctl_lut_t := make_lut;
 begin
-    process (CLK)
-    begin
-        if EN = '1' and rising_edge(CLK) then
-            audio_out_buf <= pd_lookup(GAIN, AUDIO_IN, lut);
-        end if;
-    end process;
-
-    AUDIO_OUT <= audio_out_buf;
+    lookup:
+        entity
+            work.lookup(lookup_impl)
+        generic map
+            (lut)
+        port map
+            (EN
+            ,CLK
+            ,AUDIO_IN
+            ,GAIN
+            ,AUDIO_OUT
+            );
 end architecture;
