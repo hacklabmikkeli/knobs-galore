@@ -24,6 +24,7 @@ use ieee.math_real.all;
 use work.common.all;
 
 entity amplifier is
+    -- delay 2
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
             ;GAIN:          in  ctl_signal
@@ -34,39 +35,32 @@ entity amplifier is
 end entity;
 
 architecture amplifier_impl of amplifier is
-    function transfer(gain : integer
-                     ;x : integer
-                     )
-    return integer is
-        constant bias: integer := ctl_max / 2;
-    begin
-        return ((x - bias) * gain) / ctl_max + bias;
-    end function;
+    -- AUDIO_OUT = 
+    --    (GAIN * AUDIO_IN)         / CTL_MAX + 
+    --    ((CTL_MAX - GAIN) * BIAS) / CTL_MAX
+    constant bias: ctl_signal := ('1', others => '0');
 
-
-    function make_lut return ctl_lut_t is
-        variable result : ctl_lut_t;
-    begin
-        for j in ctl_lut_t'low(1) to ctl_lut_t'high(1) loop
-            for i in ctl_lut_t'low(2) to ctl_lut_t'high(2) loop
-                result(j,i) := to_unsigned(transfer(i * 16, j),ctl_bits);
-            end loop;
-        end loop;
-        return result;
-    end function;
-
-    constant lut : ctl_lut_t := make_lut;
+    signal GX_N: ctl_signal := (others => '0');
+    signal N_Gb_N: ctl_signal := (others => '0');
+    signal audio_out_buf: ctl_signal := (others => '0');
 begin
-    lookup:
-        entity
-            work.lookup(lookup_impl)
-        generic map
-            (lut)
-        port map
-            (EN
-            ,CLK
-            ,AUDIO_IN
-            ,GAIN
-            ,AUDIO_OUT
-            );
+    process (CLK)
+        constant ctl_max_cs: ctl_signal := (others => '1');
+
+        variable GX: unsigned(ctl_bits * 2 - 1 downto 0);
+        variable N_Gb: unsigned(ctl_bits * 2 - 1 downto 0);
+    begin
+        if EN = '1' and rising_edge(CLK) then
+            -- stage 1
+            GX := GAIN * AUDIO_IN;
+            GX_N <= GX(ctl_bits * 2 - 1 downto ctl_bits);
+            N_Gb := (ctl_max_cs - GAIN) * bias;
+            N_Gb_N <= N_Gb(ctl_bits * 2 - 1 downto ctl_bits);
+
+            -- stage 2
+            audio_out_buf <= GX_N + N_Gb_N;
+        end if;
+    end process;
+
+    AUDIO_OUT <= audio_out_buf;
 end architecture;
