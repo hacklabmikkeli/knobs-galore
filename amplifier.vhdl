@@ -54,7 +54,7 @@ begin
             -- stage 1
             GX := GAIN * AUDIO_IN;
             GX_N <= GX(ctl_bits * 2 - 1 downto ctl_bits);
-            N_Gb := (ctl_max_cs - GAIN) * bias;
+            N_Gb := (not GAIN) * bias;
             N_Gb_N <= N_Gb(ctl_bits * 2 - 1 downto ctl_bits);
 
             -- stage 2

@@ -85,7 +85,7 @@ package common is
         );
 
     -- TODO: make the array larger after optimizing
-    type ctl_lut_t is array(0 to 255, 0 to 15) of ctl_signal;
+    type ctl_lut_t is array(0 to 255, 0 to 16) of ctl_signal;
 
     function to_ctl(input: time_signal)
     return ctl_signal;

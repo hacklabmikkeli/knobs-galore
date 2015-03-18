@@ -54,16 +54,12 @@ begin
     end process;
 
     process(CLK)
-        variable y_plusone: unsigned(3 downto 0);
+        variable y_plusone: unsigned(4 downto 0);
         variable x_ix: integer range 0 to 255;
-        variable y_ix: integer range 0 to 15;
+        variable y_ix: integer range 1 to 16;
     begin
         if EN = '1' and rising_edge(CLK) then
-            if Y(7 downto 4) = "1111" then
-                y_plusone := "1111";
-            else 
-                y_plusone := Y(7 downto 4) + 1;
-            end if;
+            y_plusone := ("0" & Y(7 downto 4)) + 1;
             x_ix := to_integer(X);
             y_ix := to_integer(y_plusone);
             right_ref <= rom(x_ix, y_ix);
@@ -74,7 +70,7 @@ begin
         variable y_recip: unsigned(4 downto 0);
     begin
         if EN = '1' and rising_edge(CLK) then
-            y_recip := "10000" - ("0" & Y(3 downto 0));
+            y_recip := "10000" - Y(3 downto 0);
             left_mult <= y_recip * left_ref;
         end if;
     end process;

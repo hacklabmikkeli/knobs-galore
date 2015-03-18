@@ -54,7 +54,11 @@ architecture phase_distort_impl of phase_distort is
             y := y0 - ((x-k) * y0) / (ctl_max - k);
         end if;
         y := y + x;
-        return y mod ctl_max;
+        if y > ctl_max - 1 then
+            return ctl_max - 1;
+        else
+            return y;
+        end if;
     end function;
 
     function transfer_sq
@@ -80,7 +84,11 @@ architecture phase_distort_impl of phase_distort is
         else
             y := (ctl_max / 2) + y0 + (x + k - ctl_max) * y0 / k;
         end if;
-        return y mod ctl_max;
+        if y > ctl_max - 1 then
+            return ctl_max - 1;
+        else
+            return y;
+        end if;
     end function;
 
     function make_lut_saw return ctl_lut_t is
@@ -109,16 +117,11 @@ architecture phase_distort_impl of phase_distort is
     constant lut_sq: ctl_lut_t := make_lut_sq;
     constant zero: ctl_signal := (others => '0');
     signal wave_sel_in_buf: std_logic := '0';
-    signal real_cutoff: ctl_signal;
-    signal theta_saw: ctl_signal := (others => '0');
-    signal theta_sq: ctl_signal := (others => '0');
+    signal real_cutoff: ctl_signal := (others => '0');
+    signal theta_saw: ctl_signal;
+    signal theta_sq: ctl_signal;
     signal theta_out_buf: ctl_signal := (others => '0');
 begin
-
-    real_cutoff <= 
-        CUTOFF 
-            when WAVEFORM /= waveform_res or wave_sel = '0' 
-            else zero;
 
     lookup_saw:
         entity
@@ -149,10 +152,20 @@ begin
     process (CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
+            if WAVEFORM /= waveform_res or wave_sel = '0' then
+                real_cutoff <= CUTOFF;
+            else
+                real_cutoff <= ZERO;
+            end if;
+        end if;
+    end process;
+    
+    process (CLK)
+    begin
+        if EN = '1' and rising_edge(CLK) then
             wave_sel_in_buf <= WAVE_SEL;
         end if;
     end process;
-
 
     process (CLK)
     begin
