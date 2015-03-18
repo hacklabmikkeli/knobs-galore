@@ -24,7 +24,6 @@ use ieee.math_real.all;
 use work.common.all;
 
 entity amplifier is
-    -- delay 2
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
             ;GAIN:          in  ctl_signal

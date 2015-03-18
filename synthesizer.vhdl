@@ -145,11 +145,13 @@ begin
         port map
             ('1'
             ,clk2
-            ,waveform_mix
-            ,wave_sel
+            ,waveform_saw
             ,env_cutoff(15 downto 8)
             ,theta(15 downto 8)
             ,theta_pd
+            -- TODO: hook up gain to signal pipeline
+            ,(others => '0')
+            ,open
             );
 
     waveshaper:
@@ -160,6 +162,8 @@ begin
             ,clk2
             ,theta_pd
             ,z
+            ,(others => '0')
+            ,open
             );
 
     delay:

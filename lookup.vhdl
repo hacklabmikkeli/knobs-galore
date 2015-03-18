@@ -35,11 +35,15 @@ architecture lookup_impl of lookup is
     attribute ram_style: string;
     signal rom: ctl_lut_t := TABLE;
     attribute ram_style of rom: signal is "block";
-    signal left_ref: ctl_signal := (others => '0');
-    signal right_ref: ctl_signal := (others => '0');
-    signal left_mult: unsigned(12 downto 0) := (others => '0');
-    signal right_mult: unsigned(12 downto 0) := (others => '0');
-    signal z_buf: ctl_signal := (others => '0');
+
+    signal s1_left_ref: ctl_signal := (others => '0');
+    signal s1_right_ref: ctl_signal := (others => '0');
+    signal s1_y: ctl_signal := (others => '0');
+
+    signal s2_left_mult: unsigned(12 downto 0) := (others => '0');
+    signal s2_right_mult: unsigned(12 downto 0) := (others => '0');
+
+    signal s3_z_buf: ctl_signal := (others => '0');
 
 begin
     process(CLK)
@@ -49,7 +53,7 @@ begin
         if EN = '1' and rising_edge(CLK) then
             x_ix := to_integer(X);
             y_ix := to_integer(Y(7 downto 4));
-            left_ref <= rom(x_ix, y_ix);
+            s1_left_ref <= rom(x_ix, y_ix);
         end if;
     end process;
 
@@ -62,37 +66,44 @@ begin
             y_plusone := ("0" & Y(7 downto 4)) + 1;
             x_ix := to_integer(X);
             y_ix := to_integer(y_plusone);
-            right_ref <= rom(x_ix, y_ix);
+            s1_right_ref <= rom(x_ix, y_ix);
         end if;
     end process;
 
     process(CLK)
-        variable y_recip: unsigned(4 downto 0);
     begin
         if EN = '1' and rising_edge(CLK) then
-            y_recip := "10000" - Y(3 downto 0);
-            left_mult <= y_recip * left_ref;
+            s1_y <= Y;
         end if;
     end process;
 
     process(CLK)
-        variable y_fact: unsigned(4 downto 0);
+        variable s1_y_recip: unsigned(4 downto 0);
     begin
         if EN = '1' and rising_edge(CLK) then
-            y_fact := "0" & Y(3 downto 0);
-            right_mult <= y_fact * right_ref;
+            s1_y_recip := "10000" - s1_y(3 downto 0);
+            s2_left_mult <= s1_y_recip * s1_left_ref;
         end if;
     end process;
 
     process(CLK)
-        variable z_wide: unsigned(12 downto 0);
+        variable s1_y_fact: unsigned(4 downto 0);
     begin
         if EN = '1' and rising_edge(CLK) then
-            z_wide := left_mult + right_mult;
-            z_buf <= z_wide(11 downto 4);
+            s1_y_fact := "0" & s1_y(3 downto 0);
+            s2_right_mult <= s1_y_fact * s1_right_ref;
         end if;
     end process;
 
-    Z <= z_buf;
+    process(CLK)
+        variable s2_z_wide: unsigned(12 downto 0);
+    begin
+        if EN = '1' and rising_edge(CLK) then
+            s2_z_wide := s2_left_mult + s2_right_mult;
+            s3_z_buf <= s2_z_wide(11 downto 4);
+        end if;
+    end process;
+
+    Z <= s3_z_buf;
 
 end architecture;

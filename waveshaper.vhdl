@@ -1,5 +1,5 @@
 --
---    Knobs Galore - a free phase distortion synthesizer
+--    Knobs Galore - a free phase distortion synthesiaudio_outer
 --    Copyright (C) 2015 Ilmo Euro
 --
 --    This program is free software: you can redistribute it and/or modify
@@ -25,7 +25,9 @@ entity waveshaper is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
             ;THETA:         in  ctl_signal
-            ;Z:             out ctl_signal
+            ;AUDIO_OUT:     out ctl_signal
+            ;GAIN_IN:       in  ctl_signal
+            ;GAIN_THRU:     out ctl_signal
             )
     ;
 end entity;
@@ -36,20 +38,20 @@ architecture waveshaper_sin of waveshaper is
 
     function init_sin_lut return lut_t is
         constant N : real := real(ctl_max);
-        variable theta, z : real;
-        variable z_int : integer;
+        variable theta, audio_out : real;
+        variable audio_out_int : integer;
         variable retval : lut_t;
     begin
         for k in lut_t'low to lut_t'high loop
             theta := (real(k) / N) * 2.0 * MATH_PI;
-            z := (sin(theta) * 0.5) + 0.5;
-            z_int := integer(z * real(ctl_max));
-            if z_int < 0 then
-                z_int := 0;
-            elsif z_int > (ctl_max - 1) then
-                z_int := (ctl_max - 1);
+            audio_out := (sin(theta) * 0.5) + 0.5;
+            audio_out_int := integer(audio_out * real(ctl_max));
+            if audio_out_int < 0 then
+                audio_out_int := 0;
+            elsif audio_out_int > (ctl_max - 1) then
+                audio_out_int := (ctl_max - 1);
             end if;
-            retval(k) := to_unsigned(z_int, ctl_bits);
+            retval(k) := to_unsigned(audio_out_int, ctl_bits);
         end loop;
         return retval;
     end function init_sin_lut;
@@ -79,14 +81,17 @@ architecture waveshaper_sin of waveshaper is
     signal rom: lut_t := sin_lut;
     attribute ram_style: string;
     attribute ram_style of rom: signal is "block";
-    signal z_buf: ctl_signal := (others => '0');
+    signal s1_audio_out_buf: ctl_signal := (others => '0');
+    signal s1_gain_thru_buf: ctl_signal := (others => '0');
 begin
     process (CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
-            z_buf <= lookup(THETA, rom);
+            s1_audio_out_buf <= lookup(THETA, rom);
+            s1_gain_thru_buf <= GAIN_IN;
         end if;
     end process;
 
-    Z <= z_buf;
+    AUDIO_OUT <= s1_audio_out_buf;
+    GAIN_THRU <= s1_gain_thru_buf;
 end architecture;

@@ -26,11 +26,12 @@ use work.common.all;
 entity phase_distort is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
-            ;WAVEFORM:      in  waveform
-            ;WAVE_SEL:      in  std_logic
+            ;WAVEFORM:      in  waveform_t
             ;CUTOFF:        in  ctl_signal
             ;THETA_IN:      in  ctl_signal
             ;THETA_OUT:     out ctl_signal
+            ;GAIN_IN:       in  ctl_signal
+            ;GAIN_THRU:     out ctl_signal
             )
     ;
 end entity;
@@ -116,11 +117,14 @@ architecture phase_distort_impl of phase_distort is
     constant lut_saw: ctl_lut_t := make_lut_saw;
     constant lut_sq: ctl_lut_t := make_lut_sq;
     constant zero: ctl_signal := (others => '0');
-    signal wave_sel_in_buf: std_logic := '0';
-    signal real_cutoff: ctl_signal := (others => '0');
-    signal theta_saw: ctl_signal;
-    signal theta_sq: ctl_signal;
-    signal theta_out_buf: ctl_signal := (others => '0');
+
+    signal s1_waveform: waveform_t := waveform_saw;
+    signal s1_theta_saw: ctl_signal;
+    signal s1_theta_sq: ctl_signal;
+    signal s1_gain: ctl_signal := (others => '0');
+
+    signal s2_theta_out_buf: ctl_signal := (others => '0');
+    signal s2_gain_pass_buf: ctl_signal := (others => '0');
 begin
 
     lookup_saw:
@@ -132,8 +136,8 @@ begin
             (EN
             ,CLK
             ,THETA_IN
-            ,real_cutoff
-            ,theta_saw
+            ,CUTOFF
+            ,s1_theta_saw
             );
 
     lookup_sq:
@@ -145,49 +149,34 @@ begin
             (EN
             ,CLK
             ,THETA_IN
-            ,real_cutoff
-            ,theta_sq
+            ,CUTOFF
+            ,s1_theta_sq
             );
-
-    process (CLK)
-    begin
-        if EN = '1' and rising_edge(CLK) then
-            if WAVEFORM /= waveform_res or wave_sel = '0' then
-                real_cutoff <= CUTOFF;
-            else
-                real_cutoff <= ZERO;
-            end if;
-        end if;
-    end process;
     
     process (CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
-            wave_sel_in_buf <= WAVE_SEL;
+            s1_waveform <= WAVEFORM;
+            s1_gain <= GAIN_IN;
         end if;
     end process;
 
     process (CLK)
     begin
         if EN = '1' and rising_edge(CLK) then
-            case WAVEFORM is
+            case s1_waveform is
                 when waveform_saw =>
-                    theta_out_buf <= theta_saw;
+                    s2_theta_out_buf <= s1_theta_saw;
                 when waveform_sq =>
-                    theta_out_buf <= theta_sq;
-                when waveform_mix =>
-                    if wave_sel_in_buf = '1' then
-                        theta_out_buf <= theta_sq;
-                    else
-                        theta_out_buf <= theta_saw;
-                    end if;
-                when waveform_res =>
-                    theta_out_buf <= theta_saw;
+                    s2_theta_out_buf <= s1_theta_sq;
                 when others =>
-                    theta_out_buf <= (others => 'X');
+                    s2_theta_out_buf <= (others => '0');
             end case;
+
+            s2_gain_pass_buf <= s1_gain;
         end if;
     end process;
 
-    THETA_OUT <= theta_out_buf;
+    THETA_OUT <= s2_theta_out_buf;
+    GAIN_THRU <= s2_gain_pass_buf;
 end architecture;

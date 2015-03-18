@@ -41,11 +41,19 @@ package common is
     constant adsr_sustain:  adsr_stage      := "10";
     constant adsr_rel:      adsr_stage      := "11";
 
-    subtype waveform is std_logic_vector(1 downto 0);
-    constant waveform_saw:  waveform        := "00";
-    constant waveform_sq:   waveform        := "01";
-    constant waveform_mix:  waveform        := "10";
-    constant waveform_res:  waveform        := "11";
+    subtype waveform_t is std_logic;
+    constant waveform_saw:  waveform_t      := '0';
+    constant waveform_sq:   waveform_t      := '1';
+
+    subtype mode is std_logic_vector(2 downto 0);
+    constant mode_saw:      mode            := "000";
+    constant mode_sq:       mode            := "001";
+    constant mode_saw_res:  mode            := "010";
+    constant mode_sq_res:   mode            := "011";
+    constant mode_saw_fat:  mode            := "100";
+    constant mode_sq_fat:   mode            := "101";
+    constant mode_saw_sync: mode            := "110";
+    constant mode_mix:      mode            := "111";
 
     type state_vector is
     record

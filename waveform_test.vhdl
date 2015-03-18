@@ -28,27 +28,45 @@ architecture waveform_test_impl of waveform_test is
     signal      CLK:            std_logic  := '1';
     signal      CUTOFF:         ctl_signal := (others => '0');
     signal      THETA_IN:       ctl_signal := (others => '0');
-    signal      SAW_THETA:      ctl_signal := (others => '0');
-    signal      SQR_THETA:      ctl_signal := (others => '0');
+    signal      SAW_THETA:      ctl_signal;
+    signal      SQR_THETA:      ctl_signal;
     signal      SAW_Z:          ctl_signal;
     signal      SQR_Z:          ctl_signal;
 
 begin
     phase_distort_saw : 
-        entity work.phase_distort(phase_distort_impl)
-        port map ('1', CLK, waveform_saw, '0', CUTOFF, THETA_IN, SAW_THETA);
+        entity
+            work.phase_distort(phase_distort_impl)
+        port map
+            ('1'
+            ,CLK
+            ,waveform_saw
+            ,CUTOFF
+            ,THETA_IN
+            ,SAW_THETA
+            ,(others => '0')
+            ,open);
 
     phase_distort_sq : 
-        entity work.phase_distort(phase_distort_impl)
-        port map ('1', CLK, waveform_sq, '0', CUTOFF, THETA_IN, SQR_THETA);
+        entity
+            work.phase_distort(phase_distort_impl)
+        port map
+            ('1'
+            ,CLK
+            ,waveform_sq
+            ,CUTOFF
+            ,THETA_IN
+            ,SQR_THETA
+            ,(others => '0')
+            ,open);
 
     waveshaper_saw :
         entity work.waveshaper(waveshaper_sin)
-        port map ('1', CLK, SAW_THETA, SAW_Z);
+        port map ('1', CLK, SAW_THETA, SAW_Z, (others => '0'), open);
 
     waveshaper_sq :
         entity work.waveshaper(waveshaper_sin)
-        port map ('1', CLK, SQR_THETA, SQR_Z);
+        port map ('1', CLK, SQR_THETA, SQR_Z, (others => '0'), open);
 
     process begin
         for j in 0 to ctl_max - 1 loop

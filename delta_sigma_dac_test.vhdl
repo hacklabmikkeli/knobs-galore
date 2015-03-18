@@ -33,7 +33,7 @@ architecture delta_sigma_dac_test_impl of delta_sigma_dac_test is
     constant count: natural := 30;
 begin
     waveshaper_sin : entity work.waveshaper(waveshaper_sin)
-                     port map ('1', CLK, THETA, Zctl);
+                     port map ('1', CLK, THETA, Zctl, (others => '0'), open);
 
     delta_sigma_dac : entity work.delta_sigma_dac(delta_sigma_dac_impl)
                      port map ('1', CLK, Z, Vout); 

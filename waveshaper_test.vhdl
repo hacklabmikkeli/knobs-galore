@@ -30,7 +30,7 @@ architecture waveshaper_test_impl of waveshaper_test is
     signal  Z:      ctl_signal;
 begin
     waveshaper_sin : entity work.waveshaper(waveshaper_sin)
-                     port map ('1', CLK, THETA, Z);
+                     port map ('1', CLK, THETA, Z, (others => '0'), open);
 
     process begin
         for k in 0 to ctl_max - 1 loop

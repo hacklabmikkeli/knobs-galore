@@ -33,12 +33,30 @@ architecture phase_distort_test_impl of phase_distort_test is
 
 begin
     phase_distort_saw : 
-        entity work.phase_distort(phase_distort_impl)
-        port map ('1', CLK, waveform_saw, '0', CUTOFF, THETA_IN, SAW_THETA);
+        entity
+            work.phase_distort(phase_distort_impl)
+        port map
+            ('1'
+            ,CLK
+            ,waveform_saw
+            ,CUTOFF
+            ,THETA_IN
+            ,SAW_THETA
+            ,(others => '0')
+            ,open);
 
     phase_distort_sq : 
-        entity work.phase_distort(phase_distort_impl)
-        port map ('1', CLK, waveform_sq, '0', CUTOFF, THETA_IN, SQR_THETA);
+        entity
+            work.phase_distort(phase_distort_impl)
+        port map
+            ('1'
+            ,CLK
+            ,waveform_sq
+            ,CUTOFF
+            ,THETA_IN
+            ,SAW_THETA
+            ,(others => '0')
+            ,open);
 
     process begin
         for j in 0 to ctl_max - 1 loop
