@@ -1,4 +1,4 @@
-PD/Amp lookup table
+PD lookup table (deprecated)
 
                 |             |        |             |
                 X             Y(7-4)   X             Y(7-4)

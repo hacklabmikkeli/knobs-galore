@@ -37,8 +37,8 @@ Synthesizer top level
            |       +------+--------------+
            |       :                     |
            |       | SV1:                |
-           |       | Phase1 (16)         |
-           |       | Phase2 (16)         |
+           |       | Phase (16)          |
+           |       | LFO (16)            |
            |       | Half-Wave (1)       |
          Audio     | SV2:                |
            |       | Amplitude (16)      |
