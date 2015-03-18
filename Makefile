@@ -60,7 +60,7 @@ circular_buffer.o: common.o
 
 circular_buffer_test.o: common.o circular_buffer.o
 
-synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o
+synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o delay.o amplifier.o
 
 synthesizer_test.o: common.o synthesizer.o
 
