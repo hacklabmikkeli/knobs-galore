@@ -47,19 +47,29 @@ architecture synthesizer_sim_impl of synthesizer_sim is
     end function;
 
     signal freq: time_signal := (others => '0');
-    signal gate: std_logic := '0';
-    signal gain: ctl_signal := (others => '0');
-    signal env_cutoff: time_signal := (others => '0');
-    signal env_gain: time_signal := (others => '0');
-    signal stage_cutoff: adsr_stage := adsr_rel;
-    signal stage_gain: adsr_stage := adsr_rel;
-    signal prev_gate_cutoff: std_logic := '0';
-    signal prev_gate_gain: std_logic := '0';
-    signal wave_sel: std_logic := '0';
-    signal theta : time_signal := (others => '0');
-    signal theta_pd : ctl_signal := (others => '0');
-    signal z : ctl_signal := (others => '0');
-    signal z_ampl : ctl_signal := (others => '0');
+    signal gate: std_logic;
+    signal gain: ctl_signal;
+    signal env_cutoff: time_signal;
+    signal env_gain: time_signal;
+    signal stage_cutoff: adsr_stage;
+    signal stage_gain: adsr_stage;
+    signal prev_gate_cutoff: std_logic;
+    signal prev_gate_gain: std_logic;
+    signal wave_sel: std_logic;
+    signal theta : time_signal;
+
+    signal voice_wf: waveform_t;
+    signal voice_cutoff: ctl_signal;
+    signal voice_theta: ctl_signal;
+    signal voice_gain: ctl_signal;
+
+    signal pd_theta: ctl_signal;
+    signal pd_gain: ctl_signal;
+
+    signal waveshaper_gain: ctl_signal;
+
+    signal z: ctl_signal;
+    signal z_ampl: ctl_signal;
 begin
 
     gate <= '1' when KEYS /= "00000000" else '0';
@@ -73,6 +83,7 @@ begin
         end if;
     end process;
 
+
     phase_gen:
         entity
             work.phase_gen (phase_gen_impl)
@@ -80,12 +91,9 @@ begin
             ('1'
             ,CLK
             ,freq
-            ,freq
             ,theta
-            ,(others => '0')
+            ,theta
             ,wave_sel
-            ,theta
-            ,open
             ,wave_sel
             );
 
@@ -127,6 +135,25 @@ begin
             ,prev_gate_gain
             );
 
+    voice_controller:
+        entity
+            work.voice_controller (voice_controller_impl)
+        port map
+            ('1'
+            ,CLK
+            ,mode_saw_res
+            ,env_cutoff
+            ,env_gain
+            ,theta
+            ,(others => '0')
+            ,wave_sel
+            ,voice_wf
+            ,voice_cutoff
+            ,voice_theta
+            ,voice_gain
+            );
+
+
     phase_distort:
         entity 
             work.phase_distort (phase_distort_impl)
@@ -134,12 +161,11 @@ begin
             ('1'
             ,CLK
             ,waveform_saw
-            ,env_cutoff(15 downto 8)
-            ,theta(15 downto 8)
-            ,theta_pd
-            -- TODO: hook up gain to signal pipeline
-            ,(others => '0')
-            ,open
+            ,voice_cutoff
+            ,voice_theta
+            ,pd_theta
+            ,voice_gain
+            ,pd_gain
             );
 
     waveshaper:
@@ -148,20 +174,10 @@ begin
         port map
             ('1'
             ,CLK
-            ,theta_pd
+            ,pd_theta
             ,z
-            ,(others => '0')
-            ,open
-            );
-
-    delay:
-        entity
-            work.delay (delay_impl)
-        port map
-            ('1'
-            ,CLK
-            ,env_gain(15 downto 8)
-            ,gain
+            ,pd_gain
+            ,waveshaper_gain
             );
 
     amplifier:
@@ -170,7 +186,7 @@ begin
         port map
             ('1'
             ,CLK
-            ,gain
+            ,waveshaper_gain
             ,z
             ,z_ampl
             );

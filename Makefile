@@ -41,6 +41,8 @@ delta_sigma_dac.o: common.o
 amplifier.o: common.o lookup.o
 
 delay.o: common.o
+	
+voice_controller.o: common.o
 
 phase_gen_test.o: common.o phase_gen.o
 
@@ -64,7 +66,7 @@ synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o 
 
 synthesizer_test.o: common.o synthesizer.o
 
-synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o amplifier.o delay.o
+synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o amplifier.o delay.o voice_controller.o
 
 synthesizer_sim_test.o: common.o synthesizer_sim.o
 

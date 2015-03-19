@@ -92,12 +92,9 @@ begin
             ('1'
             ,clk2
             ,freq
-            ,freq
             ,theta
-            ,(others => '0')
+            ,theta
             ,wave_sel
-            ,theta
-            ,open
             ,wave_sel
             );
 
@@ -109,7 +106,7 @@ begin
             ,clk2
             ,gate
             ,x"80"
-            ,x"0A"
+            ,x"01"
             ,x"00"
             ,x"04"
             ,env_cutoff
@@ -129,7 +126,7 @@ begin
             ,gate
             ,x"80"
             ,x"08"
-            ,x"00"
+            ,x"FF"
             ,x"02"
             ,env_gain
             ,env_gain

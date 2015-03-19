@@ -45,15 +45,15 @@ package common is
     constant waveform_saw:  waveform_t      := '0';
     constant waveform_sq:   waveform_t      := '1';
 
-    subtype mode is std_logic_vector(2 downto 0);
-    constant mode_saw:      mode            := "000";
-    constant mode_sq:       mode            := "001";
-    constant mode_saw_res:  mode            := "010";
-    constant mode_sq_res:   mode            := "011";
-    constant mode_saw_fat:  mode            := "100";
-    constant mode_sq_fat:   mode            := "101";
-    constant mode_saw_sync: mode            := "110";
-    constant mode_mix:      mode            := "111";
+    subtype mode_t is std_logic_vector(2 downto 0);
+    constant mode_saw:      mode_t          := "000";
+    constant mode_sq:       mode_t          := "001";
+    constant mode_saw_res:  mode_t          := "010";
+    constant mode_sq_res:   mode_t          := "011";
+    constant mode_saw_fat:  mode_t          := "100";
+    constant mode_sq_fat:   mode_t          := "101";
+    constant mode_saw_sync: mode_t          := "110";
+    constant mode_mix:      mode_t          := "111";
 
     type state_vector is
     record

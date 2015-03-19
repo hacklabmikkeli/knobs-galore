@@ -26,11 +26,9 @@ end entity;
 
 architecture phase_gen_test_impl of phase_gen_test is
     signal  CLK:            std_logic := '1';
-    signal  FREQ1:          time_signal := ('0', '0', '0', '0', '1', others => '0');
-    signal  FREQ2:          time_signal := ('0', '0', '0', '1', others => '0');
-    signal  THETA1:         time_signal := (others => '0');
-    signal  THETA2:         time_signal := (others => '0');
-    signal  WAVE_SEL:       std_logic := '0';
+    signal  FREQ:           time_signal := ('0', '0', '0', '0', '1', others => '0');
+    signal  THETA:          time_signal;
+    signal  WAVE_SEL:       std_logic;
     constant length:        integer := 100000;
 
 begin
@@ -39,13 +37,10 @@ begin
                 port map
                     ('1'
                     ,CLK
-                    ,FREQ1
-                    ,FREQ2
-                    ,THETA1
-                    ,THETA2
+                    ,FREQ
+                    ,THETA
+                    ,THETA
                     ,WAVE_SEL
-                    ,THETA1
-                    ,THETA2
                     ,WAVE_SEL
                     );
 
