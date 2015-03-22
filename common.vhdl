@@ -27,7 +27,7 @@ package common is
     constant ctl_max : natural := 2**ctl_bits;
     subtype ctl_signal is unsigned(ctl_bits - 1 downto 0);
 
-    constant time_bits : natural := 16;
+    constant time_bits : natural := 17;
     constant time_max : natural := 2**time_bits;
     subtype time_signal is unsigned(time_bits - 1 downto 0);
 

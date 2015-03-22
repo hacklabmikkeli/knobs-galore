@@ -1,0 +1,105 @@
+--
+--    Knobs Galore - a free phase distortion synthesizer
+--    Copyright (C) 2015 Ilmo Euro
+--
+--    This program is free software: you can redistribute it and/or modify
+--    it under the terms of the GNU General Public License as published by
+--    the Free Software Foundation, either version 3 of the License, or
+--    (at your option) any later version.
+--
+--    This program is distributed in the hope that it will be useful,
+--    but WITHOUT ANY WARRANTY; without even the implied warranty of
+--    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+--    GNU General Public License for more details.
+--
+--    You should have received a copy of the GNU General Public License
+--    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+--
+library ieee;
+library work;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.math_real.all;
+use work.common.all;
+
+entity voice_controller is
+    port    (EN:            in  std_logic
+            ;CLK:           in  std_logic
+            ;MODE:          in  mode_t
+            ;FREQ:          in  time_signal
+            ;CUTOFF_IN:     in  time_signal
+            ;CUTOFF_OUT:    out ctl_signal
+            ;GAIN_IN:       in  time_signal
+            ;GAIN_OUT:      out ctl_signal
+            ;THETA_REF:     in  time_signal
+            ;THETA_OUT:     out ctl_signal
+            ;WAVEFORM:      out waveform_t
+            )
+    ;
+end entity;
+
+architecture voice_controller_impl of voice_controller is
+    signal s1_theta_osc1: ctl_signal := (others => '0');
+    signal s1_theta_osc2: ctl_signal := (others => '0');
+    signal s1_cutoff: ctl_signal := (others => '0');
+    signal s1_gain: ctl_signal := (others => '0');
+    signal s1_wave_sel: std_logic := '0';
+    signal s2_waveform_buf: waveform_t := waveform_saw;
+    signal s2_cutoff_out_buf: ctl_signal := (others => '0');
+    signal s2_theta_out_buf: ctl_signal := (others => '0');
+    signal s2_gain_out_buf: ctl_signal := (others => '0');
+begin
+
+    process (CLK)
+        variable theta_osc1: ctl_signal;
+        variable theta_osc1_wide: unsigned(time_bits * 2 - 1 downto 0);
+        variable lfo_val : ctl_signal := (others => '0');
+    begin
+        if EN = '1' and rising_edge(CLK) then
+            theta_osc1_wide := THETA_REF * FREQ;
+            s1_theta_osc1 <= theta_osc1_wide(time_bits - 2 downto time_bits - ctl_bits - 1);
+            s1_cutoff <= to_ctl(CUTOFF_IN);
+            s1_gain <= to_ctl(GAIN_IN);
+            s1_wave_sel <= theta_osc1_wide(time_bits - 1);
+            if THETA_REF(THETA_REF'high) = '1' then
+                lfo_val(4 downto 0) := THETA_REF(THETA_REF'high downto THETA_REF'high - 4);
+            else
+                lfo_val(4 downto 0) := not THETA_REF(THETA_REF'high downto THETA_REF'high - 4);
+            end if;
+            s1_theta_osc2 <= lfo_val;
+
+            case MODE is
+                when mode_saw =>
+                    s2_waveform_buf <= waveform_saw;
+                    s2_cutoff_out_buf <= s1_cutoff;
+                    s2_theta_out_buf <= s1_theta_osc1;
+                    s2_gain_out_buf <= s1_gain;
+
+                when mode_sq =>
+                    s2_waveform_buf <= waveform_sq;
+                    s2_cutoff_out_buf <= s1_cutoff;
+                    s2_theta_out_buf <= s1_theta_osc1;
+                    s2_gain_out_buf <= s1_gain;
+
+                when mode_saw_fat =>
+                    s2_waveform_buf <= waveform_saw;
+                    s2_cutoff_out_buf <= s1_cutoff;
+                    if s1_wave_sel = '0' then
+                        s2_theta_out_buf <= s1_theta_osc1;
+                    else
+                        s2_theta_out_buf <= s1_theta_osc2;
+                    end if;
+                    s2_gain_out_buf <= s1_gain;
+
+                when others =>
+                    null;
+            end case;
+        end if;
+    end process;
+
+    WAVEFORM <= s2_waveform_buf;
+    CUTOFF_OUT <= s2_cutoff_out_buf;
+    THETA_OUT <= s2_theta_out_buf;
+    GAIN_OUT <= s2_gain_out_buf;
+
+end architecture;

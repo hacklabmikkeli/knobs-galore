@@ -90,11 +90,8 @@ begin
         port map
             ('1'
             ,CLK
-            ,freq
             ,theta
             ,theta
-            ,wave_sel
-            ,wave_sel
             );
 
     env_gen_cutoff:
@@ -123,9 +120,9 @@ begin
             ('1'
             ,CLK
             ,gate
-            ,x"40"
-            ,x"02"
-            ,x"80"
+            ,x"08"
+            ,x"01"
+            ,x"00"
             ,x"02"
             ,env_gain
             ,env_gain
@@ -141,16 +138,15 @@ begin
         port map
             ('1'
             ,CLK
-            ,mode_saw_res
+            ,mode_saw_fat
+            ,freq
             ,env_cutoff
-            ,env_gain
-            ,theta
-            ,(others => '0')
-            ,wave_sel
-            ,voice_wf
             ,voice_cutoff
-            ,voice_theta
+            ,env_gain
             ,voice_gain
+            ,theta
+            ,voice_theta
+            ,voice_wf
             );
 
 

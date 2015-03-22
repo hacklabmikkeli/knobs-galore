@@ -24,8 +24,8 @@ use work.common.all;
 entity synthesizer is
     port (CLK:              in  std_logic
          ;KEYS:             in  std_logic_vector(7 downto 0)
-         ;LINE_LEFT_POS:    out std_logic
          ;LINE_LEFT_NEG:    out std_logic
+         ;LINE_LEFT_POS:    out std_logic
          )
     ;
 end entity;
@@ -51,21 +51,33 @@ architecture synthesizer_impl of synthesizer is
     signal clk2: std_logic := '0';
     signal counter: unsigned(8 downto 0) := (others => '0');
     signal freq: time_signal := (others => '0');
-    signal gate: std_logic := '0';
-    signal gain: ctl_signal := (others => '0');
-    signal env_cutoff: time_signal := (others => '0');
-    signal env_gain: time_signal := (others => '0');
-    signal stage_cutoff: adsr_stage := adsr_rel;
-    signal stage_gain: adsr_stage := adsr_rel;
-    signal prev_gate_cutoff: std_logic := '0';
-    signal prev_gate_gain: std_logic := '0';
-    signal wave_sel: std_logic := '0';
-    signal theta: time_signal := (others => '0');
-    signal theta_pd: ctl_signal := (others => '0');
-    signal z: ctl_signal := (others => '0');
-    signal z_ampl: ctl_signal := (others => '0');
+    signal gate: std_logic;
+    signal gain: ctl_signal;
+    signal env_cutoff: time_signal;
+    signal env_gain: time_signal;
+    signal stage_cutoff: adsr_stage;
+    signal stage_gain: adsr_stage;
+    signal prev_gate_cutoff: std_logic;
+    signal prev_gate_gain: std_logic;
+    signal wave_sel: std_logic;
+    signal theta : time_signal;
+
+    signal voice_wf: waveform_t;
+    signal voice_cutoff: ctl_signal;
+    signal voice_theta: ctl_signal;
+    signal voice_gain: ctl_signal;
+
+    signal pd_theta: ctl_signal;
+    signal pd_gain: ctl_signal;
+
+    signal waveshaper_gain: ctl_signal;
+
+    signal z: ctl_signal;
+    signal z_ampl: ctl_signal;
     signal v_out: std_logic;
 begin
+
+    gate <= '1' when KEYS /= "00000000" else '0';
 
     process (CLK)
         begin
@@ -83,7 +95,6 @@ begin
 
     clk1 <= CLK;
     clk2 <= '1' when counter = "000000000" else '0';
-    gate <= '1' when KEYS /= "00000000" else '0';
 
     phase_gen:
         entity
@@ -91,11 +102,8 @@ begin
         port map
             ('1'
             ,clk2
-            ,freq
             ,theta
             ,theta
-            ,wave_sel
-            ,wave_sel
             );
 
     env_gen_cutoff:
@@ -105,7 +113,7 @@ begin
             ('1'
             ,clk2
             ,gate
-            ,x"80"
+            ,x"04"
             ,x"01"
             ,x"00"
             ,x"04"
@@ -124,9 +132,9 @@ begin
             ('1'
             ,clk2
             ,gate
+            ,x"40"
+            ,x"02"
             ,x"80"
-            ,x"08"
-            ,x"FF"
             ,x"02"
             ,env_gain
             ,env_gain
@@ -136,19 +144,36 @@ begin
             ,prev_gate_gain
             );
 
+    voice_controller:
+        entity
+            work.voice_controller (voice_controller_impl)
+        port map
+            ('1'
+            ,clk2
+            ,mode_saw_fat
+            ,freq
+            ,env_cutoff
+            ,voice_cutoff
+            ,env_gain
+            ,voice_gain
+            ,theta
+            ,voice_theta
+            ,voice_wf
+            );
+
+
     phase_distort:
         entity 
             work.phase_distort (phase_distort_impl)
         port map
             ('1'
             ,clk2
-            ,waveform_saw
-            ,env_cutoff(15 downto 8)
-            ,theta(15 downto 8)
-            ,theta_pd
-            -- TODO: hook up gain to signal pipeline
-            ,(others => '0')
-            ,open
+            ,voice_wf
+            ,voice_cutoff
+            ,voice_theta
+            ,pd_theta
+            ,voice_gain
+            ,pd_gain
             );
 
     waveshaper:
@@ -157,20 +182,10 @@ begin
         port map
             ('1'
             ,clk2
-            ,theta_pd
+            ,pd_theta
             ,z
-            ,(others => '0')
-            ,open
-            );
-
-    delay:
-        entity
-            work.delay (delay_impl)
-        port map
-            ('1'
-            ,clk2
-            ,env_gain(15 downto 8)
-            ,gain
+            ,pd_gain
+            ,waveshaper_gain
             );
 
     amplifier:
@@ -179,7 +194,7 @@ begin
         port map
             ('1'
             ,clk2
-            ,gain
+            ,waveshaper_gain
             ,z
             ,z_ampl
             );

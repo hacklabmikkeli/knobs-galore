@@ -18,6 +18,12 @@ clean:
 doc:
 	make -C doc all
 
+play: synthesizer_sim_test.raw
+	play -t raw -e unsigned-integer -b 8 -r 65536 -v 0.5 $<
+
+%.raw: %.out
+	LANG=C awk -v ORS="" -v BINMODE=2 '{ printf "%c", $$1; }' <$< >$@
+
 %.o: %.vhdl
 	ghdl -a $(ANALYZE_FLAGS) $<
 
@@ -70,4 +76,6 @@ synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_ge
 
 synthesizer_sim_test.o: common.o synthesizer_sim.o
 
-.PHONY: all test clean doc
+synthesizer_sim_test.out: synthesizer_sim_test.vcd
+
+.PHONY: all test clean doc play
