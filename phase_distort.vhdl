@@ -119,12 +119,18 @@ architecture phase_distort_impl of phase_distort is
     constant zero: ctl_signal := (others => '0');
 
     signal s1_waveform: waveform_t := waveform_saw;
-    signal s1_theta_saw: ctl_signal;
-    signal s1_theta_sq: ctl_signal;
     signal s1_gain: ctl_signal := (others => '0');
 
-    signal s2_theta_out_buf: ctl_signal := (others => '0');
-    signal s2_gain_pass_buf: ctl_signal := (others => '0');
+    signal s2_waveform: waveform_t := waveform_saw;
+    signal s2_gain: ctl_signal := (others => '0');
+
+    signal s3_waveform: waveform_t := waveform_saw;
+    signal s3_theta_saw: ctl_signal;
+    signal s3_theta_sq: ctl_signal;
+    signal s3_gain: ctl_signal := (others => '0');
+
+    signal s4_theta_out_buf: ctl_signal := (others => '0');
+    signal s4_gain_pass_buf: ctl_signal := (others => '0');
 begin
 
     lookup_saw:
@@ -137,7 +143,7 @@ begin
             ,CLK
             ,THETA_IN
             ,CUTOFF
-            ,s1_theta_saw
+            ,s3_theta_saw
             );
 
     lookup_sq:
@@ -150,7 +156,7 @@ begin
             ,CLK
             ,THETA_IN
             ,CUTOFF
-            ,s1_theta_sq
+            ,s3_theta_sq
             );
     
     process (CLK)
@@ -158,25 +164,26 @@ begin
         if EN = '1' and rising_edge(CLK) then
             s1_waveform <= WAVEFORM;
             s1_gain <= GAIN_IN;
-        end if;
-    end process;
 
-    process (CLK)
-    begin
-        if EN = '1' and rising_edge(CLK) then
-            case s1_waveform is
+            s2_waveform <= s1_waveform;
+            s2_gain <= s1_gain;
+
+            s3_waveform <= s2_waveform;
+            s3_gain <= s2_gain;
+
+            case s3_waveform is
                 when waveform_saw =>
-                    s2_theta_out_buf <= s1_theta_saw;
+                    s4_theta_out_buf <= s3_theta_saw;
                 when waveform_sq =>
-                    s2_theta_out_buf <= s1_theta_sq;
+                    s4_theta_out_buf <= s3_theta_sq;
                 when others =>
-                    s2_theta_out_buf <= (others => '0');
+                    s4_theta_out_buf <= (others => '0');
             end case;
 
-            s2_gain_pass_buf <= s1_gain;
+            s4_gain_pass_buf <= s3_gain;
         end if;
     end process;
 
-    THETA_OUT <= s2_theta_out_buf;
-    GAIN_THRU <= s2_gain_pass_buf;
+    THETA_OUT <= s4_theta_out_buf;
+    GAIN_THRU <= s4_gain_pass_buf;
 end architecture;

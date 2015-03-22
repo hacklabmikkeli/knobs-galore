@@ -13,16 +13,13 @@ test: $(TEST_VCD)
 
 clean:
 	make -C doc clean
-	rm -f *.o *.vcd *.cf *.out
+	rm -f *.o *.vcd *.cf *.out *.raw
 
 doc:
 	make -C doc all
 
-play: synthesizer_sim_test.raw
-	play -t raw -e unsigned-integer -b 8 -r 65536 -v 0.5 $<
-
 %.raw: %.out
-	LANG=C awk -v ORS="" -v BINMODE=2 '{ printf "%c", $$1; }' <$< >$@
+	LANG=C awk -v ORS="" -v BINMODE=2 '{ printf "%c", $$1; }' <$< >|$@
 
 %.o: %.vhdl
 	ghdl -a $(ANALYZE_FLAGS) $<

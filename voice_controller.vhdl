@@ -40,10 +40,12 @@ end entity;
 
 architecture voice_controller_impl of voice_controller is
     signal s1_theta_osc1: ctl_signal := (others => '0');
-    signal s1_theta_osc2: ctl_signal := (others => '0');
+    signal s1_theta_osc2_fat: ctl_signal := (others => '0');
     signal s1_cutoff: ctl_signal := (others => '0');
     signal s1_gain: ctl_signal := (others => '0');
+    signal s1_gain_windowed: ctl_signal := (others => '0');
     signal s1_wave_sel: std_logic := '0';
+    signal s1_mode: mode_t := mode_saw;
     signal s2_waveform_buf: waveform_t := waveform_saw;
     signal s2_cutoff_out_buf: ctl_signal := (others => '0');
     signal s2_theta_out_buf: ctl_signal := (others => '0');
@@ -53,22 +55,37 @@ begin
     process (CLK)
         variable theta_osc1: ctl_signal;
         variable theta_osc1_wide: unsigned(time_bits * 2 - 1 downto 0);
-        variable lfo_val : ctl_signal := (others => '0');
+        variable fact_osc2_fat: ctl_signal := ('1', others => '0');
+        variable theta_osc2_fat_wide: unsigned(ctl_bits * 2 - 1 downto 0);
+        variable theta_osc2_fat: ctl_signal;
+        variable gain_windowed_wide: unsigned(ctl_bits * 2 - 1 downto 0);
     begin
         if EN = '1' and rising_edge(CLK) then
             theta_osc1_wide := THETA_REF * FREQ;
-            s1_theta_osc1 <= theta_osc1_wide(time_bits - 2 downto time_bits - ctl_bits - 1);
+            theta_osc1 := theta_osc1_wide(time_bits - 2 
+                                          downto time_bits - ctl_bits - 1);
+            if THETA_REF(time_bits-2) = '1' then
+                fact_osc2_fat(6 downto 0) 
+                    := THETA_REF(time_bits-2 downto time_bits-8);
+            else
+                fact_osc2_fat(6 downto 0) 
+                    := not THETA_REF(time_bits-2 downto time_bits-8);
+            end if;
+            theta_osc2_fat_wide := fact_osc2_fat * theta_osc1;
+            theta_osc2_fat := theta_osc2_fat_wide(time_bits - 3 
+                                          downto time_bits - ctl_bits - 2);
+
+            s1_theta_osc1 <= theta_osc1;
+            s1_theta_osc2_fat <= theta_osc2_fat;
             s1_cutoff <= to_ctl(CUTOFF_IN);
             s1_gain <= to_ctl(GAIN_IN);
+            gain_windowed_wide := to_ctl(GAIN_IN) * not theta_osc1;
+            s1_gain_windowed <= gain_windowed_wide(ctl_bits * 2 - 1
+                                                   downto ctl_bits);
             s1_wave_sel <= theta_osc1_wide(time_bits - 1);
-            if THETA_REF(THETA_REF'high) = '1' then
-                lfo_val(4 downto 0) := THETA_REF(THETA_REF'high downto THETA_REF'high - 4);
-            else
-                lfo_val(4 downto 0) := not THETA_REF(THETA_REF'high downto THETA_REF'high - 4);
-            end if;
-            s1_theta_osc2 <= lfo_val;
+            s1_mode <= MODE;
 
-            case MODE is
+            case s1_mode is
                 when mode_saw =>
                     s2_waveform_buf <= waveform_saw;
                     s2_cutoff_out_buf <= s1_cutoff;
@@ -86,10 +103,11 @@ begin
                     s2_cutoff_out_buf <= s1_cutoff;
                     if s1_wave_sel = '0' then
                         s2_theta_out_buf <= s1_theta_osc1;
+                        s2_gain_out_buf <= s1_gain;
                     else
-                        s2_theta_out_buf <= s1_theta_osc2;
+                        s2_theta_out_buf <= s1_theta_osc2_fat;
+                        s2_gain_out_buf <= s1_gain_windowed;
                     end if;
-                    s2_gain_out_buf <= s1_gain;
 
                 when others =>
                     null;
