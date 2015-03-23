@@ -27,26 +27,66 @@ entity synthesizer_sim_test is
 end entity;
 
 architecture synthesizer_sim_test_impl of synthesizer_sim_test is
-    type key_combination_table is array(integer range <>) of std_logic_vector(7 downto 0);
+    type key_combination_table is array(integer range <>) of std_logic_vector(12 downto 0);
     type param_table is array(integer range <>) of synthesis_params;
 
-    constant key_combinations : key_combination_table(0 to 3) :=
-        ("10000000"
-        ,"00000000"
-        ,"00000001"
-        ,"00000000"
+    constant key_combinations : key_combination_table(0 to 23) :=
+        ("1000000000000"
+        ,"1000000000000"
+        ,"1000000000000"
+        ,"1000000000000"
+        ,"0000000000000"
+        ,"0000000000000"
+        ,"0000000000001"
+        ,"0000000000001"
+        ,"0000000000001"
+        ,"0000000000001"
+        ,"0000000000000"
+        ,"0000000000000"
+        ,"0000000000001"
+        ,"0000000000001"
+        ,"0000000000001"
+        ,"0000000000001"
+        ,"0000000000000"
+        ,"0000000000000"
+        ,"1000000000000"
+        ,"0000000000000"
+        ,"0000000000001"
+        ,"0000000000000"
+        ,"0000000000001"
+        ,"0000000000000"
         );
 
-    constant params: param_table(0 to 3) :=
-        ((mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+    constant params: param_table(0 to 23) :=
+        ((mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
+        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
+        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
+        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
+        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
+        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
         );
 
 
     signal CLK:              std_logic := '1';
-    signal KEYS:             std_logic_vector(7 downto 0) := key_combinations(0);
+    signal KEYS:             std_logic_vector(12 downto 0) := key_combinations(0);
     signal PARAM:            synthesis_params;
     signal AUDIO:            ctl_signal;
 
@@ -62,7 +102,7 @@ begin
         for j in key_combinations'range loop
             KEYS <= key_combinations(j);
             PARAM <= params(j);
-            for k in 0 to 131072 loop
+            for k in 0 to 32768 loop
                 CLK <= not CLK;
                 wait for 31.25 ns;
                 CLK <= not CLK;

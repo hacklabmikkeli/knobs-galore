@@ -23,7 +23,7 @@ use work.common.all;
 
 entity synthesizer_sim is
     port (CLK:              in  std_logic
-         ;KEYS:             in  std_logic_vector(7 downto 0)
+         ;KEYS:             in  std_logic_vector(12 downto 0)
          ;PARAM:            in  synthesis_params
          ;AUDIO:            out ctl_signal
          )
@@ -31,18 +31,23 @@ entity synthesizer_sim is
 end entity;
 
 architecture synthesizer_sim_impl of synthesizer_sim is
-    function keys_to_freq(keys : std_logic_vector(7 downto 0))
+    function keys_to_freq(keys : std_logic_vector(12 downto 0))
     return time_signal is
     begin
         case keys is
-            when "00000001" => return to_unsigned(262, time_bits);
-            when "00000010" => return to_unsigned(294, time_bits);
-            when "00000100" => return to_unsigned(330, time_bits);
-            when "00001000" => return to_unsigned(349, time_bits);
-            when "00010000" => return to_unsigned(392, time_bits);
-            when "00100000" => return to_unsigned(440, time_bits);
-            when "01000000" => return to_unsigned(494, time_bits);
-            when "10000000" => return to_unsigned(523, time_bits);
+            when "0000000000001" => return to_unsigned(262, time_bits);
+            when "0000000000010" => return to_unsigned(278, time_bits);
+            when "0000000000100" => return to_unsigned(294, time_bits);
+            when "0000000001000" => return to_unsigned(312, time_bits);
+            when "0000000010000" => return to_unsigned(330, time_bits);
+            when "0000000100000" => return to_unsigned(350, time_bits);
+            when "0000001000000" => return to_unsigned(371, time_bits);
+            when "0000010000000" => return to_unsigned(392, time_bits);
+            when "0000100000000" => return to_unsigned(415, time_bits);
+            when "0001000000000" => return to_unsigned(440, time_bits);
+            when "0010000000000" => return to_unsigned(466, time_bits);
+            when "0100000000000" => return to_unsigned(494, time_bits);
+            when "1000000000000" => return to_unsigned(524, time_bits);
             when others     => return to_unsigned(0, time_bits);
         end case;
     end function;
