@@ -28,35 +28,32 @@ end entity;
 
 architecture synthesizer_sim_test_impl of synthesizer_sim_test is
     type key_combination_table is array(integer range <>) of std_logic_vector(7 downto 0);
+    type param_table is array(integer range <>) of synthesis_params;
 
-    constant key_combinations : key_combination_table(16 downto 0) :=
-        ("00000000"
-        ,"10000000"
-        ,"00000000"
-        ,"01000000"
-        ,"00000000"
-        ,"00100000"
-        ,"00000000"
-        ,"00010000"
-        ,"00000000"
-        ,"00001000"
-        ,"00000000"
-        ,"00000100"
-        ,"00000000"
-        ,"00000010"
+    constant key_combinations : key_combination_table(0 to 3) :=
+        ("10000000"
         ,"00000000"
         ,"00000001"
         ,"00000000"
         );
 
+    constant params: param_table(0 to 3) :=
+        ((mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        ,(mode_saw, x"00", x"FF", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
+        );
+
+
     signal CLK:              std_logic := '1';
     signal KEYS:             std_logic_vector(7 downto 0) := key_combinations(0);
+    signal PARAM:            synthesis_params;
     signal AUDIO:            ctl_signal;
 
 begin
 
     synthesizer_sim : entity work.synthesizer_sim(synthesizer_sim_impl)
-                    port map (CLK, KEYS, AUDIO);
+                    port map (CLK, KEYS, PARAM, AUDIO);
 
     process
         file out_file: text is out "synthesizer_sim_test.out";
@@ -64,6 +61,7 @@ begin
     begin
         for j in key_combinations'range loop
             KEYS <= key_combinations(j);
+            PARAM <= params(j);
             for k in 0 to 131072 loop
                 CLK <= not CLK;
                 wait for 31.25 ns;

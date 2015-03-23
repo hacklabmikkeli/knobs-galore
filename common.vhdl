@@ -25,14 +25,17 @@ use std.textio.all;
 package common is
     constant ctl_bits : natural := 8;
     constant ctl_max : natural := 2**ctl_bits;
+    constant ctl_hi : natural := ctl_max - 1;
     subtype ctl_signal is unsigned(ctl_bits - 1 downto 0);
 
     constant time_bits : natural := 17;
     constant time_max : natural := 2**time_bits;
+    constant time_hi : natural := time_max - 1;
     subtype time_signal is unsigned(time_bits - 1 downto 0);
 
     constant audio_bits : natural := 13;
     constant audio_max : natural := 2**audio_bits;
+    constant audio_hi : natural := audio_max - 1;
     subtype audio_signal is unsigned(audio_bits - 1 downto 0);
 
     subtype adsr_stage is std_logic_vector(1 downto 0);
@@ -68,16 +71,17 @@ package common is
 
     type synthesis_params is
     record
-        sp_amplitude_attack: ctl_signal;
-        sp_amplitude_decay: ctl_signal;
-        sp_amplitude_sustain: ctl_signal;
-        sp_amplitude_rel: ctl_signal;
+        sp_mode: mode_t;
         sp_cutoff_base: ctl_signal;
         sp_cutoff_env: ctl_signal;
         sp_cutoff_attack: ctl_signal;
         sp_cutoff_decay: ctl_signal;
         sp_cutoff_sustain: ctl_signal;
         sp_cutoff_rel: ctl_signal;
+        sp_amplitude_attack: ctl_signal;
+        sp_amplitude_decay: ctl_signal;
+        sp_amplitude_sustain: ctl_signal;
+        sp_amplitude_rel: ctl_signal;
     end record;
     
     constant num_voices : natural := 32;

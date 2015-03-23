@@ -24,6 +24,7 @@ use work.common.all;
 entity synthesizer_sim is
     port (CLK:              in  std_logic
          ;KEYS:             in  std_logic_vector(7 downto 0)
+         ;PARAM:            in  synthesis_params
          ;AUDIO:            out ctl_signal
          )
     ;
@@ -58,6 +59,8 @@ architecture synthesizer_sim_impl of synthesizer_sim is
     signal wave_sel: std_logic;
     signal theta : time_signal;
 
+    signal cutoff_max: ctl_signal;
+
     signal voice_wf: waveform_t;
     signal voice_cutoff: ctl_signal;
     signal voice_theta: ctl_signal;
@@ -73,6 +76,7 @@ architecture synthesizer_sim_impl of synthesizer_sim is
 begin
 
     gate <= '1' when KEYS /= "00000000" else '0';
+    cutoff_max <= PARAM.sp_cutoff_base + PARAM.sp_cutoff_env;
 
     process (CLK)
     begin
@@ -101,10 +105,12 @@ begin
             ('1'
             ,CLK
             ,gate
-            ,x"08"
-            ,x"01"
-            ,x"00"
-            ,x"04"
+            ,PARAM.sp_cutoff_base
+            ,cutoff_max
+            ,PARAM.sp_cutoff_attack
+            ,PARAM.sp_cutoff_decay
+            ,PARAM.sp_cutoff_sustain
+            ,PARAM.sp_cutoff_rel
             ,env_cutoff
             ,env_cutoff
             ,stage_cutoff
@@ -120,10 +126,12 @@ begin
             ('1'
             ,CLK
             ,gate
-            ,x"08"
-            ,x"01"
             ,x"00"
-            ,x"02"
+            ,x"FF"
+            ,PARAM.sp_amplitude_rel
+            ,PARAM.sp_amplitude_decay
+            ,PARAM.sp_amplitude_sustain
+            ,PARAM.sp_amplitude_rel
             ,env_gain
             ,env_gain
             ,stage_gain
@@ -138,7 +146,7 @@ begin
         port map
             ('1'
             ,CLK
-            ,mode_saw_fat
+            ,PARAM.sp_mode
             ,freq
             ,env_cutoff
             ,voice_cutoff
@@ -156,7 +164,7 @@ begin
         port map
             ('1'
             ,CLK
-            ,waveform_saw
+            ,voice_wf
             ,voice_cutoff
             ,voice_theta
             ,pd_theta

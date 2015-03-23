@@ -44,6 +44,8 @@ begin
                 ('1'
                 ,CLK
                 ,GATE
+                ,x"00"
+                ,x"FF"
                 ,A_RATE
                 ,D_RATE
                 ,S_LVL

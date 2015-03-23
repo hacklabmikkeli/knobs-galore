@@ -24,6 +24,8 @@ entity env_gen is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
             ;GATE:          in  std_logic
+            ;MIN:           in  ctl_signal
+            ;MAX:           in  ctl_signal
             ;A_RATE:        in  ctl_signal
             ;D_RATE:        in  ctl_signal
             ;S_LVL:         in  ctl_signal
@@ -51,6 +53,8 @@ architecture env_gen_impl of env_gen is
 
 begin
     process(CLK)
+        variable max_wide: time_signal := (others => '0');
+        variable min_wide: time_signal := (others => '0');
     begin
         if EN = '1' and rising_edge(CLK) then
             if PREV_GATE_IN = '0' and GATE = '1' then
@@ -63,8 +67,8 @@ begin
 
             case STAGE_IN is
                 when adsr_attack =>
-                    if ENV_IN > time_max_val - A_RATE then
-                        env_out_buf <= time_max_val;
+                    if ENV_IN > (MAX & zero_f_min_c) - A_RATE then
+                        env_out_buf <= MAX & zero_f_min_c;
                         stage_out_buf <= adsr_decay;
                     else
                         env_out_buf <= ENV_IN + A_RATE;
@@ -79,8 +83,8 @@ begin
                 when adsr_sustain =>
                     null;
                 when adsr_rel =>
-                    if ENV_IN < R_RATE then
-                        env_out_buf <= zero_f;
+                    if ENV_IN < (MIN & zero_f_min_c) + R_RATE then
+                        env_out_buf <= MIN & zero_f_min_c;
                     else
                         env_out_buf <= ENV_IN - R_RATE;
                     end if;
