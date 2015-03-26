@@ -52,15 +52,12 @@ Synthesizer top level
            |              |
            |       +------+--------------+
            |       : SV1                 |
-           |       | Phase (16)          |
-           |       | Wave parity (1)     |
+           |       | Phase (17)          |
            |       | SV2                 |
-           |       | Amplitude (16)      |
+           |       | Amplitude (17)      |
            |       | Amplitude stage (2) |
-           |       | Cutoff (16)         |
+           |       | Cutoff (17)         |
            |       | Cutoff stage (2)    |
-           |       | SV3                 |
-           |       | LFO (16)            |
            |       +---------------------+
         +--+--+
         :Audio|
