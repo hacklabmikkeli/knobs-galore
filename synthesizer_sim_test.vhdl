@@ -27,86 +27,160 @@ entity synthesizer_sim_test is
 end entity;
 
 architecture synthesizer_sim_test_impl of synthesizer_sim_test is
-    type key_combination_table is array(integer range <>) of std_logic_vector(12 downto 0);
-    type param_table is array(integer range <>) of synthesis_params;
+    type step is
+    record
+        step_freq: natural;
+        step_gate: std_logic;
+        step_duration: natural;
+        step_params: synthesis_params;
+    end record;
 
-    constant key_combinations : key_combination_table(0 to 23) :=
-        ("1000000000000"
-        ,"1000000000000"
-        ,"1000000000000"
-        ,"1000000000000"
-        ,"0000000000000"
-        ,"0000000000000"
-        ,"0000000000001"
-        ,"0000000000001"
-        ,"0000000000001"
-        ,"0000000000001"
-        ,"0000000000000"
-        ,"0000000000000"
-        ,"0000000000001"
-        ,"0000000000001"
-        ,"0000000000001"
-        ,"0000000000001"
-        ,"0000000000000"
-        ,"0000000000000"
-        ,"1000000000000"
-        ,"0000000000000"
-        ,"0000000000001"
-        ,"0000000000000"
-        ,"0000000000001"
-        ,"0000000000000"
-        );
+    type step_table is array(integer range <>) of step;
 
-    constant params: param_table(0 to 23) :=
-        ((mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_fat, x"00", x"A0", x"08", x"01", x"00", x"04", x"08", x"01", x"00", x"02")
-        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
-        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
-        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
-        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
-        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
-        ,(mode_saw_res, x"00", x"C0", x"40", x"08", x"00", x"40", x"80", x"08", x"00", x"40")
+    constant steps: step_table(0 to 115) :=
+        ((55, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"A0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(110, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"10", x"FF", x"01", x"FE", x"10"))
+        ,(330, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(330, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(220, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(220, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(294, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(294, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(165, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(165, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(220, '1', 144000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(220, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
+        ,(440, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '1', 48000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '1', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '0', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '1', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '0', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(440, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
+        ,(330, '1', 96000, (mode_saw_res, x"00", x"A0", x"02", x"01", x"00", x"10", x"FF", x"01", x"FE", x"07"))
+        ,(330, '0', 36000, (mode_saw_res, x"00", x"A0", x"A0", x"40", x"00", x"10", x"FF", x"01", x"FE", x"07"))
+        ,(220, '1', 128000, (mode_saw_res, x"00", x"A0", x"02", x"01", x"00", x"10", x"FF", x"01", x"FE", x"07"))
+        ,(220, '0', 36000, (mode_saw_res, x"00", x"A0", x"A0", x"40", x"00", x"10", x"FF", x"01", x"FE", x"07"))
         );
 
 
     signal CLK:              std_logic := '1';
-    signal KEYS:             std_logic_vector(12 downto 0) := key_combinations(0);
+    signal FREQ:             time_signal;
+    signal GATE:             std_logic;
     signal PARAM:            synthesis_params;
     signal AUDIO:            ctl_signal;
 
 begin
 
     synthesizer_sim : entity work.synthesizer_sim(synthesizer_sim_impl)
-                    port map (CLK, KEYS, PARAM, AUDIO);
+                    port map (CLK, FREQ, GATE, PARAM, AUDIO);
 
     process
         file out_file: text is out "synthesizer_sim_test.out";
         variable out_line: line;
     begin
-        for j in key_combinations'range loop
-            KEYS <= key_combinations(j);
-            PARAM <= params(j);
-            for k in 0 to 32768 loop
+        for j in steps'range loop
+            FREQ <= to_unsigned(steps(j).step_freq, time_bits);
+            GATE <= steps(j).step_gate;
+            PARAM <= steps(j).step_params;
+            for k in 0 to steps(j).step_duration loop
                 CLK <= not CLK;
-                wait for 31.25 ns;
+                wait for 7 us;
                 CLK <= not CLK;
-                wait for 31.25 ns;
+                wait for 7 us;
                 write(out_line, to_integer(AUDIO));
                 writeline(out_file, out_line);
             end loop;

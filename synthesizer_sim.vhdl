@@ -23,7 +23,8 @@ use work.common.all;
 
 entity synthesizer_sim is
     port (CLK:              in  std_logic
-         ;KEYS:             in  std_logic_vector(12 downto 0)
+         ;FREQ:             in  time_signal
+         ;GATE:             in  std_logic
          ;PARAM:            in  synthesis_params
          ;AUDIO:            out ctl_signal
          )
@@ -31,29 +32,6 @@ entity synthesizer_sim is
 end entity;
 
 architecture synthesizer_sim_impl of synthesizer_sim is
-    function keys_to_freq(keys : std_logic_vector(12 downto 0))
-    return time_signal is
-    begin
-        case keys is
-            when "0000000000001" => return to_unsigned(262, time_bits);
-            when "0000000000010" => return to_unsigned(278, time_bits);
-            when "0000000000100" => return to_unsigned(294, time_bits);
-            when "0000000001000" => return to_unsigned(312, time_bits);
-            when "0000000010000" => return to_unsigned(330, time_bits);
-            when "0000000100000" => return to_unsigned(350, time_bits);
-            when "0000001000000" => return to_unsigned(371, time_bits);
-            when "0000010000000" => return to_unsigned(392, time_bits);
-            when "0000100000000" => return to_unsigned(415, time_bits);
-            when "0001000000000" => return to_unsigned(440, time_bits);
-            when "0010000000000" => return to_unsigned(466, time_bits);
-            when "0100000000000" => return to_unsigned(494, time_bits);
-            when "1000000000000" => return to_unsigned(524, time_bits);
-            when others     => return to_unsigned(0, time_bits);
-        end case;
-    end function;
-
-    signal freq: time_signal := (others => '0');
-    signal gate: std_logic;
     signal gain: ctl_signal;
     signal env_cutoff: time_signal;
     signal env_gain: time_signal;
@@ -80,18 +58,7 @@ architecture synthesizer_sim_impl of synthesizer_sim is
     signal z_ampl: ctl_signal;
 begin
 
-    gate <= '1' when KEYS /= "00000000" else '0';
     cutoff_max <= PARAM.sp_cutoff_base + PARAM.sp_cutoff_env;
-
-    process (CLK)
-    begin
-        if rising_edge(CLK) then
-            if gate = '1' then
-                freq <= keys_to_freq(KEYS);
-            end if;
-        end if;
-    end process;
-
 
     phase_gen:
         entity
@@ -109,7 +76,7 @@ begin
         port map
             ('1'
             ,CLK
-            ,gate
+            ,GATE
             ,PARAM.sp_cutoff_base
             ,cutoff_max
             ,PARAM.sp_cutoff_attack
@@ -130,7 +97,7 @@ begin
         port map
             ('1'
             ,CLK
-            ,gate
+            ,GATE
             ,x"00"
             ,x"FF"
             ,PARAM.sp_amplitude_rel
@@ -152,7 +119,7 @@ begin
             ('1'
             ,CLK
             ,PARAM.sp_mode
-            ,freq
+            ,FREQ
             ,env_cutoff
             ,voice_cutoff
             ,env_gain
