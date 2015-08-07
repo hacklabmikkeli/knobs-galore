@@ -84,7 +84,7 @@ package common is
         sp_amplitude_rel: ctl_signal;
     end record;
     
-    constant num_voices : natural := 32;
+    constant num_voices : natural := 37;
 
     constant empty_state_vector : state_vector :=
         ((others => '0')
@@ -110,7 +110,6 @@ package common is
 end common;
 
 package body common is
-
     function to_ctl(input: time_signal)
     return ctl_signal is
     begin

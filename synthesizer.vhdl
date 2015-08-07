@@ -23,7 +23,8 @@ use work.common.all;
 
 entity synthesizer is
     port (CLK:              in  std_logic
-         ;KEYS:             in  std_logic_vector(7 downto 0)
+         ;KEYS_PROBE:       out std_logic_vector(7 downto 0)
+         ;KEYS_IN:          in  std_logic_vector(5 downto 0)
          ;LINE_LEFT_NEG:    out std_logic
          ;LINE_LEFT_POS:    out std_logic
          )
@@ -31,20 +32,13 @@ entity synthesizer is
 end entity;
 
 architecture synthesizer_impl of synthesizer is
-    function keys_to_freq(keys : std_logic_vector(7 downto 0))
+    function keys_to_freq( probe : std_logic_vector(2 downto 0)
+                         ; keys : std_logic_vector(5 downto 0)
+                         ; old : time_signal)
     return time_signal is
+        variable combi: std_logic_vector(7 downto 0) := (others => '0');
     begin
-        case keys is
-            when "00000001" => return to_unsigned(262, time_bits);
-            when "00000010" => return to_unsigned(294, time_bits);
-            when "00000100" => return to_unsigned(330, time_bits);
-            when "00001000" => return to_unsigned(349, time_bits);
-            when "00010000" => return to_unsigned(392, time_bits);
-            when "00100000" => return to_unsigned(440, time_bits);
-            when "01000000" => return to_unsigned(494, time_bits);
-            when "10000000" => return to_unsigned(523, time_bits);
-            when others     => return to_unsigned(0, time_bits);
-        end case;
+        return old;
     end function;
 
     signal clk1: std_logic := '0';
@@ -77,7 +71,18 @@ architecture synthesizer_impl of synthesizer is
     signal v_out: std_logic;
 begin
 
-    gate <= '1' when KEYS /= "00000000" else '0';
+    gate <= '1' when KEYS_IN /= "00000" else '0';
+
+    with counter(2 downto 0) select
+        KEYS_PROBE <= "1ZZZZZZZ" when "000",
+                      "Z1ZZZZZZ" when "001",
+                      "ZZ1ZZZZZ" when "010",
+                      "ZZZ1ZZZZ" when "011",
+                      "ZZZZ1ZZZ" when "100",
+                      "ZZZZZ1ZZ" when "101",
+                      "ZZZZZZ1Z" when "110",
+                      "ZZZZZZZ1" when "111",
+                      "ZZZZZZZZ" when others;
 
     process (CLK)
         begin
@@ -87,8 +92,9 @@ begin
                 else
                     counter <= counter + 1;
             end if;
+
             if gate = '1' then
-                freq <= keys_to_freq(KEYS);
+                freq <= keys_to_freq(counter(2 downto 0), KEYS_IN, freq);
             end if;
         end if;
     end process;
@@ -114,8 +120,8 @@ begin
             ,clk2
             ,gate
             ,x"00"
+            ,x"F0"
             ,x"80"
-            ,x"04"
             ,x"01"
             ,x"00"
             ,x"04"
@@ -138,8 +144,8 @@ begin
             ,x"FF"
             ,x"40"
             ,x"02"
-            ,x"80"
-            ,x"02"
+            ,x"FF"
+            ,x"08"
             ,env_gain
             ,env_gain
             ,stage_gain
@@ -154,7 +160,7 @@ begin
         port map
             ('1'
             ,clk2
-            ,mode_saw_fat
+            ,mode_saw_res
             ,freq
             ,env_cutoff
             ,voice_cutoff
@@ -203,14 +209,15 @@ begin
             ,z_ampl
             );
 
-	dac : entity 
-                work.delta_sigma_dac(delta_sigma_dac_impl)
-	      port map
-                ('1'
-                ,clk1
-                ,to_audio_msb(z_ampl)
-                ,v_out
-                );
+	dac:
+        entity 
+            work.delta_sigma_dac(delta_sigma_dac_impl)
+        port map
+            ('1'
+            ,clk1
+            ,to_audio_msb(z_ampl)
+            ,v_out
+            );
 
     LINE_LEFT_NEG <= not v_out;
     LINE_LEFT_POS <= v_out;
