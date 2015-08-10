@@ -24,7 +24,7 @@ use work.common.all;
 entity synthesizer is
     port (CLK:              in  std_logic
          ;KEYS_PROBE:       out std_logic_vector(7 downto 0)
-         ;KEYS_IN:          in  std_logic_vector(5 downto 0)
+         ;KEYS_IN:          in  std_logic_vector(4 downto 0)
          ;LINE_LEFT_NEG:    out std_logic
          ;LINE_LEFT_POS:    out std_logic
          )
@@ -32,18 +32,56 @@ entity synthesizer is
 end entity;
 
 architecture synthesizer_impl of synthesizer is
-    function keys_to_freq( probe : std_logic_vector(2 downto 0)
-                         ; keys : std_logic_vector(5 downto 0)
-                         ; old : time_signal)
+    function key_to_freq(key: std_logic_vector(5 downto 0))
     return time_signal is
-        variable combi: std_logic_vector(7 downto 0) := (others => '0');
     begin
-        return old;
+        case key is
+            when "000000" => return to_unsigned(87, time_bits);
+            when "000001" => return to_unsigned(107, time_bits);
+            when "000010" => return to_unsigned(132, time_bits);
+            when "000011" => return to_unsigned(162, time_bits);
+            when "000100" => return to_unsigned(199, time_bits);
+            when "000101" => return to_unsigned(245, time_bits);
+            when "000110" => return to_unsigned(302, time_bits);
+            when "000111" => return to_unsigned(372, time_bits);
+            when "001000" => return to_unsigned(457, time_bits);
+            when "001001" => return to_unsigned(562, time_bits);
+            when "001010" => return to_unsigned(692, time_bits);
+            when "001011" => return to_unsigned(851, time_bits);
+            when "001100" => return to_unsigned(1047, time_bits);
+            when "001101" => return to_unsigned(1288, time_bits);
+            when "001110" => return to_unsigned(1585, time_bits);
+            when "001111" => return to_unsigned(1950, time_bits);
+            when "010000" => return to_unsigned(2398, time_bits);
+            when "010001" => return to_unsigned(2950, time_bits);
+            when "010010" => return to_unsigned(3629, time_bits);
+            when "010011" => return to_unsigned(4464, time_bits);
+            when "010100" => return to_unsigned(5491, time_bits);
+            when "010101" => return to_unsigned(6755, time_bits);
+            when "010110" => return to_unsigned(8309, time_bits);
+            when "010111" => return to_unsigned(10221, time_bits);
+            when "011000" => return to_unsigned(12572, time_bits);
+            when "011001" => return to_unsigned(15465, time_bits);
+            when "011010" => return to_unsigned(19023, time_bits);
+            when "011011" => return to_unsigned(23400, time_bits);
+            when "011100" => return to_unsigned(28784, time_bits);
+            when "011101" => return to_unsigned(35406, time_bits);
+            when "011110" => return to_unsigned(43552, time_bits);
+            when "011111" => return to_unsigned(53573, time_bits);
+            when "100000" => return to_unsigned(65899, time_bits);
+            when "100001" => return to_unsigned(81061, time_bits);
+            when "100010" => return to_unsigned(99711, time_bits);
+            when "100011" => return to_unsigned(122652, time_bits);
+            when "100100" => return to_unsigned(150871, time_bits);
+            when others  => return (others => '0');
+        end case;
     end function;
 
     signal clk1: std_logic := '0';
     signal clk2: std_logic := '0';
     signal counter: unsigned(8 downto 0) := (others => '0');
+    signal key_code: std_logic_vector(5 downto 0);
+    signal key_event: key_event_t;
     signal freq: time_signal := (others => '0');
     signal gate: std_logic;
     signal gain: ctl_signal;
@@ -71,36 +109,47 @@ architecture synthesizer_impl of synthesizer is
     signal v_out: std_logic;
 begin
 
-    gate <= '1' when KEYS_IN /= "00000" else '0';
-
-    with counter(2 downto 0) select
-        KEYS_PROBE <= "1ZZZZZZZ" when "000",
-                      "Z1ZZZZZZ" when "001",
-                      "ZZ1ZZZZZ" when "010",
-                      "ZZZ1ZZZZ" when "011",
-                      "ZZZZ1ZZZ" when "100",
-                      "ZZZZZ1ZZ" when "101",
-                      "ZZZZZZ1Z" when "110",
-                      "ZZZZZZZ1" when "111",
-                      "ZZZZZZZZ" when others;
-
     process (CLK)
-        begin
-            if rising_edge(CLK) then
-                if counter = to_unsigned(488, 9) then
-                    counter <= "000000000";
-                else
-                    counter <= counter + 1;
-            end if;
-
-            if gate = '1' then
-                freq <= keys_to_freq(counter(2 downto 0), KEYS_IN, freq);
+    begin
+        if rising_edge(CLK) then
+            if counter = to_unsigned(488, 9) then
+                counter <= "000000000";
+            else
+                counter <= counter + 1;
             end if;
         end if;
     end process;
 
+    process (CLK)
+    begin
+        if rising_edge(CLK) then
+            if key_event = key_event_make then
+                gate <= '1';
+                freq <= key_to_freq(key_code);
+            elsif key_event = key_event_break then
+                gate <= '0';
+                freq <= ('1', others => '0');
+            end if;
+        end if;
+    end process;
+
+
+
     clk1 <= CLK;
     clk2 <= '1' when counter = "000000000" else '0';
+
+    input_buffer:
+        entity
+            work.input_buffer (input_buffer_impl)
+        port map
+            ('1'
+            ,clk2
+            ,KEYS_IN
+            ,KEYS_PROBE
+            ,key_code
+            ,key_event
+            ,open
+            );
 
     phase_gen:
         entity

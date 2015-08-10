@@ -65,7 +65,7 @@ circular_buffer.o: common.o
 
 circular_buffer_test.o: common.o circular_buffer.o
 
-synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o delay.o amplifier.o
+synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o delay.o amplifier.o input_buffer.o
 
 synthesizer_test.o: common.o synthesizer.o
 
@@ -74,5 +74,9 @@ synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_ge
 synthesizer_sim_test.o: common.o synthesizer_sim.o
 
 synthesizer_sim_test.out: synthesizer_sim_test.vcd
+
+input_buffer.o: common.o
+
+input_buffer_test.o: input_buffer.o common.o
 
 .PHONY: all test clean doc play

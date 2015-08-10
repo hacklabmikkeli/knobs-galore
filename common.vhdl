@@ -58,6 +58,11 @@ package common is
     constant mode_saw_sync: mode_t          := "110";
     constant mode_mix:      mode_t          := "111";
 
+    subtype key_event_t is std_logic_vector(1 downto 0);
+    constant key_event_idle:  key_event_t   := "00";
+    constant key_event_make:  key_event_t   := "01";
+    constant key_event_break: key_event_t   := "10";
+
     type state_vector is
     record
         sv_phase1: time_signal;
@@ -84,7 +89,7 @@ package common is
         sp_amplitude_rel: ctl_signal;
     end record;
     
-    constant num_voices : natural := 37;
+    constant num_voices : natural := 8;
 
     constant empty_state_vector : state_vector :=
         ((others => '0')
