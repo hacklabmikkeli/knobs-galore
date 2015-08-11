@@ -40,7 +40,7 @@ architecture input_buffer_impl of input_buffer is
 
 begin
 
-    with probe_clock(5 downto 3) select KEYS_PROBE <=
+    with probe_clock(2 downto 0) select KEYS_PROBE <=
         "1ZZZZZZZ" when "000",
         "Z1ZZZZZZ" when "001",
         "ZZ1ZZZZZ" when "010",
@@ -67,7 +67,7 @@ begin
 
                 keys_in_padded(4 downto 0) := KEYS_IN;
                 old_val := keys_buf(to_integer(probe_clock));
-                new_val := keys_in_padded(to_integer(probe_clock(2 downto 0)));
+                new_val := keys_in_padded(to_integer(probe_clock(5 downto 3)));
 
                 if old_val = '0' and new_val = '1' then
                     key_event_buf <= key_event_make;
