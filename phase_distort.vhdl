@@ -42,12 +42,17 @@ architecture phase_distort_impl of phase_distort is
         ;x: integer
         )
     return integer is
+        variable log_cutoff : integer;
         variable y0 : integer;
         variable y : integer;
         variable k : integer;
 
     begin
-        k := (ctl_max - cutoff) / 2;
+        log_cutoff := integer(log2(real(cutoff+1)) * 32.0);
+        if log_cutoff > 255 then
+            log_cutoff := 255;
+        end if;
+        k := (ctl_max - log_cutoff) / 2;
         y0 := (ctl_max / 2) - k;
         if x < k then
             y := (x * y0) / k;
@@ -67,12 +72,17 @@ architecture phase_distort_impl of phase_distort is
         ;x: integer
         )
     return integer is
+        variable log_cutoff : integer;
         variable k : integer;
         variable y0 : integer;
         variable y : integer;
 
     begin
-        k := (ctl_max - cutoff) / 4;
+        log_cutoff := integer(log2(real(cutoff+1)) * 32.0);
+        if log_cutoff > 255 then
+            log_cutoff := 255;
+        end if;
+        k := (ctl_max - log_cutoff) / 4;
         y0 := ctl_max / 4;
         if x < k then
             y := (x * y0) / k;
