@@ -170,9 +170,9 @@ begin
             ,gate
             ,x"00"
             ,x"F0"
-            ,x"80"
             ,x"01"
-            ,x"00"
+            ,x"01"
+            ,x"F0"
             ,x"04"
             ,env_cutoff
             ,env_cutoff

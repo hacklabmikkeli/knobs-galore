@@ -44,10 +44,15 @@ architecture voice_controller_impl of voice_controller is
     function make_cutoff_to_fact
     return lut_t is
         variable zero: unsigned(ctl_bits + 3 downto 0) := (others => '0');
+        variable log_cutoff: integer;
         variable retval: lut_t := (others => (others => '0'));
     begin
         for i in 0 to 254 loop
-            retval(i) := to_unsigned(4096 / (256 - i), ctl_bits + 4);
+            log_cutoff := integer(log2(real(i+1)) * 32.0);
+            if log_cutoff > 255 then
+                log_cutoff := 255;
+            end if;
+            retval(i) := to_unsigned(4096 / (256 - log_cutoff), ctl_bits + 4);
         end loop;
         retval(255) := not zero;
         return retval;
