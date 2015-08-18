@@ -100,10 +100,10 @@ begin
             ,GATE
             ,x"00"
             ,x"FF"
-            ,PARAM.sp_amplitude_rel
-            ,PARAM.sp_amplitude_decay
-            ,PARAM.sp_amplitude_sustain
-            ,PARAM.sp_amplitude_rel
+            ,PARAM.sp_gain_rel
+            ,PARAM.sp_gain_decay
+            ,PARAM.sp_gain_sustain
+            ,PARAM.sp_gain_rel
             ,env_gain
             ,env_gain
             ,stage_gain

@@ -25,7 +25,7 @@ entity input_buffer is
             ;CLK:           in  std_logic
             ;KEYS_IN:       in  std_logic_vector(4 downto 0)
             ;KEYS_PROBE:    out std_logic_vector(7 downto 0)
-            ;KEY_CODE:      out std_logic_vector(5 downto 0)
+            ;KEY_CODE:      out keys_signal
             ;KEY_EVENT:     out key_event_t
             ;READY:         out std_logic
             );
@@ -34,7 +34,7 @@ end entity;
 architecture input_buffer_impl of input_buffer is
     signal keys_buf: std_logic_vector(63 downto 0) := (others => '0');
     signal probe_clock: unsigned(5 downto 0) := (others => '0');
-    signal key_code_buf: std_logic_vector(5 downto 0);
+    signal key_code_buf: keys_signal;
     signal key_event_buf: key_event_t;
     signal is_probing: std_logic := '1';
 
@@ -77,7 +77,8 @@ begin
                     key_event_buf <= key_event_idle;
                 end if;
 
-                key_code_buf <= std_logic_vector(probe_clock);
+                key_code_buf(keys_bits - 1 downto 0) 
+                    <= probe_clock(keys_bits - 1 downto 0);
                 keys_buf(to_integer(probe_clock)) <= new_val;
 
                 is_probing <= '1';

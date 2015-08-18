@@ -45,6 +45,7 @@ architecture voice_controller_impl of voice_controller is
     return lut_t is
         variable zero: unsigned(ctl_bits + 3 downto 0) := (others => '0');
         variable log_cutoff: integer;
+        variable fact: integer;
         variable retval: lut_t := (others => (others => '0'));
     begin
         for i in 0 to 254 loop
@@ -52,7 +53,11 @@ architecture voice_controller_impl of voice_controller is
             if log_cutoff > 255 then
                 log_cutoff := 255;
             end if;
-            retval(i) := to_unsigned(4096 / (256 - log_cutoff), ctl_bits + 4);
+            fact := 4096 / (256 - log_cutoff);
+            if fact > 4095 then
+                fact := 4095;
+            end if;
+            retval(i) := to_unsigned(fact, ctl_bits + 4);
         end loop;
         retval(255) := not zero;
         return retval;

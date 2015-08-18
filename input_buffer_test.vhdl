@@ -28,7 +28,7 @@ architecture input_buffer_test_impl of input_buffer_test is
     signal   CLK:           std_logic := '1';
     signal   KEYS_IN:       std_logic_vector(4 downto 0) := (others => '1');
     signal   KEYS_PROBE:    std_logic_vector(7 downto 0) := (others => 'Z');
-    signal   KEY_CODE:      std_logic_vector(5 downto 0) :=  (others => '0');
+    signal   KEY_CODE:      keys_signal :=  (others => '0');
     signal   KEY_EVENT:     key_event_t;
     constant length:        integer := 100000;
 

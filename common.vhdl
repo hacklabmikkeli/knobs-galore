@@ -38,6 +38,11 @@ package common is
     constant audio_hi : natural := audio_max - 1;
     subtype audio_signal is unsigned(audio_bits - 1 downto 0);
 
+    constant keys_bits : natural := 6;
+    constant keys_max : natural := 2**keys_bits;
+    constant keys_hi : natural := keys_max - 1;
+    subtype keys_signal is unsigned(keys_bits - 1 downto 0);
+
     subtype adsr_stage is std_logic_vector(1 downto 0);
     constant adsr_attack:   adsr_stage      := "00";
     constant adsr_decay:    adsr_stage      := "01";
@@ -63,15 +68,15 @@ package common is
     constant key_event_make:  key_event_t   := "01";
     constant key_event_break: key_event_t   := "10";
 
-    type state_vector is
+    type state_vector_t is
     record
-        sv_phase1: time_signal;
-        sv_phase2: time_signal;
-        sv_wave_sel: std_logic;
-        sv_ampl: time_signal;
-        sv_ampl_stage: adsr_stage;
+        sv_phase: time_signal;
+        sv_gain: time_signal;
+        sv_gain_stage: adsr_stage;
+        sv_gain_prev_gate: std_logic;
         sv_cutoff: time_signal;
         sv_cutoff_stage: adsr_stage;
+        sv_cutoff_prev_gate: std_logic;
     end record;
 
     type synthesis_params is
@@ -83,22 +88,23 @@ package common is
         sp_cutoff_decay: ctl_signal;
         sp_cutoff_sustain: ctl_signal;
         sp_cutoff_rel: ctl_signal;
-        sp_amplitude_attack: ctl_signal;
-        sp_amplitude_decay: ctl_signal;
-        sp_amplitude_sustain: ctl_signal;
-        sp_amplitude_rel: ctl_signal;
+        sp_gain_attack: ctl_signal;
+        sp_gain_decay: ctl_signal;
+        sp_gain_sustain: ctl_signal;
+        sp_gain_rel: ctl_signal;
     end record;
     
-    constant num_voices : natural := 8;
+    constant voices_bits: natural := 3;
+    constant num_voices: natural := 2**voices_bits;
 
-    constant empty_state_vector : state_vector :=
+    constant empty_state_vector : state_vector_t :=
         ((others => '0')
         ,(others => '0')
+        ,adsr_rel
         ,'0'
         ,(others => '0')
         ,adsr_rel
-        ,(others => '0')
-        ,adsr_rel
+        ,'0'
         );
 
     -- TODO: make the array larger after optimizing

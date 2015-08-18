@@ -54,14 +54,15 @@ Synthesizer top level
            |       : SV1                 |
            |       | Phase (17)          |
            |       | SV2                 |
-           |       | Amplitude (17)      |
-           |       | Amplitude stage (2) |
+           |       | Gain (17)           |
+           |       | Gain stage (2)      |
            |       | Cutoff (17)         |
            |       | Cutoff stage (2)    |
            |       +---------------------+
-        +--+--+
-        :Audio|
-        +--+--+
+           |
+ +---------+---------+
+ :Audio (time muxed) |
+ +---------+---------+
            |
            v
  +-------------------+

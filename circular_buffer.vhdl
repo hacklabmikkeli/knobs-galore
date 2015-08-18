@@ -23,16 +23,16 @@ use work.common.all;
 entity circular_buffer is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
-            ;DATA_IN:       in  state_vector
-            ;DATA_OUT:      out state_vector
+            ;DATA_IN:       in  state_vector_t
+            ;DATA_OUT:      out state_vector_t
             );
 end entity;
 
 architecture circular_buffer_impl of circular_buffer is
-    type data_buffer is array (0 to num_voices - 1) of state_vector;
+    type data_buffer is array (0 to num_voices - 1) of state_vector_t;
 
     signal counter: natural range 0 to num_voices - 1 := 0;
-    signal data_out_buf: state_vector := empty_state_vector;
+    signal data_out_buf: state_vector_t := empty_state_vector;
     signal data: data_buffer := (others => empty_state_vector);
 
 begin

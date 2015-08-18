@@ -34,7 +34,6 @@ architecture phase_gen_impl of phase_gen is
 
 begin
     process(CLK)
-        variable combined: unsigned(time_bits downto 0) := (others => '0');
     begin
         if EN = '1' and rising_edge(CLK) then
             s1_phase_out_buf <= PHASE_IN + 1;

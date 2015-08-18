@@ -28,8 +28,8 @@ architecture circular_buffer_test_impl of circular_buffer_test is
     signal  CLK:            std_logic := '1';
     signal  EN:             std_logic := '0';
     signal  PHASE:          time_signal;
-    signal  DATA_IN:        state_vector := empty_state_vector;
-    signal  DATA_OUT:       state_vector;
+    signal  DATA_IN:        state_vector_t := empty_state_vector;
+    signal  DATA_OUT:       state_vector_t;
     constant length:        natural := 1000;
 
 begin
@@ -43,12 +43,12 @@ begin
                 );
 
     process
-        variable sv : state_vector := empty_state_vector;
+        variable sv : state_vector_t := empty_state_vector;
 
     begin
         for k in 0 to num_voices - 1 loop
             sv := empty_state_vector;
-            sv.sv_phase1 := to_unsigned(k, time_bits);
+            sv.sv_phase := to_unsigned(k, time_bits);
             DATA_IN <= sv;
 
             EN <= '1';
@@ -78,5 +78,5 @@ begin
         wait;
     end process;
 
-    PHASE <= DATA_OUT.sv_phase1;
+    PHASE <= DATA_OUT.sv_phase;
 end architecture;

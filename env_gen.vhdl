@@ -53,8 +53,6 @@ architecture env_gen_impl of env_gen is
 
 begin
     process(CLK)
-        variable max_wide: time_signal := (others => '0');
-        variable min_wide: time_signal := (others => '0');
     begin
         if EN = '1' and rising_edge(CLK) then
             if PREV_GATE_IN = '0' and GATE = '1' then

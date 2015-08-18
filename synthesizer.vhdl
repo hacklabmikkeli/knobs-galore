@@ -32,67 +32,17 @@ entity synthesizer is
 end entity;
 
 architecture synthesizer_impl of synthesizer is
-    function key_to_freq(key: std_logic_vector(5 downto 0))
-    return time_signal is
-    begin
-        case key is
-            when "000000" => return to_unsigned(87, time_bits);
-            when "000001" => return to_unsigned(92, time_bits);
-            when "000010" => return to_unsigned(97, time_bits);
-            when "000011" => return to_unsigned(103, time_bits);
-            when "000100" => return to_unsigned(109, time_bits);
-            when "000101" => return to_unsigned(116, time_bits);
-            when "000110" => return to_unsigned(123, time_bits);
-            when "000111" => return to_unsigned(130, time_bits);
-            when "001000" => return to_unsigned(138, time_bits);
-            when "001001" => return to_unsigned(146, time_bits);
-            when "001010" => return to_unsigned(155, time_bits);
-            when "001011" => return to_unsigned(164, time_bits);
-            when "001100" => return to_unsigned(174, time_bits);
-            when "001101" => return to_unsigned(184, time_bits);
-            when "001110" => return to_unsigned(195, time_bits);
-            when "001111" => return to_unsigned(206, time_bits);
-            when "010000" => return to_unsigned(219, time_bits);
-            when "010001" => return to_unsigned(232, time_bits);
-            when "010010" => return to_unsigned(246, time_bits);
-            when "010011" => return to_unsigned(260, time_bits);
-            when "010100" => return to_unsigned(276, time_bits);
-            when "010101" => return to_unsigned(292, time_bits);
-            when "010110" => return to_unsigned(310, time_bits);
-            when "010111" => return to_unsigned(328, time_bits);
-            when "011000" => return to_unsigned(348, time_bits);
-            when "011001" => return to_unsigned(368, time_bits);
-            when "011010" => return to_unsigned(390, time_bits);
-            when "011011" => return to_unsigned(413, time_bits);
-            when "011100" => return to_unsigned(438, time_bits);
-            when "011101" => return to_unsigned(464, time_bits);
-            when "011110" => return to_unsigned(492, time_bits);
-            when "011111" => return to_unsigned(521, time_bits);
-            when "100000" => return to_unsigned(552, time_bits);
-            when "100001" => return to_unsigned(585, time_bits);
-            when "100010" => return to_unsigned(620, time_bits);
-            when "100011" => return to_unsigned(656, time_bits);
-            when "100100" => return to_unsigned(696, time_bits);
-            when others  => return (others => '0');
-        end case;
-    end function;
 
     signal clk1: std_logic := '0';
     signal clk2: std_logic := '0';
     signal counter: unsigned(8 downto 0) := (others => '0');
-    signal key_code: std_logic_vector(5 downto 0);
+    signal key_code: keys_signal;
     signal key_event: key_event_t;
     signal freq: time_signal := (others => '0');
     signal gate: std_logic;
-    signal gain: ctl_signal;
-    signal env_cutoff: time_signal;
-    signal env_gain: time_signal;
-    signal stage_cutoff: adsr_stage;
-    signal stage_gain: adsr_stage;
-    signal prev_gate_cutoff: std_logic;
-    signal prev_gate_gain: std_logic;
-    signal wave_sel: std_logic;
-    signal theta : time_signal;
+
+    signal state_vector_front: state_vector_t := empty_state_vector;
+    signal state_vector_back: state_vector_t := empty_state_vector;
 
     signal voice_wf: waveform_t;
     signal voice_cutoff: ctl_signal;
@@ -120,21 +70,6 @@ begin
         end if;
     end process;
 
-    process (CLK)
-    begin
-        if rising_edge(CLK) then
-            if key_event = key_event_make then
-                gate <= '1';
-                freq <= key_to_freq(key_code);
-            elsif key_event = key_event_break then
-                gate <= '0';
-                freq <= ('1', others => '0');
-            end if;
-        end if;
-    end process;
-
-
-
     clk1 <= CLK;
     clk2 <= '1' when counter = "000000000" else '0';
 
@@ -151,14 +86,36 @@ begin
             ,open
             );
 
+    voice_allocator:
+        entity
+            work.voice_allocator (voice_allocator_impl)
+        port map
+            ('1'
+            ,clk2
+            ,key_code
+            ,key_event
+            ,freq
+            ,gate
+            );
+
+    circular_buffer:
+        entity
+            work.circular_buffer (circular_buffer_impl)
+        port map
+            ('1'
+            ,clk2
+            ,state_vector_back
+            ,state_vector_front
+            );
+
     phase_gen:
         entity
             work.phase_gen (phase_gen_impl)
         port map
             ('1'
             ,clk2
-            ,theta
-            ,theta
+            ,state_vector_front.sv_phase
+            ,state_vector_back.sv_phase
             );
 
     env_gen_cutoff:
@@ -170,19 +127,19 @@ begin
             ,gate
             ,x"00"
             ,x"F0"
-            ,x"01"
-            ,x"01"
-            ,x"F0"
+            ,x"E8"
+            ,x"10"
+            ,x"00"
             ,x"04"
-            ,env_cutoff
-            ,env_cutoff
-            ,stage_cutoff
-            ,stage_cutoff
-            ,prev_gate_cutoff
-            ,prev_gate_cutoff
+            ,state_vector_front.sv_cutoff
+            ,state_vector_back.sv_cutoff
+            ,state_vector_front.sv_cutoff_stage
+            ,state_vector_back.sv_cutoff_stage
+            ,state_vector_front.sv_cutoff_prev_gate
+            ,state_vector_back.sv_cutoff_prev_gate
             );
 
-    env_gen_ampl:
+    env_gen_gain:
         entity
             work.env_gen (env_gen_impl)
         port map
@@ -195,12 +152,12 @@ begin
             ,x"02"
             ,x"FF"
             ,x"08"
-            ,env_gain
-            ,env_gain
-            ,stage_gain
-            ,stage_gain
-            ,prev_gate_gain
-            ,prev_gate_gain
+            ,state_vector_front.sv_gain
+            ,state_vector_back.sv_gain
+            ,state_vector_front.sv_gain_stage
+            ,state_vector_back.sv_gain_stage
+            ,state_vector_front.sv_gain_prev_gate
+            ,state_vector_back.sv_gain_prev_gate
             );
 
     voice_controller:
@@ -211,11 +168,11 @@ begin
             ,clk2
             ,mode_saw_res
             ,freq
-            ,env_cutoff
+            ,state_vector_front.sv_cutoff
             ,voice_cutoff
-            ,env_gain
+            ,state_vector_front.sv_gain
             ,voice_gain
-            ,theta
+            ,state_vector_front.sv_phase
             ,voice_theta
             ,voice_wf
             );

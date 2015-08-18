@@ -1,4 +1,4 @@
-PD lookup table (deprecated)
+PD lookup table (Z = F(X, Y))
 
                 |             |        |             |
                 X             Y(7-4)   X             Y(7-4)
