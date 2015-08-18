@@ -46,6 +46,14 @@ begin
                     );
 
     process begin
+        KEYS_IN <= "11111";
+        for k in 0 to length loop
+            CLK <= not CLK;
+            wait for 1 ns;
+            CLK <= not CLK;
+            wait for 1 ns;
+        end loop;
+        KEYS_IN <= "00000";
         for k in 0 to length loop
             CLK <= not CLK;
             wait for 1 ns;

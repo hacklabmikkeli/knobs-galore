@@ -63,7 +63,7 @@ begin
     process (CLK)
     begin
         if rising_edge(CLK) then
-            if counter = to_unsigned(488, 9) then
+            if counter = to_unsigned(61, 9) then
                 counter <= "000000000";
             else
                 counter <= counter + 1;
@@ -129,7 +129,7 @@ begin
             ,x"00"
             ,x"F0"
             ,x"E8"
-            ,x"10"
+            ,x"06"
             ,x"00"
             ,x"04"
             ,state_vector_front.sv_cutoff
