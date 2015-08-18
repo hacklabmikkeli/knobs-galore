@@ -33,7 +33,7 @@ package common is
     constant time_hi : natural := time_max - 1;
     subtype time_signal is unsigned(time_bits - 1 downto 0);
 
-    constant audio_bits : natural := 13;
+    constant audio_bits : natural := 11;
     constant audio_max : natural := 2**audio_bits;
     constant audio_hi : natural := audio_max - 1;
     subtype audio_signal is unsigned(audio_bits - 1 downto 0);

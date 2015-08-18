@@ -56,6 +56,7 @@ architecture synthesizer_impl of synthesizer is
 
     signal z: ctl_signal;
     signal z_ampl: ctl_signal;
+    signal z_mix: audio_signal;
     signal v_out: std_logic;
 begin
 
@@ -215,13 +216,23 @@ begin
             ,z_ampl
             );
 
+    mixer:
+        entity
+            work.mixer (mixer_impl)
+        port map
+            ('1'
+            ,clk2
+            ,z_ampl
+            ,z_mix
+            );
+
 	dac:
         entity 
             work.delta_sigma_dac(delta_sigma_dac_impl)
         port map
             ('1'
             ,clk1
-            ,to_audio_msb(z_ampl)
+            ,z_mix
             ,v_out
             );
 

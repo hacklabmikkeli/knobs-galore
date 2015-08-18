@@ -29,56 +29,118 @@ doc:
 	ghdl -r $(subst .o,,$^) --vcd="$(subst .o,.vcd,$^)" $(RUN_FLAGS) 
 	rm $(subst .o,,$^)
 
-phase_gen.o: common.o
+phase_gen.o: \
+	common.o
 
-env_gen.o: common.o
+env_gen.o: \
+	common.o
 
-waveshaper.o: common.o
+waveshaper.o: \
+	common.o
 
-lookup.o: common.o
+lookup.o: \
+	common.o
 
-phase_distort.o: common.o lookup.o
+delta_sigma_dac.o: \
+	common.o
 
-delta_sigma_dac.o: common.o
+delay.o: \
+	common.o
 
-amplifier.o: common.o lookup.o
+voice_controller.o: \
+	common.o
 
-delay.o: common.o
-	
-voice_controller.o: common.o
+voice_allocator.o: \
+	common.o
 
-phase_gen_test.o: common.o phase_gen.o
+mixer.o: \
+	common.o
 
-env_gen_test.o: common.o env_gen.o
+input_buffer.o: \
+	common.o
 
-waveshaper_test.o: common.o waveshaper.o
+circular_buffer.o: \
+	common.o
 
-phase_distort_test.o: common.o phase_distort.o
+phase_distort.o: \
+	common.o \
+	lookup.o
 
-amplifier_test.o: common.o amplifier.o
+amplifier.o: \
+	common.o \
+	lookup.o
 
-delta_sigma_dac_test.o: common.o waveshaper.o delta_sigma_dac.o
+phase_gen_test.o: \
+	common.o \
+	phase_gen.o
 
-waveform_test.o: common.o waveshaper.o phase_distort.o
+env_gen_test.o: \
+	common.o \
+	env_gen.o
 
-circular_buffer.o: common.o
+waveshaper_test.o: \
+	common.o \
+	waveshaper.o
 
-circular_buffer_test.o: common.o circular_buffer.o
+phase_distort_test.o: \
+	common.o \
+	phase_distort.o
 
-synthesizer.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o delay.o amplifier.o input_buffer.o voice_allocator.o
+amplifier_test.o: \
+	common.o \
+	amplifier.o
 
-synthesizer_test.o: common.o synthesizer.o
+delta_sigma_dac_test.o: \
+	common.o \
+	waveshaper.o \
+	delta_sigma_dac.o
 
-synthesizer_sim.o: common.o env_gen.o delta_sigma_dac.o phase_distort.o phase_gen.o waveshaper.o amplifier.o delay.o voice_controller.o
+waveform_test.o: \
+	common.o \
+	waveshaper.o \
+	phase_distort.o
 
-synthesizer_sim_test.o: common.o synthesizer_sim.o
+input_buffer_test.o: \
+	input_buffer.o \
+	common.o
 
-synthesizer_sim_test.out: synthesizer_sim_test.vcd
+circular_buffer_test.o: \
+	common.o \
+	circular_buffer.o
 
-input_buffer.o: common.o
+synthesizer.o: \
+	common.o \
+	env_gen.o \
+	delta_sigma_dac.o \
+	phase_distort.o \
+	phase_gen.o \
+	waveshaper.o \
+	delay.o \
+	amplifier.o \
+	input_buffer.o \
+	voice_allocator.o \
+	mixer.o
 
-input_buffer_test.o: input_buffer.o common.o
+synthesizer_test.o: \
+	common.o \
+	synthesizer.o
 
-voice_allocator.o: common.o
+synthesizer_sim.o: \
+	common.o \
+	env_gen.o \
+	delta_sigma_dac.o \
+	phase_distort.o \
+	phase_gen.o \
+	waveshaper.o \
+	amplifier.o \
+	delay.o \
+	voice_controller.o
 
-.PHONY: all test clean doc play
+synthesizer_sim_test.o: \
+	common.o \
+	synthesizer_sim.o
+
+synthesizer_sim_test.out: \
+	synthesizer_sim_test.vcd
+
+.PHONY: all test clean doc
