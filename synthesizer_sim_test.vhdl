@@ -29,159 +29,47 @@ end entity;
 architecture synthesizer_sim_test_impl of synthesizer_sim_test is
     type step is
     record
-        step_freq: natural;
-        step_gate: std_logic;
+        step_key: keys_signal;
+        step_event: key_event_t;
         step_duration: natural;
-        step_params: synthesis_params;
     end record;
 
     type step_table is array(integer range <>) of step;
 
-    constant steps: step_table(0 to 115) :=
-        ((55, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(55, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(69, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(138, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(277, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(220, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 1000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '1', 7000, (mode_saw_res, x"00", x"E0", x"D0", x"40", x"00", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(110, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"10", x"FF", x"01", x"FE", x"10"))
-        ,(330, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(330, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(220, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(220, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(294, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(294, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(165, '1', 128000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(165, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(220, '1', 144000, (mode_saw_fat, x"00", x"A0", x"01", x"02", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(220, '0', 36000, (mode_saw_fat, x"00", x"A0", x"A0", x"40", x"A0", x"03", x"FF", x"01", x"FE", x"04"))
-        ,(440, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '1', 48000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '1', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '0', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '1', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '0', 18000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '1', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(440, '0', 36000, (mode_mix, x"00", x"A0", x"A0", x"06", x"20", x"FF", x"FF", x"01", x"FE", x"FF"))
-        ,(330, '1', 96000, (mode_saw_res, x"00", x"A0", x"02", x"01", x"00", x"10", x"FF", x"01", x"FE", x"07"))
-        ,(330, '0', 36000, (mode_saw_res, x"00", x"A0", x"A0", x"40", x"00", x"10", x"FF", x"01", x"FE", x"07"))
-        ,(220, '1', 128000, (mode_saw_res, x"00", x"A0", x"02", x"01", x"00", x"10", x"FF", x"01", x"FE", x"07"))
-        ,(220, '0', 36000, (mode_saw_res, x"00", x"A0", x"A0", x"40", x"00", x"10", x"FF", x"01", x"FE", x"07"))
+    constant steps: step_table(0 to 4) :=
+        (("000000", key_event_idle, 524288)
+        ,("000001", key_event_make, 1)
+        ,("000001", key_event_idle, 524288) -- 1s
+        ,("000001", key_event_break, 1)
+        ,("000001", key_event_idle, 524288)
         );
 
 
     signal CLK:              std_logic := '1';
-    signal FREQ:             time_signal;
-    signal GATE:             std_logic;
-    signal PARAM:            synthesis_params;
-    signal AUDIO:            ctl_signal;
+    signal KEY_CODE:         keys_signal;
+    signal KEY_EVENT:        key_event_t;
+    signal AUDIO:            audio_signal;
 
 begin
 
     synthesizer_sim : entity work.synthesizer_sim(synthesizer_sim_impl)
-                    port map (CLK, FREQ, GATE, PARAM, AUDIO);
+                    port map (CLK, KEY_CODE, KEY_EVENT, AUDIO);
 
     process
         file out_file: text is out "synthesizer_sim_test.out";
         variable out_line: line;
     begin
         for j in steps'range loop
-            FREQ <= to_unsigned(steps(j).step_freq, time_bits);
-            GATE <= steps(j).step_gate;
-            PARAM <= steps(j).step_params;
+            KEY_CODE <= steps(j).step_key;
+            KEY_EVENT <= steps(j).step_event;
             for k in 0 to steps(j).step_duration loop
                 CLK <= not CLK;
-                wait for 7 us;
+                wait for 0.8 us;
                 CLK <= not CLK;
-                wait for 7 us;
-                write(out_line, to_integer(AUDIO));
+                wait for 0.8 us;
+                write(out_line, to_integer(AUDIO(10 downto 8)));
+                writeline(out_file, out_line);
+                write(out_line, to_integer(AUDIO(7 downto 0)));
                 writeline(out_file, out_line);
             end loop;
         end loop;

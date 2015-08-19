@@ -23,149 +23,72 @@ use work.common.all;
 
 entity synthesizer_sim is
     port (CLK:              in  std_logic
-         ;FREQ:             in  time_signal
-         ;GATE:             in  std_logic
-         ;PARAM:            in  synthesis_params
-         ;AUDIO:            out ctl_signal
+         ;KEY_CODE:         in  keys_signal
+         ;KEY_EVENT:        in  key_event_t
+         ;AUDIO:            out audio_signal
          )
     ;
 end entity;
 
 architecture synthesizer_sim_impl of synthesizer_sim is
-    signal gain: ctl_signal;
-    signal env_cutoff: time_signal;
-    signal env_gain: time_signal;
-    signal stage_cutoff: adsr_stage;
-    signal stage_gain: adsr_stage;
-    signal prev_gate_cutoff: std_logic;
-    signal prev_gate_gain: std_logic;
-    signal wave_sel: std_logic;
-    signal theta : time_signal;
+    signal freq: time_signal := (others => '0');
+    signal gate: std_logic;
 
-    signal cutoff_max: ctl_signal;
-
-    signal voice_wf: waveform_t;
-    signal voice_cutoff: ctl_signal;
-    signal voice_theta: ctl_signal;
-    signal voice_gain: ctl_signal;
-
-    signal pd_theta: ctl_signal;
-    signal pd_gain: ctl_signal;
-
-    signal waveshaper_gain: ctl_signal;
-
-    signal z: ctl_signal;
+    signal fifo_in: state_vector_t;
+    signal fifo_out: state_vector_t;
     signal z_ampl: ctl_signal;
+    signal audio_buf: audio_signal;
 begin
 
-    cutoff_max <= PARAM.sp_cutoff_base + PARAM.sp_cutoff_env;
-
-    phase_gen:
+    voice_allocator:
         entity
-            work.phase_gen (phase_gen_impl)
+            work.voice_allocator (voice_allocator_impl)
         port map
             ('1'
             ,CLK
-            ,theta
-            ,theta
+            ,KEY_CODE
+            ,KEY_EVENT
+            ,freq
+            ,gate
             );
 
-    env_gen_cutoff:
+    voice_generator:
         entity
-            work.env_gen (env_gen_impl)
+            work.voice_generator (voice_generator_impl)
         port map
             ('1'
             ,CLK
-            ,GATE
-            ,PARAM.sp_cutoff_base
-            ,cutoff_max
-            ,PARAM.sp_cutoff_attack
-            ,PARAM.sp_cutoff_decay
-            ,PARAM.sp_cutoff_sustain
-            ,PARAM.sp_cutoff_rel
-            ,env_cutoff
-            ,env_cutoff
-            ,stage_cutoff
-            ,stage_cutoff
-            ,prev_gate_cutoff
-            ,prev_gate_cutoff
-            );
-
-    env_gen_ampl:
-        entity
-            work.env_gen (env_gen_impl)
-        port map
-            ('1'
-            ,CLK
-            ,GATE
-            ,x"00"
-            ,x"FF"
-            ,PARAM.sp_gain_rel
-            ,PARAM.sp_gain_decay
-            ,PARAM.sp_gain_sustain
-            ,PARAM.sp_gain_rel
-            ,env_gain
-            ,env_gain
-            ,stage_gain
-            ,stage_gain
-            ,prev_gate_gain
-            ,prev_gate_gain
-            );
-
-    voice_controller:
-        entity
-            work.voice_controller (voice_controller_impl)
-        port map
-            ('1'
-            ,CLK
-            ,PARAM.sp_mode
-            ,FREQ
-            ,env_cutoff
-            ,voice_cutoff
-            ,env_gain
-            ,voice_gain
-            ,theta
-            ,voice_theta
-            ,voice_wf
-            );
-
-
-    phase_distort:
-        entity 
-            work.phase_distort (phase_distort_impl)
-        port map
-            ('1'
-            ,CLK
-            ,voice_wf
-            ,voice_cutoff
-            ,voice_theta
-            ,pd_theta
-            ,voice_gain
-            ,pd_gain
-            );
-
-    waveshaper:
-        entity
-            work.waveshaper(waveshaper_sin)
-        port map
-            ('1'
-            ,CLK
-            ,pd_theta
-            ,z
-            ,pd_gain
-            ,waveshaper_gain
-            );
-
-    amplifier:
-        entity
-            work.amplifier (amplifier_impl)
-        port map
-            ('1'
-            ,CLK
-            ,waveshaper_gain
-            ,z
+            ,freq
+            ,gate
+            ,(mode_saw
+             ,x"00", x"FF", x"01", x"01", x"00", x"01"
+             ,x"FF", x"01", x"00", x"F0"
+             )
             ,z_ampl
+            ,fifo_in
+            ,fifo_out
             );
 
-    AUDIO <= z_ampl;
+
+    circular_buffer:
+        entity
+            work.circular_buffer (circular_buffer_impl)
+        port map
+            ('1'
+            ,CLK
+            ,fifo_in
+            ,fifo_out
+            );
+
+    mixer:
+        entity
+            work.mixer (mixer_impl)
+        port map
+            ('1'
+            ,CLK
+            ,z_ampl
+            ,audio_buf
+            );
+
+    AUDIO <= audio_buf;
 end architecture;

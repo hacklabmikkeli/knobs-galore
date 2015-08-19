@@ -104,9 +104,22 @@ input_buffer_test.o: \
 	input_buffer.o \
 	common.o
 
+voice_allocator_test.o: \
+	voice_allocator.o \
+	common.o
+
 circular_buffer_test.o: \
 	common.o \
 	circular_buffer.o
+
+voice_generator.o: \
+	common.o \
+	phase_gen.o \
+	env_gen.o \
+	voice_controller.o \
+	phase_distort.o \
+	waveshaper.o \
+	amplifier.o
 
 synthesizer.o: \
 	common.o \
@@ -119,6 +132,7 @@ synthesizer.o: \
 	amplifier.o \
 	input_buffer.o \
 	voice_allocator.o \
+	circular_buffer.o \
 	mixer.o
 
 synthesizer_test.o: \
@@ -134,7 +148,11 @@ synthesizer_sim.o: \
 	waveshaper.o \
 	amplifier.o \
 	delay.o \
-	voice_controller.o
+	voice_controller.o \
+	voice_allocator.o \
+	voice_generator.o \
+	circular_buffer.o \
+	mixer.o
 
 synthesizer_sim_test.o: \
 	common.o \
