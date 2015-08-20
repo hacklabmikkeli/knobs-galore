@@ -41,7 +41,7 @@ architecture synthesizer_sim_test_impl of synthesizer_sim_test is
         ,("000001", key_event_make, 1)
         ,("000001", key_event_idle, 524288) -- 1s
         ,("000001", key_event_break, 1)
-        ,("000001", key_event_idle, 524288)
+        ,("000001", key_event_idle, 5242880)
         );
 
 
@@ -62,6 +62,7 @@ begin
         for j in steps'range loop
             KEY_CODE <= steps(j).step_key;
             KEY_EVENT <= steps(j).step_event;
+            wait for 0.8 us;
             for k in 0 to steps(j).step_duration loop
                 CLK <= not CLK;
                 wait for 0.8 us;

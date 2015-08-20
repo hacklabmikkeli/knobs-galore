@@ -53,42 +53,51 @@ architecture env_gen_impl of env_gen is
 
 begin
     process(CLK)
+        variable next_env_out: time_signal;
+        variable next_stage_out: adsr_stage;
     begin
         if EN = '1' and rising_edge(CLK) then
+
+            next_env_out := ENV_IN;
+            next_stage_out := STAGE_IN;
+
             if PREV_GATE_IN = '0' and GATE = '1' then
-                stage_out_buf <= adsr_attack;
-                prev_gate_out_buf <= '1';
+                next_stage_out := adsr_attack;
             elsif PREV_GATE_IN = '1' and GATE = '0' then
-                stage_out_buf <= adsr_rel;
-                prev_gate_out_buf <= '0';
+                next_stage_out := adsr_rel;
+            else
             end if;
 
-            case STAGE_IN is
+            case next_stage_out is
                 when adsr_attack =>
                     if ENV_IN > (MAX & zero_f_min_c) - A_RATE then
-                        env_out_buf <= MAX & zero_f_min_c;
-                        stage_out_buf <= adsr_decay;
+                        next_env_out := MAX & zero_f_min_c;
+                        next_stage_out := adsr_decay;
                     else
-                        env_out_buf <= ENV_IN + A_RATE;
+                        next_env_out := ENV_IN + A_RATE;
                     end if;
                 when adsr_decay =>
                     if ENV_IN < (S_LVL & zero_f_min_c) + D_RATE then
-                        env_out_buf <= S_LVL & zero_f_min_c;
-                        stage_out_buf <= adsr_sustain;
+                        next_env_out := S_LVL & zero_f_min_c;
+                        next_stage_out := adsr_sustain;
                     else
-                        env_out_buf <= ENV_IN - D_RATE;
+                        next_env_out := ENV_IN - D_RATE;
                     end if;
                 when adsr_sustain =>
-                    null;
+                    next_env_out := ENV_IN;
                 when adsr_rel =>
                     if ENV_IN < (MIN & zero_f_min_c) + R_RATE then
-                        env_out_buf <= MIN & zero_f_min_c;
+                        next_env_out := MIN & zero_f_min_c;
                     else
-                        env_out_buf <= ENV_IN - R_RATE;
+                        next_env_out := ENV_IN - R_RATE;
                     end if;
                 when others => -- non-binary values
                     null;
             end case;
+
+            env_out_buf <= next_env_out;
+            stage_out_buf <= next_stage_out;
+            prev_gate_out_buf <= GATE;
         end if;
     end process;
 

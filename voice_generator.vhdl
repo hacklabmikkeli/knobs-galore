@@ -34,6 +34,8 @@ end entity;
 
 architecture voice_generator_impl of voice_generator is
 
+    signal s1_freq: time_signal := (others=>'0');
+
     signal s1_cutoff: time_signal;
     signal s1_cutoff_stage: adsr_stage;
     signal s1_cutoff_prev_gate: std_logic;
@@ -56,8 +58,6 @@ architecture voice_generator_impl of voice_generator is
     signal s8_gain: ctl_signal;
 
     signal s9_z_ampl: ctl_signal;
-
-    signal s1_freq: time_signal := (others=>'0');
 
 begin
 
@@ -127,7 +127,7 @@ begin
             ('1'
             ,CLK
             ,PARAMS.sp_mode
-            ,FREQ
+            ,s1_freq
             ,s1_cutoff
             ,s3_cutoff
             ,s1_gain

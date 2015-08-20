@@ -39,9 +39,9 @@ architecture amplifier_impl of amplifier is
     --    ((CTL_MAX - GAIN) * BIAS) / CTL_MAX
     constant bias: ctl_signal := ('1', others => '0');
 
-    signal GX_N: ctl_signal := (others => '0');
-    signal N_Gb_N: ctl_signal := (others => '0');
-    signal audio_out_buf: ctl_signal := (others => '0');
+    signal s1_GX_N: ctl_signal := (others => '0');
+    signal s1_N_Gb_N: ctl_signal := (others => '0');
+    signal s2_audio_out_buf: ctl_signal := (others => '0');
 begin
     process (CLK)
         constant ctl_max_cs: ctl_signal := (others => '1');
@@ -52,14 +52,14 @@ begin
         if EN = '1' and rising_edge(CLK) then
             -- stage 1
             GX := GAIN * AUDIO_IN;
-            GX_N <= GX(ctl_bits * 2 - 1 downto ctl_bits);
+            s1_GX_N <= GX(ctl_bits * 2 - 1 downto ctl_bits);
             N_Gb := (not GAIN) * bias;
-            N_Gb_N <= N_Gb(ctl_bits * 2 - 1 downto ctl_bits);
+            s1_N_Gb_N <= N_Gb(ctl_bits * 2 - 1 downto ctl_bits);
 
             -- stage 2
-            audio_out_buf <= GX_N + N_Gb_N;
+            s2_audio_out_buf <= s1_GX_N + s1_N_Gb_N;
         end if;
     end process;
 
-    AUDIO_OUT <= audio_out_buf;
+    AUDIO_OUT <= s2_audio_out_buf;
 end architecture;

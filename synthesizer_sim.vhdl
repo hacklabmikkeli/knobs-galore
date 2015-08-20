@@ -34,18 +34,32 @@ architecture synthesizer_sim_impl of synthesizer_sim is
     signal freq: time_signal := (others => '0');
     signal gate: std_logic;
 
+    signal clk_divider: unsigned(1 downto 0) := "00";
+    signal clk1: std_logic;
+    signal clk2: std_logic;
+
     signal fifo_in: state_vector_t;
     signal fifo_out: state_vector_t;
     signal z_ampl: ctl_signal;
     signal audio_buf: audio_signal;
 begin
 
+    process(CLK)
+    begin
+        if rising_edge(CLK) then
+            clk_divider <= clk_divider + 1;
+        end if;
+    end process;
+    
+    clk1 <= clk_divider(0) and clk_divider(1);
+    clk2 <= clk_divider(0) and not clk_divider(1);
+
     voice_allocator:
         entity
             work.voice_allocator (voice_allocator_impl)
         port map
             ('1'
-            ,CLK
+            ,clk1
             ,KEY_CODE
             ,KEY_EVENT
             ,freq
@@ -57,11 +71,11 @@ begin
             work.voice_generator (voice_generator_impl)
         port map
             ('1'
-            ,CLK
+            ,clk1
             ,freq
             ,gate
             ,(mode_saw
-             ,x"00", x"FF", x"01", x"01", x"00", x"01"
+             ,x"00", x"FF", x"F0", x"01", x"00", x"01"
              ,x"FF", x"01", x"00", x"F0"
              )
             ,z_ampl
@@ -75,7 +89,7 @@ begin
             work.circular_buffer (circular_buffer_impl)
         port map
             ('1'
-            ,CLK
+            ,clk2
             ,fifo_in
             ,fifo_out
             );
@@ -85,7 +99,7 @@ begin
             work.mixer (mixer_impl)
         port map
             ('1'
-            ,CLK
+            ,clk1
             ,z_ampl
             ,audio_buf
             );

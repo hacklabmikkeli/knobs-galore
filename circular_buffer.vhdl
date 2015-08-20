@@ -29,7 +29,7 @@ entity circular_buffer is
 end entity;
 
 architecture circular_buffer_impl of circular_buffer is
-    type data_buffer is array (0 to num_voices - 1) of state_vector_t;
+    type data_buffer is array (0 to num_voices - 2) of state_vector_t;
 
     signal data_out_buf: state_vector_t := empty_state_vector;
     signal data: data_buffer := (others => empty_state_vector);
@@ -39,8 +39,8 @@ begin
     begin
         if EN = '1' and rising_edge(CLK) then
             data_out_buf <= data(0);
-            data(num_voices - 1) <= DATA_IN;
-            data(0 to num_voices - 2) <= data(1 to num_voices - 1);
+            data(0 to num_voices - 3) <= data(1 to num_voices - 2);
+            data(num_voices - 2) <= DATA_IN;
         end if;
     end process;
 
