@@ -128,10 +128,11 @@ synthesizer.o: \
 	phase_distort.o \
 	phase_gen.o \
 	waveshaper.o \
-	delay.o \
 	amplifier.o \
-	input_buffer.o \
+	delay.o \
+	voice_controller.o \
 	voice_allocator.o \
+	voice_generator.o \
 	circular_buffer.o \
 	mixer.o
 
@@ -142,7 +143,6 @@ synthesizer_test.o: \
 synthesizer_sim.o: \
 	common.o \
 	env_gen.o \
-	delta_sigma_dac.o \
 	phase_distort.o \
 	phase_gen.o \
 	waveshaper.o \

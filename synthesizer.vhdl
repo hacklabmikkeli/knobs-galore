@@ -35,35 +35,26 @@ architecture synthesizer_impl of synthesizer is
 
     signal clk1: std_logic := '0';
     signal clk2: std_logic := '0';
+    signal clk3: std_logic := '0';
     signal counter: unsigned(8 downto 0) := (others => '0');
     signal key_code: keys_signal;
     signal key_event: key_event_t;
+
     signal freq: time_signal := (others => '0');
     signal gate: std_logic;
 
-    signal state_vector_front: state_vector_t := empty_state_vector;
-    signal state_vector_back: state_vector_t := empty_state_vector;
-
-    signal voice_wf: waveform_t;
-    signal voice_cutoff: ctl_signal;
-    signal voice_theta: ctl_signal;
-    signal voice_gain: ctl_signal;
-
-    signal pd_theta: ctl_signal;
-    signal pd_gain: ctl_signal;
-
-    signal waveshaper_gain: ctl_signal;
-
-    signal z: ctl_signal;
+    signal fifo_in: state_vector_t;
+    signal fifo_out: state_vector_t;
     signal z_ampl: ctl_signal;
-    signal z_mix: audio_signal;
+    signal audio_buf: audio_signal;
+
     signal v_out: std_logic;
 begin
 
     process (CLK)
     begin
         if rising_edge(CLK) then
-            if counter = to_unsigned(61, 9) then
+            if counter = to_unsigned(30, 9) then
                 counter <= "000000000";
             else
                 counter <= counter + 1;
@@ -71,15 +62,16 @@ begin
         end if;
     end process;
 
-    clk1 <= CLK;
+    clk1 <= '1' when counter = "000000111" else '0';
     clk2 <= '1' when counter = "000000000" else '0';
+    clk3 <= CLK;
 
     input_buffer:
         entity
             work.input_buffer (input_buffer_impl)
         port map
             ('1'
-            ,clk2
+            ,clk1
             ,KEYS_IN
             ,KEYS_PROBE
             ,key_code
@@ -92,7 +84,7 @@ begin
             work.voice_allocator (voice_allocator_impl)
         port map
             ('1'
-            ,clk2
+            ,clk1
             ,key_code
             ,key_event
             ,freq
@@ -105,115 +97,25 @@ begin
         port map
             ('1'
             ,clk2
-            ,state_vector_back
-            ,state_vector_front
+            ,fifo_in
+            ,fifo_out
             );
 
-    phase_gen:
+    voice_generator:
         entity
-            work.phase_gen (phase_gen_impl)
+            work.voice_generator (voice_generator_impl)
         port map
             ('1'
-            ,clk2
-            ,state_vector_front.sv_phase
-            ,state_vector_back.sv_phase
-            );
-
-    env_gen_cutoff:
-        entity
-            work.env_gen (env_gen_impl)
-        port map
-            ('1'
-            ,clk2
-            ,gate
-            ,x"00"
-            ,x"F0"
-            ,x"E8"
-            ,x"06"
-            ,x"00"
-            ,x"04"
-            ,state_vector_front.sv_cutoff
-            ,state_vector_back.sv_cutoff
-            ,state_vector_front.sv_cutoff_stage
-            ,state_vector_back.sv_cutoff_stage
-            ,state_vector_front.sv_cutoff_prev_gate
-            ,state_vector_back.sv_cutoff_prev_gate
-            );
-
-    env_gen_gain:
-        entity
-            work.env_gen (env_gen_impl)
-        port map
-            ('1'
-            ,clk2
-            ,gate
-            ,x"00"
-            ,x"FF"
-            ,x"40"
-            ,x"02"
-            ,x"FF"
-            ,x"08"
-            ,state_vector_front.sv_gain
-            ,state_vector_back.sv_gain
-            ,state_vector_front.sv_gain_stage
-            ,state_vector_back.sv_gain_stage
-            ,state_vector_front.sv_gain_prev_gate
-            ,state_vector_back.sv_gain_prev_gate
-            );
-
-    voice_controller:
-        entity
-            work.voice_controller (voice_controller_impl)
-        port map
-            ('1'
-            ,clk2
-            ,mode_saw_res
+            ,clk1
             ,freq
-            ,state_vector_front.sv_cutoff
-            ,voice_cutoff
-            ,state_vector_front.sv_gain
-            ,voice_gain
-            ,state_vector_front.sv_phase
-            ,voice_theta
-            ,voice_wf
-            );
-
-
-    phase_distort:
-        entity 
-            work.phase_distort (phase_distort_impl)
-        port map
-            ('1'
-            ,clk2
-            ,voice_wf
-            ,voice_cutoff
-            ,voice_theta
-            ,pd_theta
-            ,voice_gain
-            ,pd_gain
-            );
-
-    waveshaper:
-        entity
-            work.waveshaper(waveshaper_sin)
-        port map
-            ('1'
-            ,clk2
-            ,pd_theta
-            ,z
-            ,pd_gain
-            ,waveshaper_gain
-            );
-
-    amplifier:
-        entity
-            work.amplifier (amplifier_impl)
-        port map
-            ('1'
-            ,clk2
-            ,waveshaper_gain
-            ,z
+            ,gate
+            ,(mode_saw
+             ,x"00", x"FF", x"F0", x"01", x"00", x"01"
+             ,x"FF", x"01", x"00", x"F0"
+             )
             ,z_ampl
+            ,fifo_in
+            ,fifo_out
             );
 
     mixer:
@@ -221,9 +123,9 @@ begin
             work.mixer (mixer_impl)
         port map
             ('1'
-            ,clk2
+            ,clk1
             ,z_ampl
-            ,z_mix
+            ,audio_buf
             );
 
 	dac:
@@ -231,8 +133,8 @@ begin
             work.delta_sigma_dac(delta_sigma_dac_impl)
         port map
             ('1'
-            ,clk1
-            ,z_mix
+            ,clk3
+            ,audio_buf
             ,v_out
             );
 
