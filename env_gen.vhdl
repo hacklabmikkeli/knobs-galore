@@ -61,16 +61,9 @@ begin
             next_env_out := ENV_IN;
             next_stage_out := STAGE_IN;
 
-            if PREV_GATE_IN = '0' and GATE = '1' then
-                next_stage_out := adsr_attack;
-            elsif PREV_GATE_IN = '1' and GATE = '0' then
-                next_stage_out := adsr_rel;
-            else
-            end if;
-
             case next_stage_out is
                 when adsr_attack =>
-                    if ENV_IN > (MAX & zero_f_min_c) - A_RATE then
+                    if ENV_IN >= (MAX & zero_f_min_c) - A_RATE then
                         next_env_out := MAX & zero_f_min_c;
                         next_stage_out := adsr_decay;
                     else
@@ -94,6 +87,12 @@ begin
                 when others => -- non-binary values
                     null;
             end case;
+
+            if PREV_GATE_IN = '0' and GATE = '1' then
+                next_stage_out := adsr_attack;
+            elsif PREV_GATE_IN = '1' and GATE = '0' then
+                next_stage_out := adsr_rel;
+            end if;
 
             env_out_buf <= next_env_out;
             stage_out_buf <= next_stage_out;

@@ -54,7 +54,7 @@ begin
     process (CLK)
     begin
         if rising_edge(CLK) then
-            if counter = to_unsigned(30, 9) then
+            if counter = to_unsigned(61, 9) then
                 counter <= "000000000";
             else
                 counter <= counter + 1;
@@ -62,8 +62,8 @@ begin
         end if;
     end process;
 
-    clk1 <= '1' when counter = "000000111" else '0';
-    clk2 <= '1' when counter = "000000000" else '0';
+    clk1 <= '1' when std_match(counter, "0001000--") else '0';
+    clk2 <= '1' when std_match(counter, "0000000--") else '0';
     clk3 <= CLK;
 
     input_buffer:
@@ -109,9 +109,9 @@ begin
             ,clk1
             ,freq
             ,gate
-            ,(mode_saw
-             ,x"00", x"FF", x"F0", x"01", x"00", x"01"
-             ,x"FF", x"01", x"00", x"F0"
+            ,(mode_sq_fat
+             ,x"00", x"A0", x"01", x"01", x"80", x"06"
+             ,x"FF", x"01", x"FF", x"10"
              )
             ,z_ampl
             ,fifo_in
