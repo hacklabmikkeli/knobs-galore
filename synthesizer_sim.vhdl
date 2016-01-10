@@ -31,17 +31,20 @@ entity synthesizer_sim is
 end entity;
 
 architecture synthesizer_sim_impl of synthesizer_sim is
+    signal clk_even: std_logic := '0';
+    signal clk_odd: std_logic := '0';
+    signal clk_slow: std_logic := '0';
+    signal clk_divider: unsigned(4 downto 0) := (others => '0');
+
     signal freq: time_signal := (others => '0');
     signal gate: std_logic;
-
-    signal clk_divider: unsigned(1 downto 0) := "00";
-    signal clk1: std_logic;
-    signal clk2: std_logic;
 
     signal fifo_in: state_vector_t;
     signal fifo_out: state_vector_t;
     signal z_ampl: ctl_signal;
     signal audio_buf: audio_signal;
+    signal audio_buf_del: audio_signal;
+
 begin
 
     process(CLK)
@@ -51,19 +54,30 @@ begin
         end if;
     end process;
     
-    clk1 <= clk_divider(0) and clk_divider(1);
-    clk2 <= clk_divider(0) and not clk_divider(1);
+    clk_even <= '1' when std_match(clk_divider, "0000-") else '0';
+    clk_odd <= '1' when std_match(clk_divider, "0001-") else '0';
+    clk_slow <= '1' when std_match(clk_divider, "1----") else '0';
 
     voice_allocator:
         entity
             work.voice_allocator (voice_allocator_impl)
         port map
             ('1'
-            ,clk1
-            ,KEY_CODE
-            ,KEY_EVENT
+            ,clk_odd
+            ,key_code
+            ,key_event
             ,freq
             ,gate
+            );
+
+    circular_buffer:
+        entity
+            work.circular_buffer (circular_buffer_impl)
+        port map
+            ('1'
+            ,clk_odd
+            ,fifo_in
+            ,fifo_out
             );
 
     voice_generator:
@@ -71,25 +85,15 @@ begin
             work.voice_generator (voice_generator_impl)
         port map
             ('1'
-            ,clk1
+            ,clk_even
+            ,clk_odd
             ,freq
             ,gate
-            ,(mode_saw
-             ,x"00", x"FF", x"F0", x"01", x"00", x"01"
-             ,x"FF", x"01", x"00", x"F0"
+            ,(mode_saw_fat
+             ,x"00", x"A0", x"01", x"01", x"00", x"01"
+             ,x"FF", x"01", x"FF", x"01"
              )
             ,z_ampl
-            ,fifo_in
-            ,fifo_out
-            );
-
-
-    circular_buffer:
-        entity
-            work.circular_buffer (circular_buffer_impl)
-        port map
-            ('1'
-            ,clk2
             ,fifo_in
             ,fifo_out
             );
@@ -99,10 +103,22 @@ begin
             work.mixer (mixer_impl)
         port map
             ('1'
-            ,clk1
+            ,clk_odd
             ,z_ampl
             ,audio_buf
             );
 
-    AUDIO <= audio_buf;
+    delay:
+        entity
+            work.audio_delay (audio_delay_impl)
+        port map
+            ('1'
+            ,clk_slow
+            ,audio_buf
+            ,audio_buf_del
+            );
+
+    AUDIO <= audio_buf 
+             + ('0' & audio_buf_del(audio_signal'high - 1 downto
+                        audio_signal'low));
 end architecture;

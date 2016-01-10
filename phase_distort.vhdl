@@ -25,7 +25,8 @@ use work.common.all;
 
 entity phase_distort is
     port    (EN:            in  std_logic
-            ;CLK:           in  std_logic
+            ;CLK_EVEN:      in  std_logic
+            ;CLK_ODD:       in  std_logic
             ;WAVEFORM:      in  waveform_t
             ;CUTOFF:        in  ctl_signal
             ;THETA_IN:      in  ctl_signal
@@ -141,6 +142,9 @@ architecture phase_distort_impl of phase_distort is
 
     signal s4_theta_out_buf: ctl_signal := (others => '0');
     signal s4_gain_pass_buf: ctl_signal := (others => '0');
+
+    signal s5_theta_out_buf: ctl_signal := (others => '0');
+    signal s5_gain_pass_buf: ctl_signal := (others => '0');
 begin
 
     lookup_saw:
@@ -150,7 +154,8 @@ begin
             (lut_saw)
         port map
             (EN
-            ,CLK
+            ,CLK_EVEN
+            ,CLK_ODD
             ,THETA_IN
             ,CUTOFF
             ,s3_theta_saw
@@ -163,24 +168,40 @@ begin
             (lut_sq)
         port map
             (EN
-            ,CLK
+            ,CLK_EVEN
+            ,CLK_ODD
             ,THETA_IN
             ,CUTOFF
             ,s3_theta_sq
             );
     
-    process (CLK)
+    process (CLK_EVEN)
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_EVEN) then
             s1_waveform <= WAVEFORM;
             s1_gain <= GAIN_IN;
+        end if;
+    end process;
 
+    process (CLK_ODD)
+    begin
+        if EN = '1' and rising_edge(CLK_ODD) then
             s2_waveform <= s1_waveform;
             s2_gain <= s1_gain;
+        end if;
+    end process;
 
+    process (CLK_EVEN)
+    begin
+        if EN = '1' and rising_edge(CLK_EVEN) then
             s3_waveform <= s2_waveform;
             s3_gain <= s2_gain;
+        end if;
+    end process;
 
+    process (CLK_ODD)
+    begin
+        if EN = '1' and rising_edge(CLK_ODD) then
             case s3_waveform is
                 when waveform_saw =>
                     s4_theta_out_buf <= s3_theta_saw;
@@ -194,6 +215,14 @@ begin
         end if;
     end process;
 
-    THETA_OUT <= s4_theta_out_buf;
-    GAIN_THRU <= s4_gain_pass_buf;
+    process (CLK_EVEN)
+    begin
+        if EN = '1' and rising_edge(CLK_EVEN) then
+            s5_theta_out_buf <= s4_theta_out_buf;
+            s5_gain_pass_buf <= s4_gain_pass_buf;
+        end if;
+    end process;
+
+    THETA_OUT <= s5_theta_out_buf;
+    GAIN_THRU <= s5_gain_pass_buf;
 end architecture;

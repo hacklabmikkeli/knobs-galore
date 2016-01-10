@@ -23,6 +23,7 @@ use work.common.all;
 entity voice_allocator is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
+            ;OCTAVER:       in  std_logic
             ;KEY_CODE:      in  keys_signal
             ;KEY_EVENT:     in  key_event_t
             ;FREQ:          out time_signal
@@ -87,26 +88,58 @@ architecture voice_allocator_impl of voice_allocator is
 
 begin
     process(CLK)
+        variable voice_aux: unsigned(voices_bits - 1 downto 0)
+            := (others => '0');
+        variable freq_aux: time_signal := (others => '0');
     begin
         if EN = '1' and rising_edge(CLK) then
-            case KEY_EVENT is
-                when key_event_make =>
-                    key_codes(to_integer(next_voice)) <= KEY_CODE;
-                    gates(to_integer(next_voice)) <= '1';
-                    next_voice <= next_voice + 1;
-                when key_event_break =>
-                    for i in key_codes'low to key_codes'high loop
-                        if key_codes(i) = KEY_CODE then
-                            gates(i) <= '0';
-                        end if;
-                    end loop;
-                when others =>
-                    null;
-            end case;
+            if OCTAVER = '1' then
+                case KEY_EVENT is
+                    when key_event_make =>
+                        key_codes(to_integer(next_voice)) <= KEY_CODE;
+                        gates(to_integer(next_voice)) <= '1';
+                        voice_aux := next_voice + 1;
+                        next_voice <= '0' & voice_aux(voices_bits - 2 downto 0);
+                    when key_event_break =>
+                        for i in key_codes'low to key_codes'high loop
+                            if key_codes(i) = KEY_CODE then
+                                gates(i) <= '0';
+                            end if;
+                        end loop;
+                    when others =>
+                        null;
+                end case;
 
-            freq_buf <= key_to_freq(key_codes(to_integer(current_voice)));
-            gate_buf <= gates(to_integer(current_voice));
-            current_voice <= current_voice + 1;
+                if current_voice(voices_bits - 1) = '0' then
+                    freq_buf <= key_to_freq(key_codes(to_integer(current_voice)));
+                    gate_buf <= gates(to_integer(current_voice));
+                else
+                    voice_aux := '0' & current_voice(voices_bits - 2 downto 0);
+                    freq_aux := key_to_freq(key_codes(to_integer(voice_aux)));
+                    freq_buf <= freq_aux(time_bits - 2 downto 0) & '0';
+                    gate_buf <= gates(to_integer(voice_aux));
+                end if;
+                current_voice <= current_voice + 1;
+            else
+                case KEY_EVENT is
+                    when key_event_make =>
+                        key_codes(to_integer(next_voice)) <= KEY_CODE;
+                        gates(to_integer(next_voice)) <= '1';
+                        next_voice <= next_voice + 1;
+                    when key_event_break =>
+                        for i in key_codes'low to key_codes'high loop
+                            if key_codes(i) = KEY_CODE then
+                                gates(i) <= '0';
+                            end if;
+                        end loop;
+                    when others =>
+                        null;
+                end case;
+
+                freq_buf <= key_to_freq(key_codes(to_integer(current_voice)));
+                gate_buf <= gates(to_integer(current_voice));
+                current_voice <= current_voice + 1;
+            end if;
         end if;
     end process;
 

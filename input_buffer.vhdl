@@ -1,5 +1,5 @@
 --
-        --    Knobs Galore - a free phase distortion synthesizer
+--    Knobs Galore - a free phase distortion synthesizer
 --    Copyright (C) 2015 Ilmo Euro
 --
 --    This program is free software: you can redistribute it and/or modify
@@ -23,8 +23,8 @@ use work.common.all;
 entity input_buffer is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
-            ;KEYS_IN:       in  std_logic_vector(4 downto 0)
-            ;KEYS_PROBE:    out std_logic_vector(7 downto 0)
+            ;KEYS_IN:       in  std_logic_vector(7 downto 0)
+            ;KEYS_PROBE:    out std_logic_vector(4 downto 0)
             ;KEY_CODE:      out keys_signal
             ;KEY_EVENT:     out key_event_t
             ;READY:         out std_logic
@@ -33,12 +33,13 @@ end entity;
 
 architecture input_buffer_impl of input_buffer is
     signal keys_buf: std_logic_vector(63 downto 0) := (others => '0');
-    signal keys_mask: std_logic_vector(4 downto 0) := (others => '0');
+    signal keys_mask: std_logic_vector(7 downto 0) := (others => '0');
     signal probe_clock: unsigned(5 downto 0) := (others => '0');
-    signal keys_probe_buf: std_logic_vector(7 downto 0);
+    signal keys_probe_buf: std_logic_vector(4 downto 0) := (others => 'Z');
     signal key_code_buf: keys_signal := (others => '0');
     signal key_event_buf: key_event_t := (others => '0');
-    signal is_probing: std_logic := '1';
+    signal key_code_translated: keys_signal;
+    signal counter: unsigned(7 downto 0);
 
 begin
 
@@ -48,49 +49,48 @@ begin
         variable new_key_state: std_logic;
     begin
         if EN = '1' and rising_edge(CLK) then
-            if is_probing = '1' then
+            if counter = "00000000" then
                 case probe_clock(2 downto 0) is
                     when "000"=>
-                        keys_probe_buf <= "1ZZZZZZZ";
+                        keys_mask <= "10000000";
                     when "001"=>
-                        keys_probe_buf <= "Z1ZZZZZZ";
+                        keys_mask <= "01000000";
                     when "010"=>
-                        keys_probe_buf <= "ZZ1ZZZZZ";
+                        keys_mask <= "00100000";
                     when "011"=>
-                        keys_probe_buf <= "ZZZ1ZZZZ";
+                        keys_mask <= "00010000";
                     when "100"=>
-                        keys_probe_buf <= "ZZZZ1ZZZ";
+                        keys_mask <= "00001000";
                     when "101"=>
-                        keys_probe_buf <= "ZZZZZ1ZZ";
+                        keys_mask <= "00000100";
                     when "110"=>
-                        keys_probe_buf <= "ZZZZZZ1Z";
+                        keys_mask <= "00000010";
                     when "111"=>
-                        keys_probe_buf <= "ZZZZZZZ1";
+                        keys_mask <= "00000001";
                     when others =>
                         null;
                 end case;
 
                 case probe_clock(5 downto 3) is
                     when "000" =>
-                        keys_mask <= "10000";
+                        keys_probe_buf <= "1ZZZZ";
                     when "001" =>
-                        keys_mask <= "01000";
+                        keys_probe_buf <= "Z1ZZZ";
                     when "010" =>
-                        keys_mask <= "00100";
+                        keys_probe_buf <= "ZZ1ZZ";
                     when "011" =>
-                        keys_mask <= "00010";
+                        keys_probe_buf <= "ZZZ1Z";
                     when "100" =>
-                        keys_mask <= "00001";
+                        keys_probe_buf <= "ZZZZ1";
                     when others =>
-                        keys_mask <= "00000";
+                        keys_probe_buf <= "ZZZZZ";
                 end case;
 
-                is_probing <= '0'; -- wait 1 cycle for input to settle
                 key_event_buf <= key_event_idle;
-            else
+            elsif counter = "10000000" then
                 old_key_state := keys_buf(to_integer(probe_clock));
 
-                if (KEYS_IN and keys_mask) /= "00000" then
+                if (KEYS_IN and keys_mask) /= "00000000" then
                     new_key_state := '1';
                 else
                     new_key_state := '0';
@@ -106,15 +106,23 @@ begin
 
                 keys_buf(to_integer(probe_clock)) <= new_key_state;
                 key_code_buf <= probe_clock;
-                probe_clock <= probe_clock + 1;
-
-                is_probing <= '1';
+                if probe_clock = "100100" then
+                    probe_clock <= "000000";
+                else
+                    probe_clock <= probe_clock + 1;
+                end if;
+            elsif counter = "10000001" then
+                key_event_buf <= key_event_idle;
+            elsif counter = "10001000" then
+                keys_probe_buf <= "00000";
             end if;
+
+            counter <= counter + 1;
         end if;
     end process;
 
     KEY_CODE <= key_code_buf;
     KEY_EVENT <= key_event_buf;
     KEYS_PROBE <= keys_probe_buf;
-    READY <= is_probing;
+    READY <= '1';
 end architecture;

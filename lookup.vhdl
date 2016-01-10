@@ -24,7 +24,8 @@ entity lookup is
     generic (TABLE:         ctl_lut_t
             );
     port    (EN:            in  std_logic
-            ;CLK:           in  std_logic
+            ;CLK_EVEN:      in  std_logic
+            ;CLK_ODD:       in  std_logic
             ;X:             in  ctl_signal
             ;Y:             in  ctl_signal
             ;Z:             out ctl_signal
@@ -46,23 +47,23 @@ architecture lookup_impl of lookup is
     signal s3_z_buf: ctl_signal := (others => '0');
 
 begin
-    process(CLK)
+    process(CLK_EVEN)
         variable x_ix: integer range 0 to 255;
         variable y_ix: integer range 0 to 15;
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_EVEN) then
             x_ix := to_integer(X);
             y_ix := to_integer(Y(7 downto 4));
             s1_left_ref <= rom(x_ix, y_ix);
         end if;
     end process;
 
-    process(CLK)
+    process(CLK_EVEN)
         variable y_plusone: unsigned(4 downto 0);
         variable x_ix: integer range 0 to 255;
         variable y_ix: integer range 1 to 16;
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_EVEN) then
             y_plusone := ("0" & Y(7 downto 4)) + 1;
             x_ix := to_integer(X);
             y_ix := to_integer(y_plusone);
@@ -70,35 +71,35 @@ begin
         end if;
     end process;
 
-    process(CLK)
+    process(CLK_EVEN)
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_EVEN) then
             s1_y <= Y;
         end if;
     end process;
 
-    process(CLK)
+    process(CLK_ODD)
         variable s1_y_recip: unsigned(4 downto 0);
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_ODD) then
             s1_y_recip := "10000" - s1_y(3 downto 0);
             s2_left_mult <= s1_y_recip * s1_left_ref;
         end if;
     end process;
 
-    process(CLK)
+    process(CLK_ODD)
         variable s1_y_fact: unsigned(4 downto 0);
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_ODD) then
             s1_y_fact := "0" & s1_y(3 downto 0);
             s2_right_mult <= s1_y_fact * s1_right_ref;
         end if;
     end process;
 
-    process(CLK)
+    process(CLK_EVEN)
         variable s2_z_wide: unsigned(12 downto 0);
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_EVEN) then
             s2_z_wide := s2_left_mult + s2_right_mult;
             s3_z_buf <= s2_z_wide(11 downto 4);
         end if;

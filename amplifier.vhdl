@@ -25,7 +25,8 @@ use work.common.all;
 
 entity amplifier is
     port    (EN:            in  std_logic
-            ;CLK:           in  std_logic
+            ;CLK_EVEN:      in  std_logic
+            ;CLK_ODD:       in  std_logic
             ;GAIN:          in  ctl_signal
             ;AUDIO_IN:      in  ctl_signal
             ;AUDIO_OUT:     out ctl_signal
@@ -42,24 +43,35 @@ architecture amplifier_impl of amplifier is
     signal s1_GX_N: ctl_signal := (others => '0');
     signal s1_N_Gb_N: ctl_signal := (others => '0');
     signal s2_audio_out_buf: ctl_signal := (others => '0');
+    signal s3_audio_out_buf: ctl_signal := (others => '0');
 begin
-    process (CLK)
+    process (CLK_EVEN)
         constant ctl_max_cs: ctl_signal := (others => '1');
 
         variable GX: unsigned(ctl_bits * 2 - 1 downto 0);
         variable N_Gb: unsigned(ctl_bits * 2 - 1 downto 0);
     begin
-        if EN = '1' and rising_edge(CLK) then
-            -- stage 1
+        if EN = '1' and rising_edge(CLK_EVEN) then
             GX := GAIN * AUDIO_IN;
             s1_GX_N <= GX(ctl_bits * 2 - 1 downto ctl_bits);
             N_Gb := (not GAIN) * bias;
             s1_N_Gb_N <= N_Gb(ctl_bits * 2 - 1 downto ctl_bits);
+        end if;
+    end process;
 
-            -- stage 2
+    process (CLK_ODD)
+    begin
+        if EN = '1' and rising_edge(CLK_ODD) then
             s2_audio_out_buf <= s1_GX_N + s1_N_Gb_N;
         end if;
     end process;
 
-    AUDIO_OUT <= s2_audio_out_buf;
+    process (CLK_EVEN)
+    begin
+        if EN = '1' and rising_edge(CLK_ODD) then
+            s3_audio_out_buf <= s2_audio_out_buf;
+        end if;
+    end process;
+
+    AUDIO_OUT <= s3_audio_out_buf;
 end architecture;

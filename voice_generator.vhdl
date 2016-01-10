@@ -22,7 +22,8 @@ use work.common.all;
 
 entity voice_generator is
     port    (EN:            in  std_logic
-            ;CLK:           in  std_logic
+            ;CLK_EVEN:      in  std_logic
+            ;CLK_ODD:       in  std_logic
             ;FREQ:          in  time_signal
             ;GATE:          in  std_logic
             ;PARAMS:        in  synthesis_params
@@ -46,24 +47,24 @@ architecture voice_generator_impl of voice_generator is
 
     signal s1_phase: time_signal;
 
-    signal s3_wf: waveform_t;
-    signal s3_cutoff: ctl_signal;
-    signal s3_theta: ctl_signal;
-    signal s3_gain: ctl_signal;
+    signal s4_wf: waveform_t;
+    signal s4_cutoff: ctl_signal;
+    signal s4_theta: ctl_signal;
+    signal s4_gain: ctl_signal;
 
-    signal s7_theta: ctl_signal;
-    signal s7_gain: ctl_signal;
-
-    signal s8_z: ctl_signal;
+    signal s8_theta: ctl_signal;
     signal s8_gain: ctl_signal;
 
-    signal s9_z_ampl: ctl_signal;
+    signal s9_z: ctl_signal;
+    signal s9_gain: ctl_signal;
+
+    signal s12_z_ampl: ctl_signal;
 
 begin
 
-    process(CLK)
+    process(CLK_EVEN)
     begin
-        if EN='1' and rising_edge(clk) then
+        if EN='1' and rising_edge(CLK_EVEN) then
             s1_freq <= FREQ;
         end if;
     end process;
@@ -73,7 +74,7 @@ begin
             work.phase_gen (phase_gen_impl)
         port map
             ('1'
-            ,CLK
+            ,CLK_EVEN
             ,IN_FROM_FIFO.sv_phase
             ,s1_phase
             );
@@ -83,7 +84,7 @@ begin
             work.env_gen (env_gen_impl)
         port map
             ('1'
-            ,CLK
+            ,CLK_EVEN
             ,GATE
             ,PARAMS.sp_cutoff_base
             ,PARAMS.sp_cutoff_env
@@ -104,7 +105,7 @@ begin
             work.env_gen (env_gen_impl)
         port map
             ('1'
-            ,CLK
+            ,CLK_EVEN
             ,GATE
             ,x"00"
             ,x"FF"
@@ -125,16 +126,17 @@ begin
             work.voice_controller (voice_controller_impl)
         port map
             ('1'
-            ,CLK
+            ,CLK_ODD
+            ,CLK_EVEN
             ,PARAMS.sp_mode
             ,s1_freq
             ,s1_cutoff
-            ,s3_cutoff
+            ,s4_cutoff
             ,s1_gain
-            ,s3_gain
+            ,s4_gain
             ,s1_phase
-            ,s3_theta
-            ,s3_wf
+            ,s4_theta
+            ,s4_wf
             );
 
 
@@ -143,13 +145,14 @@ begin
             work.phase_distort (phase_distort_impl)
         port map
             ('1'
-            ,CLK
-            ,s3_wf
-            ,s3_cutoff
-            ,s3_theta
-            ,s7_theta
-            ,s3_gain
-            ,s7_gain
+            ,CLK_EVEN
+            ,CLK_ODD
+            ,s4_wf
+            ,s4_cutoff
+            ,s4_theta
+            ,s8_theta
+            ,s4_gain
+            ,s8_gain
             );
 
     waveshaper:
@@ -157,11 +160,11 @@ begin
             work.waveshaper(waveshaper_sin)
         port map
             ('1'
-            ,CLK
-            ,s7_theta
-            ,s8_z
-            ,s7_gain
+            ,CLK_ODD
+            ,s8_theta
+            ,s9_z
             ,s8_gain
+            ,s9_gain
             );
 
     amplifier:
@@ -169,13 +172,14 @@ begin
             work.amplifier (amplifier_impl)
         port map
             ('1'
-            ,CLK
-            ,s8_gain
-            ,s8_z
-            ,s9_z_ampl
+            ,CLK_EVEN
+            ,CLK_ODD
+            ,s9_gain
+            ,s9_z
+            ,s12_z_ampl
             );
 
-    AUDIO_OUT <= s9_z_ampl;
+    AUDIO_OUT <= s12_z_ampl;
     OUT_TO_FIFO <= 
                   (s1_phase
                   ,s1_gain

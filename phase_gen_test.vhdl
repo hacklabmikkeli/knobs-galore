@@ -25,28 +25,5 @@ entity phase_gen_test is
 end entity;
 
 architecture phase_gen_test_impl of phase_gen_test is
-    signal  CLK:            std_logic := '1';
-    signal  THETA:          time_signal;
-    constant length:        integer := 100000;
-
 begin
-    phase_gen : entity
-                    work.phase_gen(phase_gen_impl)
-                port map
-                    ('1'
-                    ,CLK
-                    ,THETA
-                    ,THETA
-                    );
-
-    process begin
-        for k in 0 to length loop
-            CLK <= not CLK;
-            wait for 1 ns;
-            CLK <= not CLK;
-            wait for 1 ns;
-        end loop;
-        assert false report "end of test" severity note;
-        wait;
-    end process;
 end architecture;

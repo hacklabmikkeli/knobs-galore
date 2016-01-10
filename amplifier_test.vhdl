@@ -26,14 +26,17 @@ end entity;
 
 architecture amplifier_test_impl of amplifier_test is
     signal      CLK:            std_logic := '1';
+    signal      CLK_BAR:        std_logic;
     signal      GAIN:           ctl_signal := to_unsigned(0, ctl_bits);
     signal      AUDIO_IN:       ctl_signal := to_unsigned(0, ctl_bits);
     signal      AUDIO_OUT:      ctl_signal;
 
 begin
+    CLK_BAR <= not CLK;
+
     amplifier : 
         entity work.amplifier(amplifier_impl)
-        port map ('1', CLK, GAIN, AUDIO_IN, AUDIO_OUT);
+        port map ('1', CLK, CLK_BAR, GAIN, AUDIO_IN, AUDIO_OUT);
 
     process begin
         for j in 0 to ctl_max - 1 loop

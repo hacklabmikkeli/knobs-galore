@@ -25,42 +25,5 @@ entity input_buffer_test is
 end entity;
 
 architecture input_buffer_test_impl of input_buffer_test is
-    signal   CLK:           std_logic := '1';
-    signal   KEYS_IN:       std_logic_vector(4 downto 0) := (others => '1');
-    signal   KEYS_PROBE:    std_logic_vector(7 downto 0) := (others => 'Z');
-    signal   KEY_CODE:      keys_signal :=  (others => '0');
-    signal   KEY_EVENT:     key_event_t;
-    constant length:        integer := 100000;
-
 begin
-    input_buffer : entity
-                    work.input_buffer(input_buffer_impl)
-                port map
-                    ('1'
-                    ,CLK
-                    ,KEYS_IN
-                    ,KEYS_PROBE
-                    ,KEY_CODE
-                    ,KEY_EVENT
-                    ,open
-                    );
-
-    process begin
-        KEYS_IN <= "11111";
-        for k in 0 to length loop
-            CLK <= not CLK;
-            wait for 1 ns;
-            CLK <= not CLK;
-            wait for 1 ns;
-        end loop;
-        KEYS_IN <= "00000";
-        for k in 0 to length loop
-            CLK <= not CLK;
-            wait for 1 ns;
-            CLK <= not CLK;
-            wait for 1 ns;
-        end loop;
-        assert false report "end of test" severity note;
-        wait;
-    end process;
 end architecture;

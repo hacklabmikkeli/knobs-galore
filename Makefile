@@ -29,6 +29,9 @@ doc:
 	ghdl -r $(subst .o,,$^) --vcd="$(subst .o,.vcd,$^)" $(RUN_FLAGS) 
 	rm $(subst .o,,$^)
 
+audio_delay.o: \
+	common.o
+
 phase_gen.o: \
 	common.o
 

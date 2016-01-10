@@ -24,7 +24,8 @@ use work.common.all;
 
 entity voice_controller is
     port    (EN:            in  std_logic
-            ;CLK:           in  std_logic
+            ;CLK_EVEN:      in  std_logic
+            ;CLK_ODD:       in  std_logic
             ;MODE:          in  mode_t
             ;FREQ:          in  time_signal
             ;CUTOFF_IN:     in  time_signal
@@ -77,9 +78,13 @@ architecture voice_controller_impl of voice_controller is
     signal s2_cutoff_out_buf: ctl_signal := (others => '0');
     signal s2_theta_out_buf: ctl_signal := (others => '0');
     signal s2_gain_out_buf: ctl_signal := (others => '0');
+    signal s3_waveform_buf: waveform_t := waveform_saw;
+    signal s3_cutoff_out_buf: ctl_signal := (others => '0');
+    signal s3_theta_out_buf: ctl_signal := (others => '0');
+    signal s3_gain_out_buf: ctl_signal := (others => '0');
 begin
 
-    process (CLK)
+    process (CLK_EVEN)
         variable cutoff: ctl_signal;
         variable theta_osc1: ctl_signal;
         variable theta_osc1_wide: unsigned(time_bits * 2 - 1 downto 0);
@@ -91,7 +96,7 @@ begin
         variable theta_osc2_res: ctl_signal;
         variable gain_windowed_wide: unsigned(ctl_bits * 2 - 1 downto 0);
     begin
-        if EN = '1' and rising_edge(CLK) then
+        if EN = '1' and rising_edge(CLK_EVEN) then
             cutoff := to_ctl(CUTOFF_IN);
             theta_osc1_wide := THETA_REF * FREQ;
             theta_osc1 := theta_osc1_wide(time_bits - 2 
@@ -120,7 +125,12 @@ begin
                                                    downto ctl_bits);
             s1_wave_sel <= theta_osc1_wide(time_bits - 1);
             s1_mode <= MODE;
+        end if;
+    end process;
 
+    process (CLK_ODD)
+    begin
+        if EN = '1' and rising_edge(CLK_ODD) then
             case s1_mode is
                 when   mode_saw
                      | mode_saw_fat
@@ -204,9 +214,19 @@ begin
         end if;
     end process;
 
-    WAVEFORM <= s2_waveform_buf;
-    CUTOFF_OUT <= s2_cutoff_out_buf;
-    THETA_OUT <= s2_theta_out_buf;
-    GAIN_OUT <= s2_gain_out_buf;
+    process(CLK_EVEN)
+    begin
+        if EN='1' and rising_edge(CLK_EVEN) then
+            s3_waveform_buf <= s2_waveform_buf;
+            s3_cutoff_out_buf <= s2_cutoff_out_buf;
+            s3_theta_out_buf <= s2_theta_out_buf;
+            s3_gain_out_buf <= s2_gain_out_buf;
+        end if;
+    end process;
+
+    WAVEFORM <= s3_waveform_buf;
+    CUTOFF_OUT <= s3_cutoff_out_buf;
+    THETA_OUT <= s3_theta_out_buf;
+    GAIN_OUT <= s3_gain_out_buf;
 
 end architecture;

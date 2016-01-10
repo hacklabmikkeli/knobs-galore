@@ -25,52 +25,5 @@ entity phase_distort_test is
 end entity;
 
 architecture phase_distort_test_impl of phase_distort_test is
-    signal      CLK:            std_logic := '1';
-    signal      CUTOFF:         ctl_signal := (others => '0');
-    signal      THETA_IN:       ctl_signal := (others => '0');
-    signal      SAW_THETA:      ctl_signal;
-    signal      SQR_THETA:      ctl_signal;
-
 begin
-    phase_distort_saw : 
-        entity
-            work.phase_distort(phase_distort_impl)
-        port map
-            ('1'
-            ,CLK
-            ,waveform_saw
-            ,CUTOFF
-            ,THETA_IN
-            ,SAW_THETA
-            ,(others => '0')
-            ,open);
-
-    phase_distort_sq : 
-        entity
-            work.phase_distort(phase_distort_impl)
-        port map
-            ('1'
-            ,CLK
-            ,waveform_sq
-            ,CUTOFF
-            ,THETA_IN
-            ,SAW_THETA
-            ,(others => '0')
-            ,open);
-
-    process begin
-        for j in 0 to ctl_max - 1 loop
-            CUTOFF <= to_unsigned(j, CUTOFF'length);
-            for i in 0 to ctl_max - 1 loop
-                THETA_IN <= to_unsigned(i, THETA_IN'length);
-                wait for 1 ns;
-                CLK <= not CLK;
-                wait for 1 ns;
-                CLK <= not CLK;
-                wait for 1 ns;
-            end loop;
-        end loop;
-        assert false report "end of test" severity note;
-        wait;
-    end process;
 end architecture;
