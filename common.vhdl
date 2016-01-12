@@ -53,7 +53,7 @@ package common is
     constant waveform_saw:  waveform_t      := '0';
     constant waveform_sq:   waveform_t      := '1';
 
-    subtype mode_t is std_logic_vector(2 downto 0);
+    subtype mode_t is unsigned(2 downto 0);
     constant mode_saw:      mode_t          := "000";
     constant mode_sq:       mode_t          := "001";
     constant mode_saw_res:  mode_t          := "010";
@@ -63,7 +63,7 @@ package common is
     constant mode_saw_sync: mode_t          := "110";
     constant mode_mix:      mode_t          := "111";
 
-    subtype voice_transform_t is std_logic_vector(1 downto 0);
+    subtype voice_transform_t is unsigned(1 downto 0);
     constant voice_transform_none:  voice_transform_t   := "00";
     constant voice_transform_oct:   voice_transform_t   := "01";
     constant voice_transform_sub:   voice_transform_t   := "10";

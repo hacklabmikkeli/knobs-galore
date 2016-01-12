@@ -183,7 +183,8 @@ begin
                         s2_theta_out_buf <= s1_theta_osc2_fat;
                     end if;
                 when   mode_saw_res
-                     | mode_sq_res =>
+                     | mode_sq_res
+                     | mode_saw_sync =>
                     if s1_wave_sel = '0' then
                         s2_theta_out_buf <= s1_theta_osc1;
                     else
