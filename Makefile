@@ -29,7 +29,7 @@ doc:
 	ghdl -r $(subst .o,,$^) --vcd="$(subst .o,.vcd,$^)" $(RUN_FLAGS) 
 	rm $(subst .o,,$^)
 
-audio_delay.o: \
+preset_selector.o: \
 	common.o
 
 phase_gen.o: \
@@ -127,6 +127,7 @@ voice_generator.o: \
 synthesizer.o: \
 	common.o \
 	env_gen.o \
+	preset_selector.o \
 	delta_sigma_dac.o \
 	phase_distort.o \
 	phase_gen.o \

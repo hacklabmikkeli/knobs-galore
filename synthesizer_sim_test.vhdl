@@ -68,7 +68,7 @@ begin
                 wait for 0.8 us;
                 CLK <= not CLK;
                 wait for 0.8 us;
-                write(out_line, to_integer(AUDIO(11 downto 8)));
+                write(out_line, to_integer(AUDIO(10 downto 8)));
                 writeline(out_file, out_line);
                 write(out_line, to_integer(AUDIO(7 downto 0)));
                 writeline(out_file, out_line);

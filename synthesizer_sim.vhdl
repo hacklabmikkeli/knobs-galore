@@ -64,6 +64,7 @@ begin
         port map
             ('1'
             ,clk_odd
+            ,voice_transform_oct
             ,key_code
             ,key_event
             ,freq
@@ -90,6 +91,7 @@ begin
             ,freq
             ,gate
             ,(mode_saw_fat
+             ,voice_transform_oct
              ,x"00", x"A0", x"01", x"01", x"00", x"01"
              ,x"FF", x"01", x"FF", x"01"
              )
@@ -108,17 +110,5 @@ begin
             ,audio_buf
             );
 
-    delay:
-        entity
-            work.audio_delay (audio_delay_impl)
-        port map
-            ('1'
-            ,clk_slow
-            ,audio_buf
-            ,audio_buf_del
-            );
-
-    AUDIO <= audio_buf 
-             + ('0' & audio_buf_del(audio_signal'high - 1 downto
-                        audio_signal'low));
+    AUDIO <= audio_buf;
 end architecture;

@@ -33,7 +33,7 @@ package common is
     constant time_hi : natural := time_max - 1;
     subtype time_signal is unsigned(time_bits - 1 downto 0);
 
-    constant audio_bits : natural := 12;
+    constant audio_bits : natural := 11;
     constant audio_max : natural := 2**audio_bits;
     constant audio_hi : natural := audio_max - 1;
     subtype audio_signal is unsigned(audio_bits - 1 downto 0);
@@ -63,6 +63,11 @@ package common is
     constant mode_saw_sync: mode_t          := "110";
     constant mode_mix:      mode_t          := "111";
 
+    subtype voice_transform_t is std_logic_vector(1 downto 0);
+    constant voice_transform_none:  voice_transform_t   := "00";
+    constant voice_transform_oct:   voice_transform_t   := "01";
+    constant voice_transform_sub:   voice_transform_t   := "10";
+
     subtype key_event_t is std_logic_vector(1 downto 0);
     constant key_event_idle:  key_event_t   := "00";
     constant key_event_make:  key_event_t   := "01";
@@ -82,6 +87,7 @@ package common is
     type synthesis_params is
     record
         sp_mode: mode_t;
+        sp_transform: voice_transform_t;
         sp_cutoff_base: ctl_signal;
         sp_cutoff_env: ctl_signal;
         sp_cutoff_attack: ctl_signal;
@@ -105,6 +111,21 @@ package common is
         ,(others => '0')
         ,adsr_rel
         ,'0'
+        );
+
+    constant empty_synthesis_params : synthesis_params :=
+        (mode_saw
+        ,voice_transform_none
+        ,x"FF"
+        ,x"00"
+        ,x"FF"
+        ,x"FF"
+        ,x"FF"
+        ,x"FF"
+        ,x"FF"
+        ,x"FF"
+        ,x"FF"
+        ,x"FF"
         );
 
     -- TODO: make the array larger after optimizing

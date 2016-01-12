@@ -25,12 +25,12 @@ entity synthesizer is
     port (CLK:              in  std_logic
          ;KEYS_PROBE:       out std_logic_vector(4 downto 0)
          ;KEYS_IN:          in  std_logic_vector(7 downto 0)
+         ;CPANEL_PROBE:     out std_logic_vector(4 downto 0)
+         ;CPANEL_IN:        in  std_logic_vector(7 downto 0)
          ;LINE_LEFT_NEG:    out std_logic
          ;LINE_LEFT_POS:    out std_logic
          ;LINE_RIGHT_NEG:   out std_logic
          ;LINE_RIGHT_POS:   out std_logic
-         ;KEY_CODE_DBG:     out keys_signal
-         ;KEY_EVENT_DBG:    out key_event_t
          )
     ;
 end entity;
@@ -44,9 +44,12 @@ architecture synthesizer_impl of synthesizer is
     signal counter: unsigned(8 downto 0) := (others => '0');
     signal key_code: keys_signal;
     signal key_event: key_event_t;
+    signal cpanel_key_code: keys_signal;
+    signal cpanel_key_event: key_event_t;
 
     signal freq: time_signal := (others => '0');
     signal gate: std_logic;
+    signal params: synthesis_params;
 
     signal fifo_in: state_vector_t;
     signal fifo_out: state_vector_t;
@@ -71,6 +74,19 @@ begin
     clk_odd <= '1' when std_match(counter, "000100---") else '0';
     clk_fast <= CLK;
     clk_slow <= '1' when std_match(counter, "1--------") else '0';
+        
+    cpanel_input_buffer:
+        entity
+            work.input_buffer (input_buffer_impl)
+        port map
+            ('1'
+            ,clk_even
+            ,CPANEL_IN
+            ,CPANEL_PROBE
+            ,cpanel_key_code
+            ,cpanel_key_event
+            ,open
+            );
 
     input_buffer:
         entity
@@ -91,11 +107,22 @@ begin
         port map
             ('1'
             ,clk_odd
-            ,'1'
+            ,params.sp_transform
             ,key_code
             ,key_event
             ,freq
             ,gate
+            );
+
+    preset_selector:
+        entity
+            work.preset_selector (preset_selector_impl)
+        port map
+            ('1'
+            ,clk_odd
+            ,cpanel_key_code
+            ,cpanel_key_event
+            ,params
             );
 
     circular_buffer:
@@ -117,10 +144,7 @@ begin
             ,clk_odd
             ,freq
             ,gate
-            ,(mode_saw_fat
-             ,x"00", x"A0", x"08", x"01", x"A0", x"80"
-             ,x"FF", x"01", x"40", x"80"
-             )
+            ,params
             ,z_ampl
             ,fifo_in
             ,fifo_out
@@ -150,7 +174,4 @@ begin
     LINE_LEFT_POS <= v_out;
     LINE_RIGHT_POS <= '0';
     LINE_RIGHT_NEG <= '0';
-
-    KEY_CODE_DBG <= key_code;
-    KEY_EVENT_DBG <= key_event;
 end architecture;
