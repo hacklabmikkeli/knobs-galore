@@ -84,136 +84,31 @@ begin
             if KEY_EVENT = key_event_make then
                 case KEY_CODE is
                     -- Preset editing
-                    when "001100" => mode <= mode + 1;
-                    when "001101" => mode <= mode - 1;
-                    when "100011" => transform <= transform + 1;
-                    when "100000" => transform <= transform - 1;
-                    when "001111" => q_cutoff_base <= q_cutoff_base + 1;
-                    when "001110" => q_cutoff_base <= q_cutoff_base - 1;
-                    when "100010" => q_cutoff_env <= q_cutoff_env + 1;
-                    when "100001" => q_cutoff_env <= q_cutoff_env - 1;
+                    when "001100" => mode <= mode - 1;
+                    when "001101" => mode <= mode + 1;
+                    when "001001" => transform <= transform - 1;
+                    when "001010" => transform <= transform + 1;
+                    when "001111" => q_cutoff_base <= q_cutoff_base - 1;
+                    when "001110" => q_cutoff_base <= q_cutoff_base + 1;
+                    when "100010" => q_cutoff_env <= q_cutoff_env - 1;
+                    when "001000" => q_cutoff_env <= q_cutoff_env + 1;
                     when "000010" => q_cutoff_attack <= q_cutoff_attack + 1;
                     when "000011" => q_cutoff_attack <= q_cutoff_attack - 1;
                     when "000001" => q_cutoff_decay <= q_cutoff_decay + 1;
                     when "000000" => q_cutoff_decay <= q_cutoff_decay - 1;
-                    when "000111" => q_cutoff_sustain <= q_cutoff_sustain + 1;
-                    when "000110" => q_cutoff_sustain <= q_cutoff_sustain - 1;
+                    when "000111" => q_cutoff_sustain <= q_cutoff_sustain - 1;
+                    when "000110" => q_cutoff_sustain <= q_cutoff_sustain + 1;
                     when "000101" => q_cutoff_rel <= q_cutoff_rel + 1;
                     when "000100" => q_cutoff_rel <= q_cutoff_rel - 1;
                     when "010000" => q_gain_attack <= q_gain_attack + 1;
                     when "010001" => q_gain_attack <= q_gain_attack - 1;
                     when "010010" => q_gain_decay <= q_gain_decay + 1;
                     when "010011" => q_gain_decay <= q_gain_decay - 1;
-                    when "010111" => q_gain_sustain <= q_gain_sustain + 1;
-                    when "010110" => q_gain_sustain <= q_gain_sustain - 1;
+                    when "010111" => q_gain_sustain <= q_gain_sustain - 1;
+                    when "010110" => q_gain_sustain <= q_gain_sustain + 1;
                     when "010101" => q_gain_rel <= q_gain_rel + 1;
                     when "010100" => q_gain_rel <= q_gain_rel - 1;
 
-                    -- Factory presets
-                    when "011000" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011001" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011010" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011011" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011100" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011101" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011110" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
-                    when "011111" =>
-                        mode <= mode_saw;
-                        transform <= voice_transform_none;
-                        q_cutoff_base <= "000";
-                        q_cutoff_env <= "000";
-                        q_cutoff_attack <= "000";
-                        q_cutoff_decay <= "000";
-                        q_cutoff_sustain <= "000";
-                        q_cutoff_rel <= "000";
-                        q_gain_attack <= "000";
-                        q_gain_decay <= "000";
-                        q_gain_sustain <= "000";
-                        q_gain_rel <= "000";
                     when others   => null;
                 end case;
             end if;
