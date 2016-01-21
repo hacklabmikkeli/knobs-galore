@@ -37,7 +37,7 @@ architecture waveshaper_sin of waveshaper is
     type lut_t is array(0 to (ctl_max/4) - 1) of voice_signal;
 
     function init_sin_lut return lut_t is
-        constant N : real := real(voice_max);
+        constant N : real := real(ctl_max);
         variable theta, audio_out : real;
         variable audio_out_int : integer;
         variable retval : lut_t;
