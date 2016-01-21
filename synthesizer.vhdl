@@ -53,7 +53,7 @@ architecture synthesizer_impl of synthesizer is
 
     signal fifo_in: state_vector_t;
     signal fifo_out: state_vector_t;
-    signal z_ampl: ctl_signal;
+    signal z_ampl: voice_signal;
     signal audio_buf: audio_signal;
 
     signal v_out: std_logic;

@@ -28,8 +28,8 @@ architecture amplifier_test_impl of amplifier_test is
     signal      CLK:            std_logic := '1';
     signal      CLK_BAR:        std_logic;
     signal      GAIN:           ctl_signal := to_unsigned(0, ctl_bits);
-    signal      AUDIO_IN:       ctl_signal := to_unsigned(0, ctl_bits);
-    signal      AUDIO_OUT:      ctl_signal;
+    signal      AUDIO_IN:       voice_signal := to_unsigned(0, ctl_bits);
+    signal      AUDIO_OUT:      voice_signal;
 
 begin
     CLK_BAR <= not CLK;

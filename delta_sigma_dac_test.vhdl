@@ -26,7 +26,7 @@ end entity;
 
 architecture delta_sigma_dac_test_impl of delta_sigma_dac_test is
     signal  THETA:  ctl_signal := (others => '0');
-    signal  Zctl:   ctl_signal := (others => '0');
+    signal  Zctl:   voice_signal := (others => '0');
     signal  Z:      audio_signal := (others => '0');
     signal  CLK:    std_logic := '1';
     signal  Vout:   std_logic;
@@ -50,5 +50,5 @@ begin
         wait;
     end process;
 
-    Z <= to_audio_msb(Zctl);
+    Z <= (others => '0');
 end architecture;

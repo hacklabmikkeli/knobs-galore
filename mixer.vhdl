@@ -23,7 +23,7 @@ use work.common.all;
 entity mixer is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
-            ;MUXED_IN:      in  ctl_signal
+            ;MUXED_IN:      in  voice_signal
             ;AUDIO_OUT:     out audio_signal
             );
 end entity;
@@ -40,8 +40,8 @@ begin
         if EN = '1' and rising_edge(CLK) then
             if counter = zero then
                 audio_out_buf <= accumulator;
-                accumulator(ctl_bits - 1 downto 0) <= MUXED_IN;
-                accumulator(audio_bits - 1 downto ctl_bits) <= (others=>'0');
+                accumulator(voice_bits - 1 downto 0) <= MUXED_IN;
+                accumulator(audio_bits - 1 downto voice_bits) <= (others=>'0');
             else
                 accumulator <= accumulator + MUXED_IN;
             end if;

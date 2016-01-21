@@ -27,7 +27,7 @@ entity voice_generator is
             ;FREQ:          in  time_signal
             ;GATE:          in  std_logic
             ;PARAMS:        in  synthesis_params
-            ;AUDIO_OUT:     out ctl_signal
+            ;AUDIO_OUT:     out voice_signal
             ;OUT_TO_FIFO:   out state_vector_t
             ;IN_FROM_FIFO:  in  state_vector_t
             );
@@ -55,10 +55,10 @@ architecture voice_generator_impl of voice_generator is
     signal s8_theta: ctl_signal;
     signal s8_gain: ctl_signal;
 
-    signal s9_z: ctl_signal;
+    signal s9_z: voice_signal;
     signal s9_gain: ctl_signal;
 
-    signal s12_z_ampl: ctl_signal;
+    signal s12_z_ampl: voice_signal;
 
 begin
 

@@ -29,6 +29,9 @@ doc:
 	ghdl -r $(subst .o,,$^) --vcd="$(subst .o,.vcd,$^)" $(RUN_FLAGS) 
 	rm $(subst .o,,$^)
 
+pwm.o: \
+	common.o
+
 preset_selector.o: \
 	common.o
 
@@ -138,7 +141,8 @@ synthesizer.o: \
 	voice_allocator.o \
 	voice_generator.o \
 	circular_buffer.o \
-	mixer.o
+	mixer.o \
+	pwm.o
 
 synthesizer_test.o: \
 	common.o \

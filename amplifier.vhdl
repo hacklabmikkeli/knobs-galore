@@ -28,34 +28,32 @@ entity amplifier is
             ;CLK_EVEN:      in  std_logic
             ;CLK_ODD:       in  std_logic
             ;GAIN:          in  ctl_signal
-            ;AUDIO_IN:      in  ctl_signal
-            ;AUDIO_OUT:     out ctl_signal
+            ;AUDIO_IN:      in  voice_signal
+            ;AUDIO_OUT:     out voice_signal
             )
     ;
 end entity;
 
 architecture amplifier_impl of amplifier is
     -- AUDIO_OUT = 
-    --    (GAIN * AUDIO_IN)         / CTL_MAX + 
-    --    ((CTL_MAX - GAIN) * BIAS) / CTL_MAX
-    constant bias: ctl_signal := ('1', others => '0');
+    --    (GAIN * AUDIO_IN)           / CTL_MAX + 
+    --    ((CTL_MAX - GAIN) * BIAS)   / CTL_MAX
+    constant bias: voice_signal := ('1', others => '0');
 
-    signal s1_GX_N: ctl_signal := (others => '0');
-    signal s1_N_Gb_N: ctl_signal := (others => '0');
-    signal s2_audio_out_buf: ctl_signal := (others => '0');
-    signal s3_audio_out_buf: ctl_signal := (others => '0');
+    signal s1_GX_N: voice_signal := (others => '0');
+    signal s1_N_Gb_N: voice_signal := (others => '0');
+    signal s2_audio_out_buf: voice_signal := (others => '0');
+    signal s3_audio_out_buf: voice_signal := (others => '0');
 begin
     process (CLK_EVEN)
-        constant ctl_max_cs: ctl_signal := (others => '1');
-
-        variable GX: unsigned(ctl_bits * 2 - 1 downto 0);
-        variable N_Gb: unsigned(ctl_bits * 2 - 1 downto 0);
+        variable GX: unsigned(ctl_bits + voice_bits - 1 downto 0);
+        variable N_Gb: unsigned(ctl_bits + voice_bits - 1 downto 0);
     begin
         if EN = '1' and rising_edge(CLK_EVEN) then
             GX := GAIN * AUDIO_IN;
-            s1_GX_N <= GX(ctl_bits * 2 - 1 downto ctl_bits);
+            s1_GX_N <= GX(ctl_bits + voice_bits - 1 downto ctl_bits);
             N_Gb := (not GAIN) * bias;
-            s1_N_Gb_N <= N_Gb(ctl_bits * 2 - 1 downto ctl_bits);
+            s1_N_Gb_N <= N_Gb(ctl_bits + voice_bits - 1 downto ctl_bits);
         end if;
     end process;
 

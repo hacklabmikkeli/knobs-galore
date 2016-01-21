@@ -25,7 +25,7 @@ entity waveshaper is
     port    (EN:            in  std_logic
             ;CLK:           in  std_logic
             ;THETA:         in  ctl_signal
-            ;AUDIO_OUT:     out ctl_signal
+            ;AUDIO_OUT:     out voice_signal
             ;GAIN_IN:       in  ctl_signal
             ;GAIN_THRU:     out ctl_signal
             )
@@ -34,10 +34,10 @@ end entity;
 
 architecture waveshaper_sin of waveshaper is
 
-    type lut_t is array(0 to (ctl_max/4) - 1) of ctl_signal;
+    type lut_t is array(0 to (ctl_max/4) - 1) of voice_signal;
 
     function init_sin_lut return lut_t is
-        constant N : real := real(ctl_max);
+        constant N : real := real(voice_max);
         variable theta, audio_out : real;
         variable audio_out_int : integer;
         variable retval : lut_t;
@@ -45,13 +45,13 @@ architecture waveshaper_sin of waveshaper is
         for k in lut_t'low to lut_t'high loop
             theta := (real(k) / N) * 2.0 * MATH_PI;
             audio_out := (sin(theta) * 0.5) + 0.5;
-            audio_out_int := integer(audio_out * real(ctl_max));
+            audio_out_int := integer(audio_out * real(voice_max));
             if audio_out_int < 0 then
                 audio_out_int := 0;
-            elsif audio_out_int > (ctl_max - 1) then
-                audio_out_int := (ctl_max - 1);
+            elsif audio_out_int > (voice_max - 1) then
+                audio_out_int := (voice_max - 1);
             end if;
-            retval(k) := to_unsigned(audio_out_int, ctl_bits);
+            retval(k) := to_unsigned(audio_out_int, voice_bits);
         end loop;
         return retval;
     end function init_sin_lut;
@@ -59,7 +59,7 @@ architecture waveshaper_sin of waveshaper is
     constant sin_lut : lut_t := init_sin_lut;
 
     function lookup(theta: ctl_signal; lut: lut_t)
-    return ctl_signal is
+    return voice_signal is
         constant phase_max : integer := ctl_max / 4;
         variable quadrant : unsigned(1 downto 0);
         variable phase : integer;
@@ -81,7 +81,7 @@ architecture waveshaper_sin of waveshaper is
     signal rom: lut_t := sin_lut;
     attribute ram_style: string;
     attribute ram_style of rom: signal is "block";
-    signal s1_audio_out_buf: ctl_signal := (others => '0');
+    signal s1_audio_out_buf: voice_signal := (others => '0');
     signal s1_gain_thru_buf: ctl_signal := (others => '0');
 begin
     process (CLK)
