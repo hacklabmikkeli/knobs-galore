@@ -1,4 +1,4 @@
-# knobs-galore
+# Rough Boy
 VHDL source code for a simple phase distortion synthesizer
 
 ### Target hardware
