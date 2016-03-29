@@ -22,3 +22,4 @@ Info on phase distortion:
 
  * [WikiAudio](http://en.wikiaudio.org/Phase_distortion_synthesis)
  * [Patent](http://pdfpiw.uspto.gov/.piw?docid=04658691&PageNum=1&IDKey=EB1A4353946E&HomeUrl=http://patft.uspto.gov/netacgi/nph-Parser?Sect1=PTO1%2526Sect2=HITOFF%2526d=PALL%2526p=1%2526u=%25252Fnetahtml%25252FPTO%25252Fsrchnum.htm%2526r=1%2526f=G%2526l=50%2526s1=4658691.PN.%2526OS=PN/4658691%2526RS=PN/4658691)
+* [Phase Distortion @ Electric Druid](http://electricdruid.net/phase-distortion-synthesis/)
